@@ -1,7 +1,17 @@
 doctype html
 html
   head
+    meta(charset='utf-8')
+    meta(http-quiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    block stylesheet
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+      link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
+
   body
     block content
+    block javascript
+      script(src='/javascripts/jquery.min.js')
+      script(src='/javascripts/bootstrap.min.js')
