@@ -1,0 +1,7 @@
+*.tags
+isee_server/.tags_sorted_by_file
+*.sublime-project
+isee_server/isee.sublime-workspace
+isee_server/npm-debug.log
+*.log
+*.jpg

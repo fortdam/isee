@@ -11,11 +11,14 @@ block content
 
     .row
       .col-md-6
-        img(src=pic1, class="img-thumbnail")
+        img(src=default_img, class="img-thumbnail", id="pic1")
       .col-md-6
-        img(src=pic2, class="img-thumbnail")
+        img(src=default_img, class="img-thumbnail", id="pic2")
     .row
       .col-md-6
-        img(src=pic3, class="img-thumbnail")
+        img(src=default_img, class="img-thumbnail", id="pic3")
       .col-md-6
-        img(src=pic4, class="img-thumbnail")
+        img(src=default_img, class="img-thumbnail", id="pic4")
+
+block append javascript
+  script(src="/javascripts/isee_client.js")
