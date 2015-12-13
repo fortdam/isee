@@ -1,0 +1,25 @@
+.modal-dialog(role="document")
+  .modal-content
+    .modal-header
+      div(class="modal-title", id="myModalLabel") 
+        button(type="button", class="close", data-dismiss="modal", aria-label="Close") 
+          span(aria-hidden="true") &times
+        h4.modal-title-text Your thoughts of 
+    .modal-body
+      form
+        .form-group
+          label.radio-inline
+            input(type="radio", name="img-grade", id="img-good", value="img-good", checked="checked")
+            span(class="label label-success") Good
+          label.radio-inline
+            input(type="radio", name="img-grade", id="img-bad", value="img-bad")
+            span(class="label label-warning") Not good                  
+          label.radio-inline
+            input(type="radio", name="img-grade", id="img-poor", value="img-poor")
+            span(class="label label-danger") Terrible
+        .form-group
+          label.control-label(for="comment-message") Comment
+          textarea.form-control(rows="3", id="comment-message",placeholder="Some thing to say...",value="aa")
+    .modal-footer
+      button(type="button", class="btn btn-default", data-dismiss="modal") Close
+      button(type="button", class="btn btn-primary") Send

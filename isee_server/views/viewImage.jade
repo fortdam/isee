@@ -3,22 +3,59 @@ extends layout
 block content
   .container
     nav
-      ul(class="pager")
-        li
-          a(href="#") Previous
-        li
-          a(href="#") Next
+      ul(class="pagination")
+        li(class="page-prev")
+          a(href="#", aria-label="Previous", id="page-prev-arrow")
+            span(aria-hidden="true") &laquo;
+        li#page-item-1
+          a(href="javascript:update_page(1)", id="page-index-1") 1
+        li#page-item-2
+          a(href="javascript:update_page(2)", id="page-index-2") 2
+        li#page-item-3
+          a(href="javascript:update_page(3)", id="page-index-3") 3
+        li#page-item-4
+          a(href="javascript:update_page(4)", id="page-index-4") 4
+        li#page-item-5
+          a(href="javascript:update_page(5)", id="page-index-5") 5
+
+        li(class="page-next")
+          a(href="javascript:update_page(6)", aria-label="Next", id="page-next-arrow")
+            span(aria-hidden="true") &raquo
+
 
     .row
       .col-md-6
-        img(src=default_img, class="img-thumbnail", id="pic1")
+        img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#myModal1", trigger-place="1") 
       .col-md-6
-        img(src=default_img, class="img-thumbnail", id="pic2")
+        img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#myModal2", trigger-place="2")
+    br
     .row
       .col-md-6
-        img(src=default_img, class="img-thumbnail", id="pic3")
+        img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#myModal3", trigger-place="3")
       .col-md-6
-        img(src=default_img, class="img-thumbnail", id="pic4")
+        img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#myModal4", trigger-place="4")
+
+    .modal(class="fade", id="myModal1", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./model_dialog.jade 
+
+    .modal(class="fade", id="myModal2", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./model_dialog.jade 
+
+    .modal(class="fade", id="myModal3", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./model_dialog.jade 
+
+    .modal(class="fade", id="myModal4", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./model_dialog.jade 
+
+    h3(id="label1", style="position:fixed")
+      span(class="label label-primary")  Idol4
+    h3(id="label2", style="position:fixed")
+      span(class="label label-info")  Idol4S
+    h3(id="label3", style="position:fixed")
+      span(class="label label-default")  Iphone-6
+    h3(id="label4", style="position:fixed")
+      span(class="label label-success")  Samsung-S6
+
 
 block append javascript
   script(src="/javascripts/isee_client.js")
