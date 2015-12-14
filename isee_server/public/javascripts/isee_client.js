@@ -13,7 +13,7 @@ var appData = {
 
 };
 
-var PIC_NAMES = ["Idol4", "Idol4S", "Iphone-6", "Samsung-S6"];
+var PIC_NAMES = ["Idol4", "Idol4S", "Iphone-6S", "Samsung-S6"];
 
 var model_data = {
 	names:["Idol4", "Idol4S", "Iphone-6", "Samsung-S6"],
@@ -154,6 +154,10 @@ function select_page(index){
 	var numElt = Math.min(pageInfo.MAX_RANGE, pageInfo.total);
 	var indexUpdated = false;
 
+	if (pageInfo.curr === undefined){
+		indexUpdated = true; //undefined, load new scenes
+	}
+
 	pageInfo.curr = index;
 	if (index < pageInfo.start){
 		if ((index-numElt+1) >= 1){
@@ -179,7 +183,7 @@ function select_page(index){
 	}
 
 	if (indexUpdated) {
-		console.log(pageInfo.start);
+		console.log("Re-contruct the page...");
 		for (var i=0; i<numElt; i++){
 			$("a#page-index-"+(i+1)).attr("href", "javascript:select_page("+(i+pageInfo.start)+")");
 			$("a#page-index-"+(i+1)).text(i+pageInfo.start);
@@ -288,9 +292,45 @@ function onModalLoaded(event) {
   	console.log(model_data.comment[pos-1].text);
   	$(this).find("#comment-message").text(model_data.comment[pos-1].text);
   }
+
+  var options = { 
+       // target:        '#output',   // target element(s) to be updated with server response 
+        beforeSubmit:  function(){console.log("before submit")},  // pre-submit callback 
+        success:       function(){$('#myModal1').modal("hide");
+        							$('#myModal2').modal("hide");
+        							$('#myModal3').modal("hide");
+        							$('#myModal4').modal("hide");},  // post-submit callback
+        complete:  		function(){$('#myModal1').modal("hide");
+        							$('#myModal2').modal("hide");
+        							$('#myModal3').modal("hide");
+        							$('#myModal4').modal("hide");},
+        resetForm: true, 
+        dataType:  'json' 
+ 
+        // other available options: 
+        //url:       url         // override for form's 'action' attribute 
+        //type:      type        // 'get' or 'post', override for form's 'method' attribute 
+        //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
+        //clearForm: true        // clear all form fields after successful submit 
+        //resetForm: true        // reset the form after successful submit 
+ 
+        // $.ajax options can be used here too, for example: 
+        //timeout:   3000 
+    }; 
+ 
+    // bind to the form's submit event 
+    $(this).find('form').submit(function() { 
+        // inside event callbacks 'this' is the DOM element so we first 
+        // wrap it in a jQuery object and then invoke ajaxSubmit 
+        $(this).ajaxSubmit(options); 
+ 
+        // !!! Important !!! 
+        // always return false to prevent standard browser submit and page navigation 
+        return false; 
+    }); 
 }
 
-document.body.onload = select_project('idol4');//load_page("idol4", "Sunset");
+document.body.onload = select_project('idol4');
 
 window.onresize = place_label
 window.onscroll = place_label;

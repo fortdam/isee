@@ -76,7 +76,7 @@ db.getSceneInfo = function (project, scene) {
 	else if (scene == "supermarket") {
 		return {
 			path:'indoor/supermarket', 
-			num:'14',
+			num:'16',
 		}
 	}
 	else if (scene == "artifacts") {
