@@ -1,3 +1,23 @@
+var isee_ajax = {};
+
+//Some assumptions:
+//
+
+// isee_ajax.syncScene = function  (project) {
+// 	var request = new XMLHttpRequest();
+// 	request.open('GET', "/meta_data/scene?project="+project);
+// 	request.onreadystatechange = function() {
+// 		if (request.readyState === 4 && request.status === 200) {
+// 			console.log(request.responseText);
+// 		}
+// 	}
+
+// 	request.send(null);
+// }
+// isee_ajax.syncScene("Idol4");
+
+var appData = {};
+
 var PIC_NAMES = ["Idol4", "Idol4S", "Iphone-6", "Samsung-S6"];
 
 var page_info = {
@@ -35,8 +55,36 @@ var model_data = {
 	]
 }
 
-function update_page(index){
-	console.log("update_page");
+
+
+
+//
+function load_page(project, scene) {
+	var request = new XMLHttpRequest();
+	request.open('GET', "/meta_data/scene_num?project="+project+"&scene="+scene);
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && request.status === 200) {
+			var pageNum = parseInt(request.response);
+
+			window.appData.project = project;
+			window.appData.scene = scene;
+			window.appData.pageInfo = {
+				'total': pageNum,
+				'start': 1,
+				'end': 5,
+				'curr': undefined,
+				MAX_RANGE: 5  //FIXME: to calculate the MAX range on the fly...
+			}
+
+			select_page(1);
+		}
+	}
+
+	request.send(null);	
+}
+
+function select_page(index){
+	console.log("select_page");
 	if (index > page_info.total || index < 1 || index == page_info.curr){
 		console.log("unused")
 		return;
@@ -72,12 +120,12 @@ function update_page(index){
 	if (indexUpdated) {
 		console.log(page_info.start);
 		for (var i=0; i<numElt; i++){
-			$("a#page-index-"+(i+1)).attr("href", "javascript:update_page("+(i+page_info.start)+")");
+			$("a#page-index-"+(i+1)).attr("href", "javascript:select_page("+(i+page_info.start)+")");
 			$("a#page-index-"+(i+1)).text(i+page_info.start);
 		}		
 
 		if (page_info.start > 1){
-			$("a#page-prev-arrow").attr("href", "javascript:update_page("+(page_info.start-1)+")");
+			$("a#page-prev-arrow").attr("href", "javascript:select_page("+(page_info.start-1)+")");
 			$("li#page-prev").removeClass("disabled");
 		}
 		else {
@@ -85,7 +133,7 @@ function update_page(index){
 		}
 
 		if (page_info.end < page_info.total){
-			$("a#page-next-arrow").attr("href", "javascript:update_page("+(page_info.end+1)+")");
+			$("a#page-next-arrow").attr("href", "javascript:select_page("+(page_info.end+1)+")");
 			$("li#page-next").removeClass("disabled");
 		}
 		else{
@@ -103,29 +151,21 @@ function update_page(index){
 		}
 	}
 
-	load_images(index);
+	load_images(window.appData.project, window.appData.scene, index);
 }
 
-
-function page_select(index){
-	load_images(index);
+function load_images(project, scene, index){
+	load_image(project, scene, index, "idol4", 0, 1);
+	load_image(project, scene, index, "idol4S", 0, 2);
+	load_image(project, scene, index, "iphone", 0, 3);
+	load_image(project, scene, index, "samsung", 0, 4);
 }
 
-
-function load_images(index){
-	var test = "idol4";
-	var scene = "sunset";
-
-	load_image(test, scene, index, "idol4", 0, 1);
-	load_image(test, scene, index, "idol4S", 0, 2);
-	load_image(test, scene, index, "iphone", 0, 3);
-	load_image(test, scene, index, "samsung", 0, 4);
-}
-
-function load_image(test, scene, index, product, size, pos) {
+function load_image(project, scene, index, product, size, pos) {
 	var elt = document.getElementById("pic"+pos);
-	var image_file = "/photos/"+test+"/"+scene+"/"+product+"_"+index+".jpg";
+	var image_file = "/photos/"+project+"/"+scene+"/"+product+"_"+index+".jpg";
 	elt.src=image_file;
+	elt.onload = place_label;
 }
 
 function xy(x) {
@@ -187,8 +227,8 @@ function onModalLoaded(event) {
   }
 }
 
-document.body.onload = update_page(1);
-window.onload = place_label;
+document.body.onload = load_page("idol4", "Sunset");
+
 window.onresize = place_label
 window.onscroll = place_label;
 

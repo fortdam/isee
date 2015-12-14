@@ -2,24 +2,26 @@ extends layout
 
 block content
   .container
+    ul(class="nav nav-tabs", id="scene-tab")
+
     nav
       ul(class="pagination")
         li(class="page-prev")
           a(href="#", aria-label="Previous", id="page-prev-arrow")
             span(aria-hidden="true") &laquo;
         li#page-item-1
-          a(href="javascript:update_page(1)", id="page-index-1") 1
+          a(href="javascript:select_page(1)", id="page-index-1") 1
         li#page-item-2
-          a(href="javascript:update_page(2)", id="page-index-2") 2
+          a(href="javascript:select_page(2)", id="page-index-2") 2
         li#page-item-3
-          a(href="javascript:update_page(3)", id="page-index-3") 3
+          a(href="javascript:select_page(3)", id="page-index-3") 3
         li#page-item-4
-          a(href="javascript:update_page(4)", id="page-index-4") 4
+          a(href="javascript:select_page(4)", id="page-index-4") 4
         li#page-item-5
-          a(href="javascript:update_page(5)", id="page-index-5") 5
+          a(href="javascript:select_page(5)", id="page-index-5") 5
 
         li(class="page-next")
-          a(href="javascript:update_page(6)", aria-label="Next", id="page-next-arrow")
+          a(href="javascript:select_page(6)", aria-label="Next", id="page-next-arrow")
             span(aria-hidden="true") &raquo
 
 
