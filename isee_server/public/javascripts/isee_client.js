@@ -1,32 +1,19 @@
-var isee_ajax = {};
 
-//Some assumptions:
-//
 
-// isee_ajax.syncScene = function  (project) {
-// 	var request = new XMLHttpRequest();
-// 	request.open('GET', "/meta_data/scene?project="+project);
-// 	request.onreadystatechange = function() {
-// 		if (request.readyState === 4 && request.status === 200) {
-// 			console.log(request.responseText);
-// 		}
-// 	}
+var appData = {
+	'projectInfo': {
+		curr: undefined
+	},
+	'sceneInfo': {
+		curr: undefined
+	},
+	'pageInfo': {
+		curr: undefined
+	}
 
-// 	request.send(null);
-// }
-// isee_ajax.syncScene("Idol4");
-
-var appData = {};
+};
 
 var PIC_NAMES = ["Idol4", "Idol4S", "Iphone-6", "Samsung-S6"];
-
-var page_info = {
-	total: 28,
-	start: 1,
-	end: 5,
-	curr: undefined,
-	MAX_RANGE: 5
-}
 
 var model_data = {
 	names:["Idol4", "Idol4S", "Iphone-6", "Samsung-S6"],
@@ -55,21 +42,92 @@ var model_data = {
 	]
 }
 
+function select_project(project) {
+	window.appData.projectInfo.curr = project;
+	load_scene();
+}
 
-
-
-//
-function load_page(project, scene) {
+function load_scene() {
 	var request = new XMLHttpRequest();
-	request.open('GET', "/meta_data/scene_num?project="+project+"&scene="+scene);
+	var project = window.appData.projectInfo.curr;
+
+	request.open('GET', "/meta_data/scene?project="+project);
 	request.onreadystatechange = function() {
 		if (request.readyState === 4 && request.status === 200) {
-			var pageNum = parseInt(request.response);
+			var res = JSON.parse(request.response);
+			window.appData.sceneInfo.total = [];
 
-			window.appData.project = project;
-			window.appData.scene = scene;
+			//remove all existing elements in nav bar...
+			$('.nav-tabs').empty();
+
+			res.scenes.forEach(function (x,i,a) {
+				if(typeof x == 'object') {
+					var name = Object.keys(x)[0];
+
+					var str =  "<li class=\"dropdown\">\
+        							<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\
+        								<p class=\"text-capitalize\">"+name+"<b class=\"caret\"></b></p>\
+        							</a>\
+        							<ul class=\"dropdown-menu\">";
+
+					var scenes = x[name];
+					for (var ii=0; ii<scenes.length; ii++) {
+						console.log(scenes[ii]);
+						var allScenes = window.appData.sceneInfo.total;
+						allScenes[allScenes.length] = scenes[ii];
+						
+						str += "<li><a href=\"javascript:select_scene_num("+(allScenes.length-1)+")\"><p class=\"text-capitalize\">"+scenes[ii]+"</p></a></li>"
+					}
+
+       				str += "</ul></li>"
+
+					var curTab = $('.nav-tabs').append(str);
+					
+
+				}
+				else if (typeof x == 'string') {
+					var allScenes = window.appData.sceneInfo.total;
+					allScenes[allScenes.length] = x;
+
+					$('.nav-tabs').append("<li><a href=\"javascript:select_scene_num("+(allScenes.length-1)+")\"><p class=\"text-capitalize\">"+x+"</p></a></li>");
+					console.log("hahah:"+x);
+				}
+
+			})
+			//FIXME: Only support 2 levels unfolding yet...
+			select_scene('sunset');  //FIXME: Hard code now...
+
+		}
+	}
+
+	request.send(null);	
+}
+
+function select_scene_num(index){
+	select_scene(window.appData.sceneInfo.total[index]);
+}
+
+function select_scene(scene){
+
+	window.appData.sceneInfo.curr = scene;
+	load_page();
+}
+
+//
+function load_page() {
+	var request = new XMLHttpRequest();
+	var project = window.appData.projectInfo.curr;
+	var scene = window.appData.sceneInfo.curr;
+
+	request.open('GET', "/meta_data/scene_info?project="+project+"&scene="+scene);
+
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && request.status === 200) {
+			var res = JSON.parse(request.response);
+
+			window.appData.sceneInfo.currPath = res.path;
 			window.appData.pageInfo = {
-				'total': pageNum,
+				'total': res.num,
 				'start': 1,
 				'end': 5,
 				'curr': undefined,
@@ -85,55 +143,58 @@ function load_page(project, scene) {
 
 function select_page(index){
 	console.log("select_page");
-	if (index > page_info.total || index < 1 || index == page_info.curr){
+
+	var pageInfo = window.appData.pageInfo;
+
+	if (index > pageInfo.total || index < 1 || index == pageInfo.curr){
 		console.log("unused")
 		return;
 	}
 
-	var numElt = Math.min(page_info.MAX_RANGE, page_info.total);
+	var numElt = Math.min(pageInfo.MAX_RANGE, pageInfo.total);
 	var indexUpdated = false;
 
-	page_info.curr = index;
-	if (index < page_info.start){
+	pageInfo.curr = index;
+	if (index < pageInfo.start){
 		if ((index-numElt+1) >= 1){
-			page_info.start = index - numElt + 1;
-			page_info.end = index;
+			pageInfo.start = index - numElt + 1;
+			pageInfo.end = index;
 		}
 		else {
-			page_info.start = 1;
-			page_info.end = numElt;
+			pageInfo.start = 1;
+			pageInfo.end = numElt;
 		}
 		indexUpdated = true;
 	}
-	else if(index > page_info.end){
-		if((index+numElt-1) <= page_info.total){
-			page_info.start = index;
-			page_info.end = index + numElt - 1;
+	else if(index > pageInfo.end){
+		if((index+numElt-1) <= pageInfo.total){
+			pageInfo.start = index;
+			pageInfo.end = index + numElt - 1;
 		}
 		else{
-			page_info.end = page_info.total;
-			page_info.start = page_info.total - numElt + 1;
+			pageInfo.end = pageInfo.total;
+			pageInfo.start = pageInfo.total - numElt + 1;
 		}
 		indexUpdated = true;
 	}
 
 	if (indexUpdated) {
-		console.log(page_info.start);
+		console.log(pageInfo.start);
 		for (var i=0; i<numElt; i++){
-			$("a#page-index-"+(i+1)).attr("href", "javascript:select_page("+(i+page_info.start)+")");
-			$("a#page-index-"+(i+1)).text(i+page_info.start);
+			$("a#page-index-"+(i+1)).attr("href", "javascript:select_page("+(i+pageInfo.start)+")");
+			$("a#page-index-"+(i+1)).text(i+pageInfo.start);
 		}		
 
-		if (page_info.start > 1){
-			$("a#page-prev-arrow").attr("href", "javascript:select_page("+(page_info.start-1)+")");
+		if (pageInfo.start > 1){
+			$("a#page-prev-arrow").attr("href", "javascript:select_page("+(pageInfo.start-1)+")");
 			$("li#page-prev").removeClass("disabled");
 		}
 		else {
 			$("li#page-prev").addClass("disabled");
 		}
 
-		if (page_info.end < page_info.total){
-			$("a#page-next-arrow").attr("href", "javascript:select_page("+(page_info.end+1)+")");
+		if (pageInfo.end < pageInfo.total){
+			$("a#page-next-arrow").attr("href", "javascript:select_page("+(pageInfo.end+1)+")");
 			$("li#page-next").removeClass("disabled");
 		}
 		else{
@@ -141,7 +202,7 @@ function select_page(index){
 		}
 	}
 
-	var activeIndex = page_info.curr - page_info.start + 1;
+	var activeIndex = pageInfo.curr - pageInfo.start + 1;
 	for (var i=1; i<numElt+1; i++){
 		if (activeIndex == i){
 			$("li#page-item-"+i).addClass("active");
@@ -151,7 +212,7 @@ function select_page(index){
 		}
 	}
 
-	load_images(window.appData.project, window.appData.scene, index);
+	load_images(window.appData.projectInfo.curr, window.appData.scene, index);
 }
 
 function load_images(project, scene, index){
@@ -163,7 +224,9 @@ function load_images(project, scene, index){
 
 function load_image(project, scene, index, product, size, pos) {
 	var elt = document.getElementById("pic"+pos);
-	var image_file = "/photos/"+project+"/"+scene+"/"+product+"_"+index+".jpg";
+
+	var folder = window.appData.sceneInfo.currPath;
+	var image_file = "/photos/"+project+"/"+folder+"/"+product+"_"+index+".jpg";
 	elt.src=image_file;
 	elt.onload = place_label;
 }
@@ -227,7 +290,7 @@ function onModalLoaded(event) {
   }
 }
 
-document.body.onload = load_page("idol4", "Sunset");
+document.body.onload = select_project('idol4');//load_page("idol4", "Sunset");
 
 window.onresize = place_label
 window.onscroll = place_label;

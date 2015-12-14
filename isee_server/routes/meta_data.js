@@ -12,8 +12,8 @@ router.get('/scene', function(req, res, next){
 	res.send(db.getSceneList(req.query.project));
 })
 
-router.get('/scene_num', function(req, res, next){
-	res.send(db.getSceneNum(req.query.project, req.query.scene));
+router.get('/scene_info', function(req, res, next){
+	res.send(db.getSceneInfo(req.query.project, req.query.scene));
 })
 
 router.get('/product', function(req, res, next){
