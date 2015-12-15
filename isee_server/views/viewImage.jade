@@ -1,6 +1,14 @@
 extends layout
 
 block content
+  header(class="navbar navbar-static-top bs-docs-nav", id="top", role="banner")
+  .container
+    .navbar-header
+      .navbar-brand Projects
+    .nav(id="bs-navbar", class="collapse navbar-collapse")
+      ul(class="nav navbar-nav", id="project-links")
+
+
   .container
     ul(class="nav nav-tabs", id="scene-tab")
 
@@ -50,13 +58,13 @@ block content
       include ./model_dialog.jade 
 
     h3(id="label1", style="position:fixed")
-      span(class="label label-primary")  Idol4
+      span(class="label label-primary", id='label-text-1')  a
     h3(id="label2", style="position:fixed")
-      span(class="label label-info")  Idol4S
+      span(class="label label-info", id='label-text-2')  b
     h3(id="label3", style="position:fixed")
-      span(class="label label-default")  Iphone-6
+      span(class="label label-default", id='label-text-3')  c
     h3(id="label4", style="position:fixed")
-      span(class="label label-success")  Samsung-S6
+      span(class="label label-success", id='label-text-4')  d
 
 
 block append javascript

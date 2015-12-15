@@ -1,15 +1,21 @@
 var db = {};
 
 db.getProjectList = function () {
-	return {'projects':['idol4 Subjective Test#1', 'MML Internal Test 1', "MML Internal Test 2"]};
+	return {'projects':['idol4', 'idol3']};
 }
 
 db.getSceneList = function (project) {
-	return {'scenes': [
-		{'outdoor': ['morning', 'noon', 'afternoon', 'sunset', 'cloudy', 'cloudy_sunset', 'night']},
-		{'indoor': ['lab', 'office', 'resturaunt', 'supermarket']},
-		'artifacts'
-	]};
+	if (project == 'idol4'){
+		return {'scenes': [
+			{'outdoor': ['morning', 'noon', 'afternoon', 'sunset', 'cloudy', 'cloudy_sunset', 'night']},
+			{'indoor': ['lab', 'office', 'resturaunt', 'supermarket']},
+			'artifacts'
+		]};
+	}
+	else if (project == 'idol3'){
+		return {'scenes': ['VQI 1st Release']}
+	}
+
 }
 
 db.getSceneInfo = function (project, scene) {
@@ -85,13 +91,27 @@ db.getSceneInfo = function (project, scene) {
 			num:'5',
 		}
 	}
+	else if (scene == "VQI 1st Release") {
+		return {
+			path: 'VQI',
+			num: '6'
+		}
+	}
 	else {
 		return null;
 	}
 }
 
 db.getProduct = function (project) {
-	return {'products': ["Idol 4", "Idol 4S", "IPhone 6", "Samsung S6"]}
+	if (project == 'idol4'){
+		return {'products': ["Idol 4", "Idol 4S", "IPhone 6S", "Samsung S6"],
+				'prefix': ['idol4', 'idol4S', 'iphone', 'samsung']};
+	}
+	else if (project == 'idol3'){
+		return {'products': ["3M2 TCL", "3M2 VQI", "214 TCL", "214 VQI"],
+				'prefix': ['3M2_OLD', "3M2_VQI", "214_OLD", "214_VQI"]};
+	}
+	
 }
 
 module.exports = db;

@@ -13,38 +13,48 @@ var appData = {
 
 };
 
-var PIC_NAMES = ["Idol4", "Idol4S", "Iphone-6S", "Samsung-S6"];
+function load_projects() {
+	var request = new XMLHttpRequest();
+	request.open("GET", "/meta_data/project");
+	request.onreadystatechange = function() {
+		var res = JSON.parse(request.response);
+		window.appData.projectInfo.total = res.projects;
 
-var model_data = {
-	names:["Idol4", "Idol4S", "Iphone-6", "Samsung-S6"],
-	user_name: "Jimmy Tang",
-	comment:[
-		{
-			avail: true,
-			grade: "issue",
-			text: "The sharpness is poor.\nThe lens-distortion is obvious"
-		},
-		{
-			avail: true,
-			grade: "issue",
-			text: "The sharpness is poor.\nThe lens-distortion is obvious.\nReddish picture"
-		},
-		{
-			avail: true,
-			grade: "good",
-			text: "Picture is good"
-		},
-		{
-			avail: true,
-			grade: "good",
-			text: "Good sharpness.\nObvious distortion"
-		},
-	]
+		$('#project-links').empty();
+		for (var i=0; i<window.appData.projectInfo.total.length; i++){
+			$('#project-links').append("<li><a href=\"javascript:select_project_num("+i+")\">"+window.appData.projectInfo.total[i]+"</li>");
+		}
+
+		select_project(window.appData.projectInfo.total[0]);
+	}
+	request.send();
+}
+
+function select_project_num(index){
+	select_project(window.appData.projectInfo.total[index]);
 }
 
 function select_project(project) {
+	var request = new XMLHttpRequest();
 	window.appData.projectInfo.curr = project;
-	load_scene();
+
+	request.open("GET", "/meta_data/product?project="+project);
+	request.onreadystatechange = function(){
+		if (request.readyState === 4 && request.status === 200){
+			console.log("get product");
+			var res = JSON.parse(request.response);
+			window.appData.projectInfo.products = res.products;
+			window.appData.projectInfo.prefix = res.prefix;
+
+			$('#label-text-1').html(window.appData.projectInfo.products[0]);
+			$('#label-text-2').html(window.appData.projectInfo.products[1]);
+			$('#label-text-3').html(window.appData.projectInfo.products[2]);
+			$('#label-text-4').html(window.appData.projectInfo.products[3]);
+
+			load_scene();
+		}
+	}
+	request.send();
 }
 
 function load_scene() {
@@ -94,9 +104,8 @@ function load_scene() {
 				}
 
 			})
-			//FIXME: Only support 2 levels unfolding yet...
-			select_scene('sunset');  //FIXME: Hard code now...
-
+			
+			select_scene(window.appData.sceneInfo.total[0]);  
 		}
 	}
 
@@ -108,7 +117,6 @@ function select_scene_num(index){
 }
 
 function select_scene(scene){
-
 	window.appData.sceneInfo.curr = scene;
 	load_page();
 }
@@ -216,22 +224,26 @@ function select_page(index){
 		}
 	}
 
-	load_images(window.appData.projectInfo.curr, window.appData.scene, index);
+	load_images();
 }
 
-function load_images(project, scene, index){
-	load_image(project, scene, index, "idol4", 0, 1);
-	load_image(project, scene, index, "idol4S", 0, 2);
-	load_image(project, scene, index, "iphone", 0, 3);
-	load_image(project, scene, index, "samsung", 0, 4);
+function load_images(){
+	var imageFilePath = '';
+
+	var path1 = window.appData.projectInfo.curr;
+	var path2 = window.appData.sceneInfo.currPath; 
+	var prefix = window.appData.projectInfo.prefix;
+	var appendix = window.appData.pageInfo.curr;
+
+console.log(window.appData.projectInfo.prefix);
+	for (var i=1; i<=prefix.length; i++){
+		load_image("/photos/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+	}
 }
 
-function load_image(project, scene, index, product, size, pos) {
+function load_image(filePath, pos) {
 	var elt = document.getElementById("pic"+pos);
-
-	var folder = window.appData.sceneInfo.currPath;
-	var image_file = "/photos/"+project+"/"+folder+"/"+product+"_"+index+".jpg";
-	elt.src=image_file;
+	elt.src=filePath;
 	elt.onload = place_label;
 }
 
@@ -271,27 +283,8 @@ function onModalLoaded(event) {
   var pos = imageElt.attr("trigger-place");
   
 
-  $(this).find('.modal-title-text').text('Tell us your thoughts about this picture(' + PIC_NAMES[pos-1]+')');
+  $(this).find('.modal-title-text').text('Tell us your thoughts about this picture(' + window.appData.projectInfo.products[pos-1]+')');
 
-  // if (model_data.comment[pos-1].avail){
-  // 	console.log("available");
-  // 	if(model_data.comment[pos-1].grade == "good") {
-  // 		console.log("good checked");
-  // 		$(this).find('#img-good').checked ="checked";
-  // 	}
-  // 	else if(model_data.comment[pos-1].grade == "issue") {
-  // 		console.log("issue chedked");
-  // 		$(this).find('#img-bad').attr("checked","checked")
-  // 	}
-  // 	else if(model_data.comment[pos-1].grade == "terrible") {
-  // 		console.log("poor checked");
-  // 		$(this).find('#img-poor').checked ="checked";
-  // 	}
-
-  // 	console.log("re-paste");
-  // 	console.log(model_data.comment[pos-1].text);
-  // 	$(this).find("#comment-message").text(model_data.comment[pos-1].text);
-  // }
 
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
@@ -333,7 +326,7 @@ function onModalLoaded(event) {
     }); 
 }
 
-document.body.onload = select_project('idol4');
+document.body.onload = load_projects();//select_project('idol4');
 
 window.onresize = place_label
 window.onscroll = place_label;
