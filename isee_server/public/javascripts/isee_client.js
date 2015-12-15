@@ -271,41 +271,44 @@ function onModalLoaded(event) {
   var pos = imageElt.attr("trigger-place");
   
 
-  $(this).find('.modal-title-text').text('Tell us your thoughts about ' + PIC_NAMES[pos-1]);
+  $(this).find('.modal-title-text').text('Tell us your thoughts about this picture(' + PIC_NAMES[pos-1]+')');
 
-  if (model_data.comment[pos-1].avail){
-  	console.log("available");
-  	if(model_data.comment[pos-1].grade == "good") {
-  		console.log("good checked");
-  		$(this).find('#img-good').checked ="checked";
-  	}
-  	else if(model_data.comment[pos-1].grade == "issue") {
-  		console.log("issue chedked");
-  		$(this).find('#img-bad').attr("checked","checked")
-  	}
-  	else if(model_data.comment[pos-1].grade == "terrible") {
-  		console.log("poor checked");
-  		$(this).find('#img-poor').checked ="checked";
-  	}
+  // if (model_data.comment[pos-1].avail){
+  // 	console.log("available");
+  // 	if(model_data.comment[pos-1].grade == "good") {
+  // 		console.log("good checked");
+  // 		$(this).find('#img-good').checked ="checked";
+  // 	}
+  // 	else if(model_data.comment[pos-1].grade == "issue") {
+  // 		console.log("issue chedked");
+  // 		$(this).find('#img-bad').attr("checked","checked")
+  // 	}
+  // 	else if(model_data.comment[pos-1].grade == "terrible") {
+  // 		console.log("poor checked");
+  // 		$(this).find('#img-poor').checked ="checked";
+  // 	}
 
-  	console.log("re-paste");
-  	console.log(model_data.comment[pos-1].text);
-  	$(this).find("#comment-message").text(model_data.comment[pos-1].text);
-  }
+  // 	console.log("re-paste");
+  // 	console.log(model_data.comment[pos-1].text);
+  // 	$(this).find("#comment-message").text(model_data.comment[pos-1].text);
+  // }
 
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
         beforeSubmit:  function(){console.log("before submit")},  // pre-submit callback 
-        success:       function(){$('#myModal1').modal("hide");
+        success:       function(){console.log("success");
+        							$('#myModal1').modal("hide");
         							$('#myModal2').modal("hide");
         							$('#myModal3').modal("hide");
         							$('#myModal4').modal("hide");},  // post-submit callback
-        complete:  		function(){$('#myModal1').modal("hide");
+        complete:  		function(){console.log("complete");
+        							$('#myModal1').modal("hide");
         							$('#myModal2').modal("hide");
         							$('#myModal3').modal("hide");
         							$('#myModal4').modal("hide");},
         resetForm: true, 
-        dataType:  'json' 
+        clearForm: true,
+        dataType:  'json',
  
         // other available options: 
         //url:       url         // override for form's 'action' attribute 
@@ -315,7 +318,7 @@ function onModalLoaded(event) {
         //resetForm: true        // reset the form after successful submit 
  
         // $.ajax options can be used here too, for example: 
-        //timeout:   3000 
+        timeout:   3000 
     }; 
  
     // bind to the form's submit event 
