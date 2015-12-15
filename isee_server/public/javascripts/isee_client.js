@@ -17,7 +17,7 @@ function load_projects() {
 	var request = new XMLHttpRequest();
 	request.open("GET", "/meta_data/project");
 	request.onreadystatechange = function() {
-		var res = JSON.parse(request.response);
+		var res = JSON.parse(request.response);		
 		window.appData.projectInfo.total = res.projects;
 
 		$('#project-links').empty();
@@ -41,7 +41,7 @@ function select_project(project) {
 	request.open("GET", "/meta_data/product?project="+project);
 	request.onreadystatechange = function(){
 		if (request.readyState === 4 && request.status === 200){
-			console.log("get product");
+			// console.log("get product");
 			var res = JSON.parse(request.response);
 			window.appData.projectInfo.products = res.products;
 			window.appData.projectInfo.prefix = res.prefix;
@@ -82,7 +82,7 @@ function load_scene() {
 
 					var scenes = x[name];
 					for (var ii=0; ii<scenes.length; ii++) {
-						console.log(scenes[ii]);
+						// console.log(scenes[ii]);
 						var allScenes = window.appData.sceneInfo.total;
 						allScenes[allScenes.length] = scenes[ii];
 						
@@ -100,7 +100,7 @@ function load_scene() {
 					allScenes[allScenes.length] = x;
 
 					$('.nav-tabs').append("<li><a href=\"javascript:select_scene_num("+(allScenes.length-1)+")\"><p class=\"text-capitalize\">"+x+"</p></a></li>");
-					console.log("hahah:"+x);
+					// console.log("hahah:"+x);
 				}
 
 			})
@@ -150,12 +150,12 @@ function load_page() {
 }
 
 function select_page(index){
-	console.log("select_page");
+	// console.log("select_page");
 
 	var pageInfo = window.appData.pageInfo;
 
 	if (index > pageInfo.total || index < 1 || index == pageInfo.curr){
-		console.log("unused")
+		// console.log("unused")
 		return;
 	}
 
@@ -191,7 +191,7 @@ function select_page(index){
 	}
 
 	if (indexUpdated) {
-		console.log("Re-contruct the page...");
+		// console.log("Re-contruct the page...");
 		for (var i=0; i<numElt; i++){
 			$("a#page-index-"+(i+1)).attr("href", "javascript:select_page("+(i+pageInfo.start)+")");
 			$("a#page-index-"+(i+1)).text(i+pageInfo.start);
@@ -235,7 +235,7 @@ function load_images(){
 	var prefix = window.appData.projectInfo.prefix;
 	var appendix = window.appData.pageInfo.curr;
 
-console.log(window.appData.projectInfo.prefix);
+// console.log(window.appData.projectInfo.prefix);
 	for (var i=1; i<=prefix.length; i++){
 		load_image("/photos/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
 	}
@@ -291,12 +291,13 @@ function onModalLoaded(event) {
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
         beforeSubmit:  function(a,b,c){
-        							a[a.length] = {name:"user", value:"Jimmy"};
+        							a[a.length] = {name:"user", value:"JimmyG"};
         							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
         							a[a.length] = {name:"scene", value:window.appData.sceneInfo.curr};
         							a[a.length] = {name:"index", value:window.appData.pageInfo.curr};
         							a[a.length] = {name:"product", value:window.appData.projectInfo.products[pos-1]}
-        							console.log(a)},  // pre-submit callback 
+        							// console.log(a)
+        							},  // pre-submit callback 
 
         complete:  		function(msg){window.currModal.modal("hide");
     								window.currModal = null},

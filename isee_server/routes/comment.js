@@ -1,7 +1,8 @@
 var express = require('express');
 
-
 var router = express.Router();
+
+var db = require('../database/db');
 
 /* POST a comment */
 router.post('/', function(req, res, next) {
@@ -14,8 +15,8 @@ router.post('/', function(req, res, next) {
   	grade: req.body.img_grade,
   	review: req.body.comment_message
   }
-  console.log("Receive a comment: "+comment);
 
+  db.sendComment(comment);
   res.send("OK");
 });
 

@@ -114,4 +114,8 @@ db.getProduct = function (project) {
 	
 }
 
+db.sendComment = function (comment){
+	console.log(JSON.stringify(comment));
+}
+
 module.exports = db;
