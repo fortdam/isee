@@ -135,7 +135,7 @@ function load_page() {
 
 			window.appData.sceneInfo.currPath = res.path;
 			window.appData.pageInfo = {
-				'total': res.num,
+				'total': parseInt(res.num),
 				'start': 1,
 				'end': 5,
 				'curr': undefined,
@@ -281,6 +281,8 @@ function place_label() {
 function onModalLoaded(event) {
   var imageElt = $(event.relatedTarget);
   var pos = imageElt.attr("trigger-place");
+
+  window.currModal = $(this);
   
 
   $(this).find('.modal-title-text').text('Tell us your thoughts about this picture(' + window.appData.projectInfo.products[pos-1]+')');
@@ -288,17 +290,16 @@ function onModalLoaded(event) {
 
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
-        beforeSubmit:  function(){console.log("before submit")},  // pre-submit callback 
-        success:       function(){console.log("success");
-        							$('#myModal1').modal("hide");
-        							$('#myModal2').modal("hide");
-        							$('#myModal3').modal("hide");
-        							$('#myModal4').modal("hide");},  // post-submit callback
-        complete:  		function(){console.log("complete");
-        							$('#myModal1').modal("hide");
-        							$('#myModal2').modal("hide");
-        							$('#myModal3').modal("hide");
-        							$('#myModal4').modal("hide");},
+        beforeSubmit:  function(a,b,c){
+        							a[a.length] = {name:"user", value:"Jimmy"};
+        							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
+        							a[a.length] = {name:"scene", value:window.appData.sceneInfo.curr};
+        							a[a.length] = {name:"index", value:window.appData.pageInfo.curr};
+        							a[a.length] = {name:"product", value:window.appData.projectInfo.products[pos-1]}
+        							console.log(a)},  // pre-submit callback 
+
+        complete:  		function(msg){window.currModal.modal("hide");
+    								window.currModal = null},
         resetForm: true, 
         clearForm: true,
         dataType:  'json',
