@@ -11,6 +11,9 @@ var photos = require('./routes/photos');
 var meta_data = require('./routes/meta_data');
 var comment = require('./routes/comment');
 
+var fs = require('fs');
+var images = require("images");
+
 var app = express();
 
 // view engine setup
@@ -23,6 +26,54 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// function subsample_image(originalFile, targetFile, factor){
+//   var pic = images(originalFile);
+//   var width = pic.width()*factor;
+
+//   pic.size(width).save(targetFile);
+// }
+
+// app.use('/photos/*.jpg', function(req, res, next){
+//   console.log("load image:"+'public'+req.originalUrl);
+  
+
+//   if (!fs.existsSync('public'+req.originalUrl))
+//   { 
+//     console.log("log 0");
+//   //File does not exist
+
+//     var regex = new RegExp('__small__.');
+
+//     if (req.originalUrl.search(regex)) { //Find a small pic
+//       console.log("log 1");
+//       console.log(req.originalUrl.replace(regex, ""));
+
+//       if (fs.existsSync('public'+req.originalUrl.replace(regex, ""))){  //Original copy exist
+//         console.log("log 2");
+//         subsample_image('public'+req.originalUrl.replace(regex, ""), 'public'+req.originalUrl, 0.125);
+//       }
+//       next();
+//     }
+//     console.log("log 3")
+    
+//     // regex = new RegExp("/__medium__./");
+//     // if (regex.test(req.originalUrl)) {
+//     //   next();
+//     // }
+    
+//     // regex = (new RegExp("/__large__./"));
+//     // if (regex.test(req.originalUrl)) {
+//     // }
+
+//   }
+//   else {
+//     console.log("come here");
+//   }
+//   // console.log("aaaa");
+//   next();
+// });
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);

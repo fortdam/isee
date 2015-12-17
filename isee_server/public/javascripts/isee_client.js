@@ -237,7 +237,7 @@ function load_images(){
 
 // console.log(window.appData.projectInfo.prefix);
 	for (var i=1; i<=prefix.length; i++){
-		load_image("/photos/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+		load_image("/photos/__small__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
 	}
 }
 

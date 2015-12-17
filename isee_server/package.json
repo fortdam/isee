@@ -15,7 +15,8 @@
     "serve-favicon": "~2.3.0",
     "mongodb": "*",
     "monk": "*",
-    "images": "*",
+    "gm": "*",
+    "images":"*",
     "exif": "*"
   }
 }
