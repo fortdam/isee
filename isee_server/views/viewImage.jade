@@ -2,16 +2,18 @@ extends layout
 
 block content
   header(class="navbar navbar-static-top bs-docs-nav", id="top", role="banner")
-  .container
-    .navbar-header
-      .navbar-brand Projects
-    .nav(id="bs-navbar", class="collapse navbar-collapse")
-      ul(class="nav navbar-nav", id="project-links")
-
+    .container
+      .navbar-header
+        .navbar-brand Projects
+      .nav(id="bs-navbar", class="collapse navbar-collapse")
+        ul(class="nav navbar-nav", id="project-links")
+        ul(class="nav navbar-nav navbar-right")
+          li
+            a(href="#", data-toggle="modal", data-target="#settingModal") 
+              span(class="glyphicon glyphicon-cog" aria-hidden="true")
 
   .container
     ul(class="nav nav-tabs", id="scene-tab")
-
     nav
       ul(class="pagination")
         li(class="page-prev")
@@ -56,6 +58,9 @@ block content
 
     .modal(class="fade", id="myModal4", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
       include ./model_dialog.jade 
+
+    .modal(class="fade", id="settingModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./setting_dialog.jade
 
     h3(id="label1", style="position:fixed")
       span(class="label label-primary", id='label-text-1')  a

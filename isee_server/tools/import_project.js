@@ -86,16 +86,13 @@ function prepare_subsample_dirs(originalDir){
 }
 
 function create_scene_info(originalDir){
-	var folder = fs.readdirSync(dir);
+	var folder = fs.readdirSync(originalDir);
 
 	for (var i=0; i<folder.length; i++){
 		if (fs.lstatSync(dir+folder[i]).isDirectory()){
 			return; //Not a leaf, return
 		}
 	}
-
-
-
 }
 
 function prepare_subsample_dir_kernel(originalDir, resizeType){
@@ -143,11 +140,18 @@ function extract_exif(originalFile){
     });
 }
 
-
+function name_normalize(orignalFile){
+	if (orignalFile.match(/JPG$/)) {
+		fs.renameSync(orignalFile, orignalFile.replace(/JPG$/, "jpg"));
+	}
+}
 
 function project_mipmap(project){
 	prepare_mipmap();
-	process_all_files(PHOTO_PATH+project+'/', [prepare_subsample_dirs, create_scene_info], [subsample_images, extract_exif]);
+	process_all_files(PHOTO_PATH+project+'/', 
+		[prepare_subsample_dirs, create_scene_info], //For folders
+		[name_normalize,subsample_images, extract_exif]  //For filez
+		);   
 }
 
 function read_project_info(project){
