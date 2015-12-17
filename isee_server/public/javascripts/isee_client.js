@@ -1,14 +1,19 @@
 
 
 var appData = {
-	'projectInfo': {
+	projectInfo: {
 		curr: undefined
 	},
-	'sceneInfo': {
+	sceneInfo: {
 		curr: undefined
 	},
-	'pageInfo': {
+	pageInfo: {
 		curr: undefined
+	},
+	settings: {
+		imgsize: "large",
+		layout: "matrix",
+		comment: "off"
 	}
 
 };
@@ -25,7 +30,7 @@ function load_projects() {
 			$('#project-links').append("<li><a href=\"javascript:select_project_num("+i+")\">"+window.appData.projectInfo.total[i]+"</li>");
 		}
 
-		select_project(window.appData.projectInfo.total[0]);
+		select_project(window.appData.projectInfo.total[1]);
 	}
 	request.send();
 }
@@ -237,7 +242,18 @@ function load_images(){
 
 // console.log(window.appData.projectInfo.prefix);
 	for (var i=1; i<=prefix.length; i++){
-		load_image("/photos/__small__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+		if (window.appData.settings.imgsize == 'small'){
+			load_image("/photos/__small__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+		}
+		else if (window.appData.settings.imgsize =='medium'){
+			load_image("/photos/__medium__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+		}
+		else if (window.appData.settings.imgsize == 'large'){
+			load_image("/photos/__large__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+		}
+		else{
+			load_image("/photos/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+		}
 	}
 }
 
@@ -328,6 +344,45 @@ function onModalLoaded(event) {
     }); 
 }
 
+function onSettingModalLoaded(event){
+
+	var settings = window.appData.settings;
+
+	$(this).find('#'+settings.imgsize).addClass('active');
+	$(this).find('#'+settings.layout).addClass('active');
+	$(this).find('#'+settings.comment).addClass('active');
+
+	// $(this).find('label').change(function(){
+	// 	settings.imgsize = $('label.active:eq(0)').attr('id');
+	// 	settings.layout = $('label.active:eq(1)').attr('id');
+	// 	settings.comment = $('label.active:eq(2)').attr("id");
+	// });
+}
+
+function onHideSettingModalLoaded(event){
+	var settings = window.appData.settings;
+	var relayout = false;
+	var reload = false
+
+	if(settings.imgsize != $('label.active:eq(0)').attr('id')){
+		reload = true;
+	}
+
+	if (settings.layout != $('label.active:eq(1)').attr('id') ||
+		settings.comment != $('label.active:eq(2)').attr("id")){
+		relayout = true;
+	}
+
+	settings.imgsize = $('label.active:eq(0)').attr('id');
+	settings.layout = $('label.active:eq(1)').attr('id');
+	settings.comment = $('label.active:eq(2)').attr("id");
+
+	if (reload){
+		console.log("reload");
+		load_images();		
+	}
+}
+
 document.body.onload = load_projects();//select_project('idol4');
 
 window.onresize = place_label
@@ -337,3 +392,6 @@ $('#myModal1').on('show.bs.modal', onModalLoaded);
 $('#myModal2').on('show.bs.modal', onModalLoaded);
 $('#myModal3').on('show.bs.modal', onModalLoaded);
 $('#myModal4').on('show.bs.modal', onModalLoaded);
+
+$('#settingModal').on('show.bs.modal', onSettingModalLoaded);
+$('#settingModal').on('hide.bs.modal', onHideSettingModalLoaded);
