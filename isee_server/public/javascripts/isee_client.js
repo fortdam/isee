@@ -250,13 +250,13 @@ function load_images(){
 // console.log(window.appData.projectInfo.prefix);
 	for (var i=1; i<=prefix.length; i++){
 		if (window.appData.settings.imgsize == 'small'){
-			load_image("/photos/__small__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+			load_image("/photos/cache/__small__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
 		}
 		else if (window.appData.settings.imgsize =='medium'){
-			load_image("/photos/__medium__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+			load_image("/photos/cache/__medium__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
 		}
 		else if (window.appData.settings.imgsize == 'large'){
-			load_image("/photos/__large__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
+			load_image("/photos/cache/__large__/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);
 		}
 		else{
 			load_image("/photos/"+path1+"/"+path2+"/"+prefix[i-1]+"_"+appendix+".jpg", i);

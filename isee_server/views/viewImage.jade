@@ -56,13 +56,6 @@ block content
           li(data-target="#carousel-example-generic" data-slide-to="1")
           li(data-target="#carousel-example-generic" data-slide-to="2")
           li(data-target="#carousel-example-generic" data-slide-to="3")
-        a(class="left"  href="#carousel-example-generic" role="button" data-slide="prev")
-          span(class="glyphicon glyphicon-chevron-left" aria-hidden="true")
-          span(class="sr-only") Previous
-        a(class="right" href="#carousel-example-generic" role="button" data-slide="next")
-          span(class="glyphicon glyphicon-chevron-right" aria-hidden="true")
-          span(class="sr-only") Next
-
         .carousel-inner(role="listbox")
           .item(class="active")
             img(src=default_img, id="pic1" ,data-toggle="modal", data-target="#myModal1", trigger-place="1")
@@ -84,6 +77,12 @@ block content
             .carousel-caption
               h3
                 span(class="label label-success", id='carousel-label-text-4')  d
+        a(class="left"  href="#carousel-example-generic" role="button" data-slide="prev")
+          span(class="glyphicon glyphicon-chevron-left" aria-hidden="true")
+          span(class="sr-only") Previous
+        a(class="right" href="#carousel-example-generic" role="button" data-slide="next")
+          span(class="glyphicon glyphicon-chevron-right" aria-hidden="true")
+          span(class="sr-only") Next
 
     .modal(class="fade", id="myModal1", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
       include ./model_dialog.jade 
