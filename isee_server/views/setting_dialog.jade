@@ -9,16 +9,16 @@
       b Size:
       br
       .btn-group(data-toggle="buttons")
-        label(class="btn btn-default", id="full-size")
+        label(class="btn btn-default", id="full-size", filter="setting")
           input(type="radio", name="image-size", id="full-size", value="full-size", autocomplete="off") 
           span Full Size
-        label(class="btn btn-default", id="large")
+        label(class="btn btn-default", id="large", filter="setting")
           input(type="radio", name="image-size", id="large", value="large", autocomplete="off") 
           span Large
-        label(class="btn btn-default", id="medium")
+        label(class="btn btn-default", id="medium", filter="setting")
           input(type="radio", name="image-size", id="medium", value="medium", autocomplete="off") 
           span Medium
-        label(class="btn btn-default", id="small")
+        label(class="btn btn-default", id="small", filter="setting")
           input(type="radio", name="image-size", id="small", value="small", autocomplete="off") 
           span Small
       br
@@ -26,10 +26,10 @@
       b Layout:
       br
       .btn-group(data-toggle="buttons")
-        label(class="btn btn-default", id="matrix")
+        label(class="btn btn-default", id="matrix", filter="setting")
           input(type="radio", name="layout", id="matrix", value="matrix", autocomplete="off") 
           span Matrix
-        label(class="btn btn-default", id="film-stripe")
+        label(class="btn btn-default", id="film-stripe", filter="setting")
           input(type="radio", name="layout", id="film-stripe", value="matrix", autocomplete="off") 
           span Film-stripe
       br
@@ -37,10 +37,10 @@
       b Comment:
       br
       .btn-group(data-toggle="buttons")
-        label(class="btn btn-default", id="on")
+        label(class="btn btn-default", id="on", filter="setting")
           input(type="radio", name="comment", id="on", value="on", autocomplete="off") 
           span On
-        label(class="btn btn-default", id="off")
+        label(class="btn btn-default", id="off", filter="setting")
           input(type="radio", name="comment", id="off", value="off", autocomplete="off") 
           span Off
     .modal-footer

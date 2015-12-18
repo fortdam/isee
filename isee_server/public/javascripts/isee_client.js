@@ -51,10 +51,14 @@ function select_project(project) {
 			window.appData.projectInfo.products = res.products;
 			window.appData.projectInfo.prefix = res.prefix;
 
-			$('#label-text-1').html(window.appData.projectInfo.products[0]);
-			$('#label-text-2').html(window.appData.projectInfo.products[1]);
-			$('#label-text-3').html(window.appData.projectInfo.products[2]);
-			$('#label-text-4').html(window.appData.projectInfo.products[3]);
+			$('#matrix-label-text-1').html(window.appData.projectInfo.products[0]);
+			$('#carousel-label-text-1').html(window.appData.projectInfo.products[0]);
+			$('#matrix-label-text-2').html(window.appData.projectInfo.products[1]);
+			$('#carousel-label-text-2').html(window.appData.projectInfo.products[1]);
+			$('#matrix-label-text-3').html(window.appData.projectInfo.products[2]);
+			$('#carousel-label-text-3').html(window.appData.projectInfo.products[2]);
+			$('#matrix-label-text-4').html(window.appData.projectInfo.products[3]);
+			$('#carousel-label-text-4').html(window.appData.projectInfo.products[3]);
 
 			load_scene();
 		}
@@ -258,9 +262,8 @@ function load_images(){
 }
 
 function load_image(filePath, pos) {
-	var elt = document.getElementById("pic"+pos);
-	elt.src=filePath;
-	elt.onload = place_label;
+	$('img#pic'+pos).attr('src', filePath);
+	$('img#pic'+pos).onload = place_label;
 }
 
 function xy(x) {
@@ -348,15 +351,14 @@ function onSettingModalLoaded(event){
 
 	var settings = window.appData.settings;
 
-	$(this).find('#'+settings.imgsize).addClass('active');
-	$(this).find('#'+settings.layout).addClass('active');
-	$(this).find('#'+settings.comment).addClass('active');
+	$(this).find('#'+settings.imgsize).addClass('active btn-primary');
+	$(this).find('#'+settings.layout).addClass('active btn-primary');
+	$(this).find('#'+settings.comment).addClass('active btn-primary');
 
-	// $(this).find('label').change(function(){
-	// 	settings.imgsize = $('label.active:eq(0)').attr('id');
-	// 	settings.layout = $('label.active:eq(1)').attr('id');
-	// 	settings.comment = $('label.active:eq(2)').attr("id");
-	// });
+	$(this).find('label').change(function(){
+		$("label[filter='setting']").removeClass("btn-primary");
+		$("label[filter='setting'].active").addClass("btn-primary");
+	});
 }
 
 function onHideSettingModalLoaded(event){
@@ -368,8 +370,7 @@ function onHideSettingModalLoaded(event){
 		reload = true;
 	}
 
-	if (settings.layout != $('label.active:eq(1)').attr('id') ||
-		settings.comment != $('label.active:eq(2)').attr("id")){
+	if (settings.layout != $('label.active:eq(1)').attr('id')){
 		relayout = true;
 	}
 
@@ -377,10 +378,22 @@ function onHideSettingModalLoaded(event){
 	settings.layout = $('label.active:eq(1)').attr('id');
 	settings.comment = $('label.active:eq(2)').attr("id");
 
+	if(relayout){
+		if (settings.layout == 'matrix'){
+			$('#matrix').removeClass('hidden');
+			$('#filmstrip').addClass('hidden');
+		}
+		else{
+			$('#matrix').addClass('hidden');
+			$('#filmstrip').removeClass('hidden');			
+		}
+		window.setTimeout(place_label, 500);
+	}
+
 	if (reload){
-		console.log("reload");
 		load_images();		
 	}
+
 }
 
 document.body.onload = load_projects();//select_project('idol4');
@@ -395,3 +408,12 @@ $('#myModal4').on('show.bs.modal', onModalLoaded);
 
 $('#settingModal').on('show.bs.modal', onSettingModalLoaded);
 $('#settingModal').on('hide.bs.modal', onHideSettingModalLoaded);
+
+if (window.appData.settings.layout == 'matrix'){
+	$('#filmstrip').addClass('hidden');
+}
+else{
+	$('#matrix').addClass('hidden');
+}
+
+window.setTimeout(place_label, 500);
