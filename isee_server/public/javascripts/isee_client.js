@@ -10,12 +10,15 @@ var appData = {
 	pageInfo: {
 		curr: undefined
 	},
+	userInfo: {
+		name: "",
+		email: ""
+	},
 	settings: {
 		imgsize: "large",
 		layout: "matrix",
 		comment: "off"
 	}
-
 };
 
 function load_projects() {
@@ -263,7 +266,7 @@ function load_images(){
 
 function load_image(filePath, pos) {
 	$('img#pic'+pos).attr('src', filePath);
-	$('img#pic'+pos).onload = place_label;
+	$('img#pic'+pos).onload = place_label;place_label
 }
 
 function xy(x) {
@@ -310,11 +313,13 @@ function onModalLoaded(event) {
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
         beforeSubmit:  function(a,b,c){
-        							a[a.length] = {name:"user", value:"JimmyG"};
         							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
         							a[a.length] = {name:"scene", value:window.appData.sceneInfo.curr};
         							a[a.length] = {name:"index", value:window.appData.pageInfo.curr};
-        							a[a.length] = {name:"product", value:window.appData.projectInfo.products[pos-1]}
+        							a[a.length] = {name:"product", value:window.appData.projectInfo.products[pos-1]};
+        							a[a.length] = {name:"user", value:window.userInfo.name};
+        							a[a.length] = {name:"email", value:window.userInfo.email};
+        							a[a.length] = {name:"imgsize", value:window.settings.imgsize};
         							// console.log(a)
         							},  // pre-submit callback 
 
@@ -353,6 +358,8 @@ function onSettingModalLoaded(event){
 
 	$(this).find('#'+settings.imgsize).addClass('active btn-primary');
 	$(this).find('#'+settings.layout).addClass('active btn-primary');
+
+	console.log("commment is:"+settings.comment);
 	$(this).find('#'+settings.comment).addClass('active btn-primary');
 
 	$(this).find('label').change(function(){
@@ -361,7 +368,7 @@ function onSettingModalLoaded(event){
 	});
 }
 
-function onHideSettingModalLoaded(event){
+function onSettingModalHide(event){
 	var settings = window.appData.settings;
 	var relayout = false;
 	var reload = false
@@ -378,14 +385,18 @@ function onHideSettingModalLoaded(event){
 	settings.layout = $('label.active:eq(1)').attr('id');
 	settings.comment = $('label.active:eq(2)').attr("id");
 
+	localStorage.imgsize = settings.imgsize;
+	localStorage.layout = settings.layout;
+	localStorage.comment = settings.comment;
+
 	if(relayout){
 		if (settings.layout == 'matrix'){
-			$('#matrix').removeClass('hidden');
-			$('#filmstrip').addClass('hidden');
+			$('.matrix').removeClass('hidden');
+			$('.filmstrip').addClass('hidden');
 		}
 		else{
-			$('#matrix').addClass('hidden');
-			$('#filmstrip').removeClass('hidden');			
+			$('.matrix').addClass('hidden');
+			$('.filmstrip').removeClass('hidden');			
 		}
 		window.setTimeout(place_label, 500);
 	}
@@ -393,27 +404,77 @@ function onHideSettingModalLoaded(event){
 	if (reload){
 		load_images();		
 	}
-
 }
 
-document.body.onload = load_projects();//select_project('idol4');
+function onUserModalLoaded(event){
 
-window.onresize = place_label
-window.onscroll = place_label;
+	var userInfo = window.appData.userInfo;
 
-$('#myModal1').on('show.bs.modal', onModalLoaded);
-$('#myModal2').on('show.bs.modal', onModalLoaded);
-$('#myModal3').on('show.bs.modal', onModalLoaded);
-$('#myModal4').on('show.bs.modal', onModalLoaded);
+	console.log(userInfo.name);
 
-$('#settingModal').on('show.bs.modal', onSettingModalLoaded);
-$('#settingModal').on('hide.bs.modal', onHideSettingModalLoaded);
-
-if (window.appData.settings.layout == 'matrix'){
-	$('#filmstrip').addClass('hidden');
-}
-else{
-	$('#matrix').addClass('hidden');
+	$(this).find('input#username').attr('value', userInfo.name);
+	$(this).find('input#email').attr('value', userInfo.email);
 }
 
+function onUserModalHide(event){
+	var userInfo = window.appData.userInfo;
+
+	userInfo.name = $(this).find('input#username').val();
+	localStorage.username = userInfo.name;
+
+	userInfo.email = $(this).find('input#email').val();
+	localStorage.email = userInfo.email;
+}
+
+
+function preload_local_settings(){
+	if (localStorage.username){
+		window.appData.userInfo.name = localStorage.username;
+	}
+
+	if (localStorage.email){
+		window.appData.userInfo.email = localStorage.email;
+	}
+
+	if (localStorage.imgsize){
+		window.appData.settings.imgsize = localStorage.imgsize;
+	}
+
+	if (localStorage.layout){
+		window.appData.settings.layout = localStorage.layout;
+	}
+
+	if (localStorage.comment){
+		window.appData.settings.comment = localStorage.comment;
+	}
+
+	if (window.appData.settings.layout == 'matrix'){
+		$('.filmstrip').addClass('hidden');
+	}
+	else{
+		$('.matrix').addClass('hidden');
+	}
+}
+
+function set_hook_functions(){
+	document.body.onload = load_projects();//select_project('idol4');
+
+	window.onresize = place_label
+	window.onscroll = place_label;
+
+	$('#myModal1').on('show.bs.modal', onModalLoaded);
+	$('#myModal2').on('show.bs.modal', onModalLoaded);
+	$('#myModal3').on('show.bs.modal', onModalLoaded);
+	$('#myModal4').on('show.bs.modal', onModalLoaded);
+
+	$('#settingModal').on('show.bs.modal', onSettingModalLoaded);
+	$('#settingModal').on('hide.bs.modal', onSettingModalHide);
+
+	$('#userModal').on('show.bs.modal', onUserModalLoaded);
+	$('#userModal').on('hide.bs.modal', onUserModalHide);	
+}
+
+//Main Routine
+set_hook_functions();
+preload_local_settings();
 window.setTimeout(place_label, 500);

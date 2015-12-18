@@ -9,6 +9,9 @@ block content
         ul(class="nav navbar-nav", id="project-links")
         ul(class="nav navbar-nav navbar-right")
           li
+            a(href="#", data-toggle="modal", data-target="#userModal") 
+              span(class="glyphicon glyphicon-user" aria-hidden="true")
+          li
             a(href="#", data-toggle="modal", data-target="#settingModal") 
               span(class="glyphicon glyphicon-cog" aria-hidden="true")
 
@@ -34,7 +37,7 @@ block content
           a(href="javascript:select_page(6)", aria-label="Next", id="page-next-arrow")
             span(aria-hidden="true") &raquo
 
-    #matrix
+    .matrix
       .row
         .col-md-6
           img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#myModal1", trigger-place="1") 
@@ -46,7 +49,7 @@ block content
           img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#myModal3", trigger-place="3")
         .col-md-6
           img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#myModal4", trigger-place="4")
-    #filmstrip
+    .filmstrip
       div(id="carousel-example-generic", class="carousel slide", data-ride="carousel", data-interval=50000, data-keyboard=true)
         ol.carousel-indicators
           li.active(data-target="#carousel-example-generic" data-slide-to="0")
@@ -96,6 +99,9 @@ block content
 
     .modal(class="fade", id="settingModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
       include ./setting_dialog.jade
+
+    .modal(class="fade", id="userModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./user_dialog.jade
 
     h3(id="label1", style="position:fixed")
       span(class="label label-primary matrix", id='matrix-label-text-1')  a

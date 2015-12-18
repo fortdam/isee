@@ -1,0 +1,16 @@
+.modal-dialog(role="document")
+  .modal-content
+    .modal-header
+      div(class="modal-title") 
+        button(type="button", class="close", data-dismiss="modal", aria-label="Close") 
+          span(aria-hidden="true") &times
+        h4.modal-title-text User Information
+    .modal-body
+      .form-group
+        label(for="username") User name
+          input.form-control(type="text", id="username", placeholder="Name")
+      .form-group
+        label(for="email") Email address
+          input.form-control(type="email" id="email" placeholder="Email")        
+    .modal-footer
+      button(type="button", class="btn btn-default", data-dismiss="modal") Close
