@@ -1,6 +1,7 @@
 
 
 var appData = {
+	fullscreen: false,
 	projectInfo: {
 		curr: undefined
 	},
@@ -456,6 +457,7 @@ function preload_local_settings(){
 	}
 }
 
+
 function set_hook_functions(){
 	document.body.onload = load_projects();//select_project('idol4');
 
@@ -473,6 +475,90 @@ function set_hook_functions(){
 	$('#userModal').on('show.bs.modal', onUserModalLoaded);
 	$('#userModal').on('hide.bs.modal', onUserModalHide);	
 }
+
+function toggle_fullscreen(){
+	var element = document.documentElement;
+
+	if (window.appData.fullscreen === false){
+		if (element.requestFullScreen){
+			element.requestFullScreen();
+		}
+		else if(element.mozRequestFullScreen){
+			element.mozRequestFullScreen();
+		}
+		else if(element.webkitRequestFullscreen){
+			element.webkitRequestFullscreen();
+		}
+		else if(element.msRequestFullScreen){
+			element.msRequestFullScreen();
+		}
+		$('.glyphicon-resize-full').removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
+		window.appData.fullscreen = true;
+	}
+	else{
+		console.log('exit full screen')
+		if(document.exitFullScreen){
+			document.exitFullScreen();
+		} 
+		else if(document.mozCancelFullScreen){
+		    document.mozCancelFullScreen();
+		} 
+		else if(document.webkitExitFullscreen){
+		    document.webkitExitFullscreen();
+		} 
+		else if(document.msExitFullScreen){
+			document.msExitFullScreen();
+		}		
+
+		$('.glyphicon-resize-small').removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
+		window.appData.fullscreen = false;
+	}	
+}
+
+document.addEventListener("fullscreenchange", function( event ) {
+	if (!document.fullscreenElement) {
+    	$('.glyphicon-resize-small').removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
+		window.appData.fullscreen = false;
+  	} 
+  	else {
+  		$('.glyphicon-resize-full').removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
+		window.appData.fullscreen = true;
+  	}
+});
+
+document.addEventListener("mozfullscreenchange", function( event ) {
+	if (!document.mozFullScreen) {
+    	$('.glyphicon-resize-small').removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
+		window.appData.fullscreen = false;
+  	} 
+  	else {
+  		$('.glyphicon-resize-full').removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
+		window.appData.fullscreen = true;
+  	}
+});
+
+document.addEventListener("webkitfullscreenchange", function( event ) {
+	if (!document.webkitIsFullScreen) {
+    	$('.glyphicon-resize-small').removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
+		window.appData.fullscreen = false;
+  	} 
+  	else {
+  		$('.glyphicon-resize-full').removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
+		window.appData.fullscreen = true;
+  	}
+});
+
+document.addEventListener("msfullscreenchange", function( event ) {
+	if (!document.msFullscreenElement) {
+    	$('.glyphicon-resize-small').removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
+		window.appData.fullscreen = false;
+  	} 
+  	else {
+  		$('.glyphicon-resize-full').removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
+		window.appData.fullscreen = true;
+  	}
+});
+
 
 //Main Routine
 set_hook_functions();

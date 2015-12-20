@@ -6,3 +6,9 @@ body {
 a {
   color: #00B7FF;
 }
+
+.carousel-control.left, .carousel-control.right {
+  background: none !important;
+  filter: progid: none !important;
+  outline: 0;
+ }

@@ -9,6 +9,9 @@ block content
         ul(class="nav navbar-nav", id="project-links")
         ul(class="nav navbar-nav navbar-right")
           li
+            a(href="javascript:toggle_fullscreen()") 
+              span(class="glyphicon glyphicon-resize-full" aria-hidden="true")
+          li
             a(href="#", data-toggle="modal", data-target="#userModal") 
               span(class="glyphicon glyphicon-user" aria-hidden="true")
           li
@@ -77,10 +80,10 @@ block content
             .carousel-caption
               h3
                 span(class="label label-success", id='carousel-label-text-4')  d
-        a(class="left"  href="#carousel-example-generic" role="button" data-slide="prev")
+        a(class="left carousel-control"  href="#carousel-example-generic" role="button" data-slide="prev")
           span(class="glyphicon glyphicon-chevron-left" aria-hidden="true")
           span(class="sr-only") Previous
-        a(class="right" href="#carousel-example-generic" role="button" data-slide="next")
+        a(class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next")
           span(class="glyphicon glyphicon-chevron-right" aria-hidden="true")
           span(class="sr-only") Next
 
