@@ -26,13 +26,24 @@ function load_projects() {
 	var request = new XMLHttpRequest();
 	request.open("GET", "/meta_data/project");
 	request.onreadystatechange = function() {
-		var res = JSON.parse(request.response);		
-		window.appData.projectInfo.total = res.projects;
-
+		var res = JSON.parse(request.response);	
+		//Clear the project information
+		window.appData.projectInfo.total = [];
 		$('#project-links').empty();
-		for (var i=0; i<window.appData.projectInfo.total.length; i++){
-			$('#project-links').append("<li><a href=\"javascript:select_project_num("+i+")\">"+window.appData.projectInfo.total[i]+"</li>");
-		}
+
+		//Enumerate all the projects
+		Object.keys(res).forEach(function(val, index, array){
+			$('#project-links').append("<li><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+val+"</a><ul class=\"dropdown-menu\" id=\"project_"+index+"\"></li>");
+
+			res[val].forEach(function(v,i,a){
+				var offset = window.appData.projectInfo.total.indexOf(v.test);
+				if(offset === -1){
+					window.appData.projectInfo.total[window.appData.projectInfo.total.length] = v.test;
+					offset = window.appData.projectInfo.total.length-1;
+				}
+				$('ul#project_'+index).append("<li><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+			});
+		});
 
 		select_project(window.appData.projectInfo.total[1]);
 	}
@@ -459,9 +470,9 @@ function preload_local_settings(){
 
 
 function set_hook_functions(){
-	document.body.onload = load_projects();//select_project('idol4');
+	document.body.onload = load_projects;//select_project('idol4');
 
-	window.onresize = place_label
+	window.onresize = place_label;
 	window.onscroll = place_label;
 
 	$('#myModal1').on('show.bs.modal', onModalLoaded);

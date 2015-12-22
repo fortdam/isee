@@ -1,6 +1,6 @@
 var fs = require("fs");
 var gm = require("gm");
-var images = require("images");
+var process = require("process");
 
 var ExifImage = require('exif').ExifImage;
 
@@ -69,8 +69,6 @@ function process_all_files(dir, dirCB, fileCB){
 				else if (typeof(dirCB) === "function"){
 					dirCB(dir+folder[i]+'/');
 				}
-
-				dirCB(dir+folder[i]+'/');
 			}
 			process_all_files(dir+folder[i]+'/', dirCB, fileCB);
 		}
@@ -89,7 +87,7 @@ function create_scene_info(originalDir){
 	var folder = fs.readdirSync(originalDir);
 
 	for (var i=0; i<folder.length; i++){
-		if (fs.lstatSync(dir+folder[i]).isDirectory()){
+		if (fs.lstatSync(originalDir+folder[i]).isDirectory()){
 			return; //Not a leaf, return
 		}
 	}
@@ -159,5 +157,17 @@ function read_project_info(project){
 	console.log(projectInfo);
 }
 
-read_project_info('idol3');
-project_mipmap('idol3');
+if (process.argv.length < 2) {
+	console.log('The command is: node import_project.js <project name>');
+}
+else {
+	if (fs.existsSync("../public/"+process.argv)){
+		read_project_info(process.argv[2]);
+		project_mipmap(process.argv[2]);
+	}
+	else{
+		console.log("The project doesn't exist, please make sure the project <../public/"+process.argv[2]+"> exists");
+	}
+
+}
+

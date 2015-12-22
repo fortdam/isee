@@ -1,7 +1,17 @@
 var db = {};
 
 db.getProjectList = function () {
-	return {'projects':['idol4_151207', 'idol3_151210']};
+	return {'Idol3': [{
+				'name': 'VQI test #1',
+				'test':'idol3_151210'}],
+			'Idol4': [{
+				'name': 'Subjective - Rear #1',
+				'test': 'idol4_151207'}],
+			'Idol4S': [{
+				'name': 'Subjective - Rear #1',
+				'test': 'idol4_151207'}]
+			}
+
 }
 
 db.getSceneList = function (project) {
