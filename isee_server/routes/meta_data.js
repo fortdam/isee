@@ -2,10 +2,17 @@ var express = require('express');
 var router = express.Router();
 
 var db = require('../database/db');
+var isee_db = require('../database/isee_db');
 
+isee_db.open();
 /* GET users listing. */
 router.get('/project', function(req, res, next) {
-  res.send(db.getProjectList());
+
+	isee_db.getProject(function(data){
+		res.send(data);
+	});
+
+//  res.send(db.getProjectList());
 });
 
 router.get('/scene', function(req, res, next){

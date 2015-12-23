@@ -1,5 +1,6 @@
 var db = {};
 
+
 db.getProjectList = function () {
 	return {'Idol3': [{
 				'name': 'VQI test #1',
@@ -10,8 +11,7 @@ db.getProjectList = function () {
 			'Idol4S': [{
 				'name': 'Subjective - Rear #1',
 				'test': 'idol4_151207'}]
-			}
-
+			};
 }
 
 db.getSceneList = function (project) {

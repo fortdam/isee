@@ -33,7 +33,7 @@ function load_projects() {
 
 		//Enumerate all the projects
 		Object.keys(res).forEach(function(val, index, array){
-			$('#project-links').append("<li><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+val+"</a><ul class=\"dropdown-menu\" id=\"project_"+index+"\"></li>");
+			$('#project-links').append("<li><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+val+"<b class=\"caret\"></b></a><ul class=\"dropdown-menu\" id=\"project_"+index+"\"></li>");
 
 			res[val].forEach(function(v,i,a){
 				var offset = window.appData.projectInfo.total.indexOf(v.test);
