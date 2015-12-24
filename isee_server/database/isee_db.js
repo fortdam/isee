@@ -26,17 +26,24 @@ isee_db.open = function(callback){
 
 isee_db.close = function(){
 	if(this.db){
-		this.db = null;
 		this.db.close();
+		this.db = null;
 	}
 }
 
-isee_db.clear = function(){
-	this.db.collection(COL_PROJECT).drop();
-	this.db.collection(COL_COMMENT).drop();
+isee_db.clear = function(callback){
+	var db = this.db;
+
+	db.collection(COL_PROJECT).drop(function(err, resp){
+		db.collection(COL_COMMENT).drop(function(err, resp){
+			if(callback){
+				callback();
+			}
+		});
+	});
 }
 
-isee_db.addPath = function(projectPath){
+isee_db.addPath = function(projectPath, callback){
 
 	if(!fs.existsSync(projectPath)){
 		console.log("The path doesn't exist: "+projectPath);
@@ -53,15 +60,19 @@ isee_db.addPath = function(projectPath){
 	project_info['test'] = paths[paths.length-1];
 	project_info['cust_id'] = 1;
 
-	this.addProject(project_info);
+	var inst = this;
+	this.db.collection(COL_PROJECT).deleteMany({"test":project_info['test']},
+		function(){
+			inst.addProject(project_info, callback);
+		});
 }
 
 
-isee_db.addProject = function(project){
+isee_db.addProject = function(project, callback){
 	assert(this.db);
 	assert(typeof(project) === 'object');
 
-	this.db.collection(COL_PROJECT).insertOne(project,null);
+	this.db.collection(COL_PROJECT).insertOne(project,callback);
 }
 
 isee_db.getProject = function(callback){
@@ -100,8 +111,15 @@ isee_db.getProject = function(callback){
 					}
 				});				
 			}
+		}
+	);
+}
 
-		});
+isee_db.getProduct = function(test, callback){
+	assert(this.db);
+
+	var cursor = this.db.collection(COL_PROJECT).find({"test": test, "cust_id":1});
+
 }
 
 

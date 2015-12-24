@@ -1,31 +1,31 @@
 var fs = require("fs");
 var gm = require("gm");
 var process = require("process");
-
 var ExifImage = require('exif').ExifImage;
 
+var isee_db = require('../database/isee_db');
 
 
 var PHOTO_PATH = "../public/photos/";
 
 var RESIZE_CONFIG = {
 	small: {
-		path: PHOTO_PATH + "__small__/",
+		path: PHOTO_PATH + "cache/__small__/",
 		width: 500,
 		quality: 85,
 	},
 	medium: {
-		path: PHOTO_PATH + "__medium__/",
+		path: PHOTO_PATH + "cache/__medium__/",
 		width: 1000,
 		quality: 90,
 	},
 	large: {
-		path: PHOTO_PATH + "__large__/",
+		path: PHOTO_PATH + "cache/__large__/",
 		width: 2000,
 		quality: 95
 	},
 	exif: { //A trick to create folder with resize
-		path: PHOTO_PATH + "__exif__/",
+		path: PHOTO_PATH + "cache/__exif__/",
 	}
 }
 
@@ -93,6 +93,14 @@ function create_scene_info(originalDir){
 	}
 }
 
+function add_project_info_2_db(projectDir){
+	isee_db.open(function(db){
+		isee_db.addPath(projectDir, function(){
+			isee_db.close();
+		});
+	});
+}
+
 function prepare_subsample_dir_kernel(originalDir, resizeType){
 	var targetDir = originalDir.replace(PHOTO_PATH, RESIZE_CONFIG[resizeType].path);
 
@@ -102,6 +110,7 @@ function prepare_subsample_dir_kernel(originalDir, resizeType){
 
 	while(splittedPath.length>0 && splittedPath[0].length>0){
 		currPath += splittedPath.shift() + "/";
+		console.log(currPath);
 		if (!fs.existsSync(currPath)){
 			fs.mkdirSync(currPath);
 		}
@@ -120,22 +129,28 @@ function subsample_image_kernel(originalFile, resizeType){
   var pic = gm(originalFile);
 
   var targetFile = originalFile.replace(PHOTO_PATH, RESIZE_CONFIG[resizeType].path);
-  console.log(targetFile);
 
-  gm(originalFile)
-  	.resize(RESIZE_CONFIG[resizeType].width)
-  	.quality(RESIZE_CONFIG[resizeType].quality)
-  	.write(targetFile, function(err){});
+  if (!fs.existsSync(targetFile)){
+	console.log("Create:"+targetFile);
+
+  	gm(originalFile)
+  		.resize(RESIZE_CONFIG[resizeType].width)
+  		.quality(RESIZE_CONFIG[resizeType].quality)
+  		.write(targetFile, function(err){});
+  }
 }
 
 function extract_exif(originalFile){
 	var exifFile = originalFile.replace(PHOTO_PATH, RESIZE_CONFIG['exif'].path).replace(/jpg$/i,"exif");
 
-	new ExifImage({ image : originalFile }, function (error, exifData) {
-        if (!error){
-            fs.writeFileSync(exifFile, JSON.stringify(exifData)); // Do something with your data!
-        }            
-    });
+	if (!fs.existsSync(exifFile)){
+		new ExifImage({ image : originalFile }, function (error, exifData) {
+	        if (!error){
+	            fs.writeFileSync(exifFile, JSON.stringify(exifData)); // Do something with your data!
+	        }            
+	    });	
+	}
+
 }
 
 function name_normalize(orignalFile){
@@ -146,9 +161,10 @@ function name_normalize(orignalFile){
 
 function project_mipmap(project){
 	prepare_mipmap();
+	add_project_info_2_db(PHOTO_PATH+project);
 	process_all_files(PHOTO_PATH+project+'/', 
 		[prepare_subsample_dirs, create_scene_info], //For folders
-		[name_normalize,subsample_images, extract_exif]  //For filez
+		[name_normalize, subsample_images, extract_exif]  //For filez
 		);   
 }
 
@@ -161,12 +177,12 @@ if (process.argv.length < 2) {
 	console.log('The command is: node import_project.js <project name>');
 }
 else {
-	if (fs.existsSync("../public/"+process.argv)){
+	if (fs.existsSync(PHOTO_PATH+process.argv[2])){
 		read_project_info(process.argv[2]);
 		project_mipmap(process.argv[2]);
 	}
 	else{
-		console.log("The project doesn't exist, please make sure the project <../public/"+process.argv[2]+"> exists");
+		console.log("The project doesn't exist, please make sure the project <"+PHOTO_PATH+process.argv[2]+"> exists");
 	}
 
 }
