@@ -85,7 +85,6 @@ isee_db.addScene = function(project, name, path, indice, callback){
 		'number': indice,
 		'cust_id': 2
 	};
-	console.log('haha scene_info');
 	this.db.collection(COL_PROJECT).insertOne(scene_info, callback);
 }
 

@@ -65,9 +65,7 @@ function select_project(project) {
 			// console.log("get product");
 			var res = JSON.parse(request.response);
 			console.log(res);
-			res.products.pop();
 
-			res.prefix.pop();
 			window.appData.projectInfo.products = res.products;
 			window.appData.projectInfo.prefix = res.prefix;
 
