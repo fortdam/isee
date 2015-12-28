@@ -336,17 +336,18 @@ function onModalLoaded(event) {
        // target:        '#output',   // target element(s) to be updated with server response 
         beforeSubmit:  function(a,b,c){
         							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
-        							a[a.length] = {name:"scene", value:window.appData.sceneInfo.curr};
-        							a[a.length] = {name:"index", value:window.appData.pageInfo.curr};
+        							a[a.length] = {name:"scene", value:window.appData.sceneInfo.total[window.appData.sceneInfo.curr].name};
+        							a[a.length] = {name:"index", value:window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number[window.appData.pageInfo.curr]};
         							a[a.length] = {name:"product", value:window.appData.projectInfo.products[pos-1]};
-        							a[a.length] = {name:"user", value:window.userInfo.name};
-        							a[a.length] = {name:"email", value:window.userInfo.email};
-        							a[a.length] = {name:"imgsize", value:window.settings.imgsize};
-        							// console.log(a)
+        							a[a.length] = {name:"user", value:window.appData.userInfo.name};
+        							a[a.length] = {name:"email", value:window.appData.userInfo.email};
+        							a[a.length] = {name:"imgsize", value:window.appData.settings.imgsize};
+        							console.log(a)
         							},  // pre-submit callback 
 
         complete:  		function(msg){window.currModal.modal("hide");
-    								window.currModal = null},
+    								window.currModal = null;
+    								return false},
         resetForm: true, 
         clearForm: true,
         dataType:  'json',

@@ -156,8 +156,10 @@ isee_db.getProduct = function(test, callback){
 }
 
 
-isee_db.updateComment = function(){
-
+isee_db.sendComment = function(comment){
+	assert(this.db);
+	
+	this.db.collection(COL_COMMENT).insertOne(comment);
 }
 
 isee_db.test = function(){
