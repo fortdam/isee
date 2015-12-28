@@ -14,6 +14,44 @@ db.getProjectList = function () {
 			};
 }
 
+db.getScene = function(project){
+	if (project == 'idol3_151210'){
+		return [{
+			'name':'VQI',
+			'path':[],
+			'number':[1,2,3,4,5,6]
+		}];
+	}
+	else if (project == 'idol4_151207'){
+		return [
+			{
+				'name':'artifacts',
+				'path': [],
+				'number':[1,2,4,5]
+			},
+			{
+				name:'lab',
+				path:['indoor'],
+				number:[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+			},
+			{
+				name:'office',
+				path:['indoor'],
+				number:[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+			},
+			{
+				name:'afternoon',
+				path:['outdoor'],
+				number:[1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,24,27,28]
+			},
+			{
+				name:'cloudy',
+				path:['outdoor'],
+				number:[1,2,3,4,5,6,7,8,9,10,12,13,14,15,17,18,19,20,21,22,23,24,25]
+			}];
+	}
+}
+
 db.getSceneList = function (project) {
 	if (project == 'idol4_151207'){
 		return {'scenes': [

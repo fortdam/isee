@@ -27,6 +27,7 @@ function load_projects() {
 	request.open("GET", "/meta_data/project");
 	request.onreadystatechange = function() {
 		var res = JSON.parse(request.response);	
+		console.log(request.response);
 		//Clear the project information
 		window.appData.projectInfo.total = [];
 		$('#project-links').empty();
@@ -81,6 +82,42 @@ function select_project(project) {
 	request.send();
 }
 
+function ui_clear_scene(scene){
+	//remove all existing elements in nav bar...
+	$('.nav-tabs').empty();
+}
+
+function ui_add_scene(scene, index){
+	var currElt = $('.nav-tabs');
+	var totalPath = scene.path;
+	var insertElt = "";
+	var i = 0;
+
+	while(i < totalPath.length){
+		var name = totalPath[i];
+		var elt = $('ul#'+name);
+
+		if(elt.length == 0){
+			insertElt = "<li class=\"dropdown\">\
+				<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\
+					<p class=\"text-capitalize\">"+name+"<b class=\"caret\"></b></p>\
+				</a>\
+				<ul class=\"dropdown-menu\" id=\""+name+"\">\
+				</ul>\
+			</li>"
+			currElt.append(insertElt);
+			currElt = $('ul#'+name);
+		}
+		else{
+			currElt = elt;
+		}
+		i++;
+	}
+
+	insertElt = "<li><a href=\"javascript:select_scene("+index+")\"><p class=\"text-capitalize\">"+scene.name+"</p></a></li>"
+	currElt.append(insertElt);
+}
+
 function load_scene() {
 	var request = new XMLHttpRequest();
 	var project = window.appData.projectInfo.curr;
@@ -89,88 +126,43 @@ function load_scene() {
 	request.onreadystatechange = function() {
 		if (request.readyState === 4 && request.status === 200) {
 			var res = JSON.parse(request.response);
-			window.appData.sceneInfo.total = [];
+			window.appData.sceneInfo.total = res;
 
 			//remove all existing elements in nav bar...
-			$('.nav-tabs').empty();
+			ui_clear_scene();
 
-			res.scenes.forEach(function (x,i,a) {
-				if(typeof x == 'object') {
-					var name = Object.keys(x)[0];
+			res.forEach(function (x,i,a) {
+				ui_add_scene(x, i);	
+			});
 
-					var str =  "<li class=\"dropdown\">\
-        							<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\
-        								<p class=\"text-capitalize\">"+name+"<b class=\"caret\"></b></p>\
-        							</a>\
-        							<ul class=\"dropdown-menu\">";
-
-					var scenes = x[name];
-					for (var ii=0; ii<scenes.length; ii++) {
-						// console.log(scenes[ii]);
-						var allScenes = window.appData.sceneInfo.total;
-						allScenes[allScenes.length] = scenes[ii];
-						
-						str += "<li><a href=\"javascript:select_scene_num("+(allScenes.length-1)+")\"><p class=\"text-capitalize\">"+scenes[ii]+"</p></a></li>"
-					}
-
-       				str += "</ul></li>"
-
-					var curTab = $('.nav-tabs').append(str);
-					
-
-				}
-				else if (typeof x == 'string') {
-					var allScenes = window.appData.sceneInfo.total;
-					allScenes[allScenes.length] = x;
-
-					$('.nav-tabs').append("<li><a href=\"javascript:select_scene_num("+(allScenes.length-1)+")\"><p class=\"text-capitalize\">"+x+"</p></a></li>");
-					// console.log("hahah:"+x);
-				}
-
-			})
+			console.log(window.appData);
 			
-			select_scene(window.appData.sceneInfo.total[0]);  
+			select_scene(0);  
 		}
 	}
 
 	request.send(null);	
 }
 
-function select_scene_num(index){
-	select_scene(window.appData.sceneInfo.total[index]);
-}
-
-function select_scene(scene){
-	window.appData.sceneInfo.curr = scene;
+function select_scene(index){
+	window.appData.sceneInfo.curr = index;
 	load_page();
 }
 
 //
 function load_page() {
-	var request = new XMLHttpRequest();
-	var project = window.appData.projectInfo.curr;
-	var scene = window.appData.sceneInfo.curr;
+	var sceneInfo = window.appData.sceneInfo.total[window.appData.sceneInfo.curr];
 
-	request.open('GET', "/meta_data/scene_info?project="+project+"&scene="+scene);
-
-	request.onreadystatechange = function() {
-		if (request.readyState === 4 && request.status === 200) {
-			var res = JSON.parse(request.response);
-
-			window.appData.sceneInfo.currPath = res.path;
-			window.appData.pageInfo = {
-				'total': parseInt(res.num),
-				'start': 1,
-				'end': 5,
-				'curr': undefined,
-				MAX_RANGE: 5  //FIXME: to calculate the MAX range on the fly...
-			}
-
-			select_page(1);
-		}
+	window.appData.pageInfo = {
+		'total': sceneInfo.number.length,
+		'start': 1,
+		'curr': undefined
 	}
 
-	request.send(null);	
+	window.appData.pageInfo.MAX_RANGE = Math.min(window.appData.pageInfo.total, 5);
+	window.appData.pageInfo.end = Math.min(window.appData.pageInfo.total, 5);
+
+	select_page(1);
 }
 
 function select_page(index){
@@ -254,10 +246,20 @@ function select_page(index){
 function load_images(){
 	var imageFilePath = '';
 
+	var currScene = window.appData.sceneInfo.total[window.appData.sceneInfo.curr];
+	var currPage = window.appData.pageInfo.curr;
+
+
 	var path1 = window.appData.projectInfo.curr;
-	var path2 = window.appData.sceneInfo.currPath; 
+	var path2 = currScene.path.join('/');
+
+	if (currScene.path.length > 0){
+		path2 += '/';
+	}
+	path2 += currScene.name; 
+
 	var prefix = window.appData.projectInfo.prefix;
-	var appendix = window.appData.pageInfo.curr;
+	var appendix = currScene.number[currPage-1];
 
 // console.log(window.appData.projectInfo.prefix);
 	for (var i=1; i<=prefix.length; i++){

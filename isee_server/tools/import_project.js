@@ -91,14 +91,32 @@ function create_scene_info(originalDir){
 			return; //Not a leaf, return
 		}
 	}
+
+	var splittedPath = originalDir.match(/\.\.\/(?:\w+)\/(?:\w+)\/(.*)\/(\w+)\/$/);
+	var sceneName = splittedPath[2];
+	var scenePath = splittedPath[1].split('/');
+	var testName = scenePath.shift();
+
+	var folder = fs.readdirSync(originalDir);
+	var totalIndex = [];
+	folder.forEach(function(v,i,a){
+		var text = v.match(/_(\d+)\.jpg/i);
+		if(text && text.length > 1){
+			var num = parseInt(text[1]);
+			if (totalIndex.indexOf(num) < 0){
+				totalIndex.push(num);
+			}
+		}
+	});
+	totalIndex.sort(function(a,b){return a-b});
+	dbTransaction++;
+	isee_db.addScene(testName, sceneName, scenePath, totalIndex, function(){
+		dbTransaction--;
+	});	
 }
 
-function add_project_info_2_db(projectDir){
-	isee_db.open(function(db){
-		isee_db.addPath(projectDir, function(){
-			isee_db.close();
-		});
-	});
+function add_project_info_2_db(projectDir, callback){
+	isee_db.addPath(projectDir, callback);
 }
 
 function prepare_subsample_dir_kernel(originalDir, resizeType){
@@ -150,7 +168,6 @@ function extract_exif(originalFile){
 	        }            
 	    });	
 	}
-
 }
 
 function name_normalize(orignalFile){
@@ -159,27 +176,43 @@ function name_normalize(orignalFile){
 	}
 }
 
-function project_mipmap(project){
+function project_import(project){
 	prepare_mipmap();
-	add_project_info_2_db(PHOTO_PATH+project);
-	process_all_files(PHOTO_PATH+project+'/', 
-		[prepare_subsample_dirs, create_scene_info], //For folders
-		[name_normalize, subsample_images, extract_exif]  //For filez
-		);   
+	isee_db.open(function(){
+		add_project_info_2_db(PHOTO_PATH+project, function(){
+			process_all_files(PHOTO_PATH+project+'/', 
+				[prepare_subsample_dirs, create_scene_info], //For folders
+				[name_normalize, subsample_images, extract_exif]  //For filez
+			);  		
+		});
+	});
 }
 
-function read_project_info(project){
-	projectInfo = JSON.parse(fs.readFileSync(PHOTO_PATH+project+'/project.json'));
-	console.log(projectInfo);
+// function read_project_info(project){
+// 	projectInfo = JSON.parse(fs.readFileSync(PHOTO_PATH+project+'/project.json'));
+// 	console.log(projectInfo);
+// }
+
+var dbTransaction = 0;
+
+function close_db_after_pending_works(){
+	if(dbTransaction == 0){
+		isee_db.close();
+	}
+	else {
+		setTimeout(close_db_after_pending_works, 5000);
+	}
 }
 
+//Main routine starts here
 if (process.argv.length < 2) {
 	console.log('The command is: node import_project.js <project name>');
 }
 else {
 	if (fs.existsSync(PHOTO_PATH+process.argv[2])){
-		read_project_info(process.argv[2]);
-		project_mipmap(process.argv[2]);
+		// read_project_info(process.argv[2]);
+		project_import(process.argv[2]);
+		setTimeout(close_db_after_pending_works,5000);
 	}
 	else{
 		console.log("The project doesn't exist, please make sure the project <"+PHOTO_PATH+process.argv[2]+"> exists");

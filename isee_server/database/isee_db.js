@@ -75,11 +75,28 @@ isee_db.addProject = function(project, callback){
 	this.db.collection(COL_PROJECT).insertOne(project,callback);
 }
 
+
+isee_db.addScene = function(project, name, path, indice, callback){
+	assert(this.db);
+	var scene_info = {
+		'test': project,
+		'name': name,
+		'path': path,
+		'number': indice,
+		'cust_id': 2
+	};
+	console.log('haha scene_info');
+	this.db.collection(COL_PROJECT).insertOne(scene_info, callback);
+}
+
+
 isee_db.getProject = function(callback){
 	var db = this.db;
 
 	db.collection(COL_PROJECT).aggregate([
-		{$group:{"_id":"$cust_id", "projects":{$push:"$projects"}}}]).toArray(function(err, result){
+		{$match:{"cust_id":1}},
+		{$group:{"_id":"$cust_id", "projects":{$push:"$projects"}}}
+		]).toArray(function(err, result){
 			var data = {};
 
 			if(result.length>0){
@@ -93,7 +110,7 @@ isee_db.getProject = function(callback){
 				var cursor = db.collection(COL_PROJECT).find({"cust_id":1});
 				cursor.each(function(err,doc){
 					if (doc){
-						console.log(doc);
+						//console.log(doc);
 
 						for(var i=0;i<Object.keys(data).length; i++){
 							var prj = Object.keys(data)[i];
@@ -104,7 +121,7 @@ isee_db.getProject = function(callback){
 						}
 					}
 					else{
-						console.log("empty doc")
+						console.log(data);
 						if (callback){
 							callback(data);
 						}			
@@ -115,17 +132,30 @@ isee_db.getProject = function(callback){
 	);
 }
 
+isee_db.getScene = function(test, callback){
+	var db = this.db;
+
+	this.db.collection(COL_PROJECT).aggregate([
+		{$match:{"cust_id":2, "test":test}},
+		{$project:{"_id":0, "name":1, "path":1, "number":1}}
+		]).toArray(function(err, result){
+			callback(result);
+		}
+	);
+}
+
 isee_db.getProduct = function(test, callback){
 	assert(this.db);
 
-	var cursor = this.db.collection(COL_PROJECT).find({"test": test, "cust_id":1});
-
+	this.db.collection(COL_PROJECT).aggregate([
+		{$match:{"cust_id":1, "test":test}},
+		{$project:{"_id":0, "products":1, "prefix":1}}
+		]).toArray(function(err, result){
+			callback(result);
+		}
+	);
 }
 
-
-isee_db.addScene = function(){
-
-}
 
 isee_db.updateComment = function(){
 
