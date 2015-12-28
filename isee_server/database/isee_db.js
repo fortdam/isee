@@ -151,7 +151,7 @@ isee_db.getProduct = function(test, callback){
 		{$match:{"cust_id":1, "test":test}},
 		{$project:{"_id":0, "products":1, "prefix":1}}
 		]).toArray(function(err, result){
-			callback(result);
+			callback(result[0]);
 		}
 	);
 }

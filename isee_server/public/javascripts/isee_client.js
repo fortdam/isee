@@ -64,18 +64,28 @@ function select_project(project) {
 		if (request.readyState === 4 && request.status === 200){
 			// console.log("get product");
 			var res = JSON.parse(request.response);
+			console.log(res);
+			res.products.pop();
+
+			res.prefix.pop();
 			window.appData.projectInfo.products = res.products;
 			window.appData.projectInfo.prefix = res.prefix;
 
-			$('#matrix-label-text-1').html(window.appData.projectInfo.products[0]);
-			$('#carousel-label-text-1').html(window.appData.projectInfo.products[0]);
-			$('#matrix-label-text-2').html(window.appData.projectInfo.products[1]);
-			$('#carousel-label-text-2').html(window.appData.projectInfo.products[1]);
-			$('#matrix-label-text-3').html(window.appData.projectInfo.products[2]);
-			$('#carousel-label-text-3').html(window.appData.projectInfo.products[2]);
-			$('#matrix-label-text-4').html(window.appData.projectInfo.products[3]);
-			$('#carousel-label-text-4').html(window.appData.projectInfo.products[3]);
-
+			//Totally 4 matrix support in maximum
+			for (var i=0; i<4; i++){
+				if(i<res.products.length){
+					$('#matrix-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
+					$('#carousel-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
+					$('#matrix-label-text-'+(i+1)).show();
+					$('#carousel-label-text-'+(i+1)).show();
+					$('.slot'+(i+1)).show()
+				}
+				else{
+					$('#matrix-label-text-'+(i+1)).hide();
+					$('#carousel-label-text-'+(i+1)).hide();
+					$('.slot'+(i+1)).hide();
+				}
+			}
 			load_scene();
 		}
 	}
