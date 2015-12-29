@@ -163,7 +163,7 @@ isee_db.sendComment = function(comment){
 	var sent = false;
 
 	this.db.collection(COL_COMMENT).deleteMany({
-		"user":comment.user, 
+		"user":comment.user.toLowerCase(), 
 		"project": comment.project, 
 		"scene":comment.scene, 
 		"index":comment.index, 
@@ -180,7 +180,7 @@ isee_db.getComment = function(user, project, scene, index, product, callback){
 	assert(this.db);
 
 	var cursor = this.db.collection(COL_COMMENT).find({
-		"user":user, 
+		"user":user.toLowerCase(), 
 		"project":project, 
 		"scene": scene, 
 		"index": index, 

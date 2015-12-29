@@ -434,7 +434,9 @@ function load_comment(query, pos){
 				$('#comment'+pos).css('background-color', 'yellow');
 				$('#comment'+pos).css('color', 'black');
 			}
-			$('#comment'+pos).empty().append(query.user+":"+res.review);
+
+			$('#comment'+pos).empty().append(query.user.toUpperCase()+":"+res.review);
+		
 		}
 		place_label();
 	}
