@@ -169,8 +169,19 @@ function load_page() {
 		'curr': undefined
 	}
 
+
+
 	window.appData.pageInfo.MAX_RANGE = Math.min(window.appData.pageInfo.total, 5);
 	window.appData.pageInfo.end = Math.min(window.appData.pageInfo.total, 5);
+
+	for (var i=1; i<=5; i++){
+		if (i<=window.appData.pageInfo.MAX_RANGE){
+			$('li#page-item-'+i).removeClass('hidden');
+		}
+		else{
+			$('li#page-item-'+i).addClass('hidden');			
+		}
+	}
 
 	select_page(1);
 }
