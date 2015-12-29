@@ -22,8 +22,28 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  console.log("Receive a comment");
-  res.send("OK");
+
+  isee_db.getComment(
+    req.query.user, 
+    req.query.project, 
+    req.query.scene, 
+    req.query.index, 
+    req.query.product, 
+    function(data){
+      console.log('callback comes');
+      if (data){
+        var comment = {};
+        if (data && data.length >0){
+          comment.state = "yes";
+          comment.grade = data[0].grade;
+          comment.review = data[0].review;
+        }
+        else{
+          comment.state = "no";
+        }
+        res.send(JSON.stringify(comment));
+      }
+    });
 });
 
 module.exports = router;

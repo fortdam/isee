@@ -15,9 +15,23 @@ a {
 	-moz-opacity:0.7;
 	opacity: 0.7;
 	z-index:100; 
+	font-size:18px;
 	background-color:#ffffff;  
 }
 
+.comment {  
+/*	width: 50;
+	height:100;*/
+	word-break:normal;
+	filter:alpha(Opacity=70);
+	-moz-opacity:0.7;
+	opacity: 0.7;
+	z-index:100; 
+	font-weight: 600;
+	font-size: 18px;
+	color: black
+	background-color:#ffffff;  
+}
 .carousel-control.left, .carousel-control.right {
   background: none !important;
   filter: progid: none !important;

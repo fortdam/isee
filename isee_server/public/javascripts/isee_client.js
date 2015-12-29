@@ -252,6 +252,9 @@ function select_page(index){
 
 	load_images();
 	load_exifs();
+	if(window.appData.settings.comment != 'off'){
+		load_comments();
+	}
 }
 
 
@@ -369,6 +372,63 @@ function load_exif(filePath, pos){
 	request.send();
 }
 
+function load_comments(){
+	var query = {};
+	if (window.appData.settings.comment == 'mml'){
+		query.user = "mml";
+	}
+	else{
+		query.user = window.appData.userInfo.name;
+	}
+
+	query.project = window.appData.projectInfo.curr;
+	query.scene = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].name;
+	query.index = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number[window.appData.pageInfo.curr-1];
+
+	for (var i=1; i<=window.appData.projectInfo.products.length; i++){
+		query.product = window.appData.projectInfo.products[i-1];
+		load_comment(query, i);
+	}
+}
+
+function load_comment(query, pos){
+	var request = new XMLHttpRequest();
+	var queryStr = '/comment?'+
+		'user='+query.user+
+		'&project='+query.project+
+		'&scene='+query.scene+
+		'&index='+query.index+
+		'&product='+query.product;
+
+	request.open("GET", queryStr);
+	request.onreadystatechange = function() {
+		var res = JSON.parse(request.response);	
+		console.log('receive comment')
+		console.log(request.response);
+		if(res.state == 'no'){
+			//Always hide the info
+			$('#comment'+pos).empty();
+		}
+		else {
+			//Fill in the content and display if needed
+			if (res.grade == 'good'){
+				$('#comment'+pos).css('background-color', 'green');
+				$('#comment'+pos).css('color', 'white');
+			}
+			else if(res.grade == 'poor'){
+				$('#comment'+pos).css('background-color', 'red');
+				$('#comment'+pos).css('color', 'white');
+			}
+			else{
+				$('#comment'+pos).css('background-color', 'yellow');
+				$('#comment'+pos).css('color', 'black');
+			}
+			$('#comment'+pos).empty().append(query.user+":"+res.review);
+		}
+		place_label();
+	}
+	request.send();
+}
 
 function xy(x) {
     o = document.getElementById(x);
@@ -388,51 +448,78 @@ function place_label() {
 	var pos;
 	var width;
 	var width1;
+	var height;
+	var height2;
 
 	if (window.appData.settings.layout == 'matrix'){
 		pos = $("img#pic1").offset();
 		width = $("img#pic1").width();
-		width1  = $("#overlay1").width();	
+		width1 = $("#overlay1").width();
+		height = $("img#pic1").height();
+		height2	= $('#comment1').height();
+
+		if (window.appData.settings.exif == 'exif-on'){
+			$('.overlay').removeClass('hidden');
+		}
+		else{
+			$('.overlay').addClass('hidden');
+		}
+
+		if (window.appData.settings.comment == 'off'){
+			$('.comment').addClass('hidden');
+		}
+		else{
+			$('.comment').removeClass('hidden');
+		}
+
 		$("h3#label1").offset({top: pos.top, left:pos.left});
 		$("#overlay1").offset({top: pos.top, left:pos.left+width-width1});
-		$("#overlay1").show();
+		$('#comment1').offset({top: pos.top+height-height2, left:pos.left});
 
 		pos = $("img#pic2").offset();
 		width = $("img#pic2").width();
 		width1  = $("#overlay2").width();
+		height = $("img#pic2").height();
+		height2	= $('#comment2').height();		
+
 		$("h3#label2").offset({top: pos.top, left:pos.left});
 		$("#overlay2").offset({top: pos.top, left:pos.left+width-width1});
-		$("#overlay2").show();
-
+		$('#comment2').offset({top: pos.top+height-height2, left:pos.left});
 
 		pos = $("img#pic3").offset();
 		width = $("img#pic3").width();
 		width1  = $("#overlay3").width();
+		height = $("img#pic3").height();
+		height2	= $('#comment3').height();	
+
 		$("h3#label3").offset({top: pos.top, left:pos.left});
 		$("#overlay3").offset({top: pos.top, left:pos.left+width-width1});
-		$("#overlay3").show();
+		$('#comment3').offset({top: pos.top+height-height2, left:pos.left});
 
 		pos = $("img#pic4").offset();
 		width = $("img#pic4").width();
 		width1  = $("#overlay4").width();
+		height = $("img#pic4").height();
+		height2	= $('#comment4').height();	
+
 		$("h3#label4").offset({top: pos.top, left:pos.left});
 		$("#overlay4").offset({top: pos.top, left:pos.left+width-width1});
-		$("#overlay4").show();
+		$('#comment4').offset({top: pos.top+height-height2, left:pos.left});
 	}
 	else{
-		pos = $(".filmstrip").offset();
-		width = $(".filmstrip").width();
-		width1  = $("#overlay1").width();
-		$('#overlay1').offset({top: pos.top, left:pos.left});
+		var index = parseInt($('.carousel-indicators>.active').attr('data-slide-to'))+1;
 
-		width1  = $("#overlay2").width();
-		$('#overlay2').offset({top: pos.top, left:pos.left});
-				
-		width1  = $("#overlay3").width();
-		$('#overlay3').offset({top: pos.top, left:pos.left});
-				
-		width1  = $("#overlay4").width();
-		$('#overlay4').offset({top: pos.top, left:pos.left});
+		pos = $(".filmstrip").offset();
+		height = $(".filmstrip").height();
+		height2	= $('#comment4').height();
+
+		$('.overlay').addClass('hidden');
+		$('.comment').addClass('hidden');
+
+		$('#overlay'+index).removeClass('hidden');
+		$('#comment'+index).removeClass('hidden');
+		$('#overlay'+index).offset({top: pos.top, left:pos.left});
+		$('#comment'+index).offset({top: pos.top+height-height2, left:pos.left});
 	}
 }
 
@@ -451,7 +538,7 @@ function onModalLoaded(event) {
         beforeSubmit:  function(a,b,c){
         							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
         							a[a.length] = {name:"scene", value:window.appData.sceneInfo.total[window.appData.sceneInfo.curr].name};
-        							a[a.length] = {name:"index", value:window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number[window.appData.pageInfo.curr]};
+        							a[a.length] = {name:"index", value:window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number[window.appData.pageInfo.curr-1]};
         							a[a.length] = {name:"product", value:window.appData.projectInfo.products[pos-1]};
         							a[a.length] = {name:"user", value:window.appData.userInfo.name};
         							a[a.length] = {name:"email", value:window.appData.userInfo.email};
@@ -508,7 +595,7 @@ function onSettingModalHide(event){
 	var settings = window.appData.settings;
 	var relayout = false;
 	var reload = false;
-
+	var reloadComment = false;
 
 	if(settings.imgsize != $('label.active:eq(0)').attr('id')){
 		reload = true;
@@ -516,6 +603,10 @@ function onSettingModalHide(event){
 
 	if (settings.layout != $('label.active:eq(1)').attr('id')){
 		relayout = true;
+	}
+
+	if (settings.comment != $('label.active:eq(2)').attr("id")){
+		reloadComment = true;
 	}
 
 	settings.imgsize = $('label.active:eq(0)').attr('id');
@@ -540,25 +631,13 @@ function onSettingModalHide(event){
 		}
 		window.setTimeout(place_label, 500);
 	}
-console.log('test here');
-console.log(settings.layout);
-console.log(settings.exif)
-	if(settings.exif == 'exif-off'){
-		$('.overlay').addClass('hidden');
-	}
-	else{
-		if(settings.layout == 'film-strip'){
-			console.log('toggle film strip');
-			$('.overlay').addClass('hidden');
-			$('#overlay1').removeClass('hidden');
-		}
-		else{
-			$('.overlay').removeClass('hidden');
-		}
-	}
 
 	if (reload){
 		load_images();		
+	}
+
+	if (reloadComment){
+		load_comments();
 	}
 }
 
@@ -615,15 +694,6 @@ function preload_local_settings(){
 		$('.matrix').addClass('hidden');
 		$('.carousel').carousel(0);
 	}
-
-	if(window.appData.settings.exif == 'exif-off'){
-		$('.overlay').addClass('hidden');
-	}
-	else if(window.appData.settings.layout == 'film-strip'){
-		$('.overlay').addClass('hidden');
-		$('#overlay1').removeClass('hidden');
-
-	}
 }
 
 
@@ -650,9 +720,11 @@ function set_hook_functions(){
 		console.log(window.appData.settings.exif);
 
 
-		if(window.appData.settings.exif == 'exif-on'){
+		if(window.appData.settings.exif == 'exif-on' && window.appData.settings.layout == 'film-strip'){
 			$('.overlay').addClass('hidden');
 			$('#overlay'+(index+1)).removeClass('hidden');
+			$('.comment').addClass('hidden');
+			$('#comment'+(index+1)).removeClass('hidden');
 			place_label()
 			// window.setTimeout(function(){place_label();},500);
 		}

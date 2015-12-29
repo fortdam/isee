@@ -171,6 +171,23 @@ isee_db.sendComment = function(comment){
 		});
 }
 
+isee_db.getComment = function(user, project, scene, index, product, callback){
+	assert(this.db);
+	console.log('retrieve a comment');
+
+	var cursor = this.db.collection(COL_COMMENT).find({
+		"user":user, 
+		"project":project, 
+		"scene": scene, 
+		"index": index, 
+		"product": product});
+
+	cursor.toArray(function(err, data){
+		callback(data)
+	});
+}
+
+
 isee_db.test = function(){
 	var cursor = this.db.collection(COL_PROJECT).find();
 
