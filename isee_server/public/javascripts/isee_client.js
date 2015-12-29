@@ -414,8 +414,8 @@ function load_comment(query, pos){
 	request.open("GET", queryStr);
 	request.onreadystatechange = function() {
 		var res = JSON.parse(request.response);	
-		console.log('receive comment')
-		console.log(request.response);
+		// console.log('receive comment')
+		// console.log(request.response);
 		if(res.state == 'no'){
 			//Always hide the info
 			$('#comment'+pos).empty();
@@ -547,6 +547,7 @@ function place_label() {
 		}
 	}
 }
+var modalRegistered = [];
 
 function onModalLoaded(event) {
   var imageElt = $(event.relatedTarget);
@@ -556,7 +557,6 @@ function onModalLoaded(event) {
   
 
   $(this).find('.modal-title-text').text('Tell us your thoughts about this picture(' + window.appData.projectInfo.products[pos-1]+')');
-
 
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
@@ -575,11 +575,11 @@ function onModalLoaded(event) {
     								window.currModal = null;
 
     								if ((window.appData.settings.comment == 'my') || 
-    									((window.appData.settings.comment == 'mml')&& (window.appData.userInfo.name=='mml'))){
+    									((window.appData.settings.comment == 'mml') && (window.appData.userInfo.name=='mml'))){
     									console.log('reload comments');
     									load_comments();
     								}
-    								return false},
+    								return true},
         resetForm: true, 
         clearForm: true,
         dataType:  'json',
@@ -595,16 +595,23 @@ function onModalLoaded(event) {
         timeout:   3000 
     }; 
  
-    // bind to the form's submit event 
-    $(this).find('form').submit(function() { 
-        // inside event callbacks 'this' is the DOM element so we first 
-        // wrap it in a jQuery object and then invoke ajaxSubmit 
-        $(this).ajaxSubmit(options); 
- 
-        // !!! Important !!! 
-        // always return false to prevent standard browser submit and page navigation 
-        return false; 
-    }); 
+ 	if (modalRegistered.indexOf(pos) == -1){
+ 		    // bind to the form's submit event 
+ 		    modalRegistered.push(pos);
+	    $(this).find('form').submit(function() { 
+	        // inside event callbacks 'this' is the DOM element so we first 
+	        // wrap it in a jQuery object and then invoke ajaxSubmit 
+	        console.log("trigger submit");
+	        console.log(pos);
+	        $(this).ajaxSubmit(options); 
+	 
+	        // !!! Important !!! 
+	        // always return false to prevent standard browser submit and page navigation 
+	        return false; 
+	    }); 
+ 	}
+
+
 }
 
 function onSettingModalLoaded(event){

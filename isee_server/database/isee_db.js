@@ -160,6 +160,7 @@ isee_db.sendComment = function(comment){
 	assert(this.db);
 
 	var db = this.db;
+	var sent = false;
 
 	this.db.collection(COL_COMMENT).deleteMany({
 		"user":comment.user, 
@@ -167,13 +168,16 @@ isee_db.sendComment = function(comment){
 		"scene":comment.scene, 
 		"index":comment.index, 
 		"product":comment.product}, function(){
-			db.collection(COL_COMMENT).insertOne(comment);
+			console.log("check double insert!")
+			if (comment.review.length>0 && sent==false){ //elsewhere we consider user want to delete a comment
+				sent = true;
+				db.collection(COL_COMMENT).insertOne(comment);
+			}
 		});
 }
 
 isee_db.getComment = function(user, project, scene, index, product, callback){
 	assert(this.db);
-	console.log('retrieve a comment');
 
 	var cursor = this.db.collection(COL_COMMENT).find({
 		"user":user, 
@@ -187,6 +191,40 @@ isee_db.getComment = function(user, project, scene, index, product, callback){
 	});
 }
 
+isee_db.getCommentSummary = function(project, product, user, callback){
+	assert(this.db);
+
+	var findCriteria = {};
+	var sortCriteria = {};
+
+	if (project.length > 0){
+		findCriteria.project = project;
+	}
+	else {
+		sortCriteria.project = 1;
+	}
+
+	if (product.length > 0){
+		findCriteria.product = product;
+	}
+
+	if (user.length > 0){
+		findCriteria.user = user;
+	}
+
+	sortCriteria.scene = 1;
+	sortCriteria.index = 1;
+
+	if (product.length == 0){
+		sortCriteria.product = 1;
+	}
+
+	console.log(sortCriteria);
+
+	this.db.collection(COL_COMMENT).find(findCriteria).sort(sortCriteria).toArray(function(err, docs){
+		callback(docs);
+	})
+}
 
 isee_db.test = function(){
 	var cursor = this.db.collection(COL_PROJECT).find();
