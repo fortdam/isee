@@ -8,7 +8,7 @@
     .modal-body
       b Size:
       br
-      .btn-group(data-toggle="buttons")
+      .btn-group(data-toggle="buttons", id="imgsize-group")
         label(class="btn btn-default", id="full-size", filter="setting")
           input(type="radio", name="image-size", id="full-size", value="full-size", autocomplete="off") 
           span Full Size
@@ -25,22 +25,36 @@
       br
       b Layout:
       br
-      .btn-group(data-toggle="buttons")
+      .btn-group(data-toggle="buttons", id="layout-group")
         label(class="btn btn-default", id="matrix", filter="setting")
           input(type="radio", name="layout", id="matrix", value="matrix", autocomplete="off") 
           span Matrix
-        label(class="btn btn-default", id="film-stripe", filter="setting")
-          input(type="radio", name="layout", id="film-stripe", value="matrix", autocomplete="off") 
-          span Film-stripe
+        label(class="btn btn-default", id="film-strip", filter="setting")
+          input(type="radio", name="layout", id="film-strip", value="matrix", autocomplete="off") 
+          span Film-strip
       br
       br
       b Comment:
       br
-      .btn-group(data-toggle="buttons")
-        label(class="btn btn-default", id="on", filter="setting")
-          input(type="radio", name="comment", id="on", value="on", autocomplete="off") 
-          span On
+      .btn-group(data-toggle="buttons", class="comment-group")
+        label(class="btn btn-default", id="my", filter="setting")
+          input(type="radio", name="comment", id="my", value="my", autocomplete="off") 
+          span My
+        label(class="btn btn-default", id="mml", filter="setting")
+          input(type="radio", name="comment", id="mml", value="mml", autocomplete="off") 
+          span MML        
         label(class="btn btn-default", id="off", filter="setting")
+          input(type="radio", name="comment", id="off", value="off", autocomplete="off") 
+          span Off
+      br
+      br
+      b EXIF Info:
+      br
+      .btn-group(data-toggle="buttons", id="exif-group")
+        label(class="btn btn-default", id="exif-on", filter="setting")
+          input(type="radio", name="comment", id="on", value="on", autocomplete="off") 
+          span On      
+        label(class="btn btn-default", id="exif-off", filter="setting")
           input(type="radio", name="comment", id="off", value="off", autocomplete="off") 
           span Off
     .modal-footer

@@ -45,6 +45,7 @@ block content
         .col-md-6(class='slot1')
           img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#myModal1", trigger-place="1") 
         .col-md-6(class='slot2')
+          //- .overlay
           img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#myModal2", trigger-place="2")
       br
       .row
@@ -114,6 +115,10 @@ block content
     h3(id="label4", style="position:fixed")
       span(class="label label-success matrix", id='matrix-label-text-4')  d
 
+    p.overlay(id="overlay1" style="position:fixed" rows='10')
+    p.overlay(id="overlay2" style="position:fixed" rows='10')  
+    p.overlay(id="overlay3" style="position:fixed" rows='10')
+    p.overlay(id="overlay4" style="position:fixed" rows='10')
 
 block append javascript
   script(src="/javascripts/jquery.form.min.js")

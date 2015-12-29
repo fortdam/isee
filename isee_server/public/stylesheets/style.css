@@ -7,6 +7,17 @@ a {
   color: #00B7FF;
 }
 
+.overlay {  
+/*	width: 50;
+	height:100;*/
+	word-break:normal;
+	filter:alpha(Opacity=70);
+	-moz-opacity:0.7;
+	opacity: 0.7;
+	z-index:100; 
+	background-color:#ffffff;  
+}
+
 .carousel-control.left, .carousel-control.right {
   background: none !important;
   filter: progid: none !important;

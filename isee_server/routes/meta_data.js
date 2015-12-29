@@ -3,6 +3,7 @@ var router = express.Router();
 
 var db = require('../database/db');
 var isee_db = require('../database/isee_db');
+var fs= require('fs');
 
 isee_db.open();
 /* GET users listing. */
@@ -26,5 +27,6 @@ router.get('/product', function(req, res, next){
 		res.send(data);
 	})
 })
+
 
 module.exports = router;
