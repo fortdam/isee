@@ -475,16 +475,20 @@ function place_label() {
 		$("h3#label1").offset({top: pos.top, left:pos.left});
 		$("#overlay1").offset({top: pos.top, left:pos.left+width-width1});
 		$('#comment1').offset({top: pos.top+height-height2, left:pos.left});
+		$('#comment1').width(width);
 
 		pos = $("img#pic2").offset();
 		width = $("img#pic2").width();
 		width1  = $("#overlay2").width();
 		height = $("img#pic2").height();
-		height2	= $('#comment2').height();		
+		height2	= $('#comment2').height();
+
 
 		$("h3#label2").offset({top: pos.top, left:pos.left});
 		$("#overlay2").offset({top: pos.top, left:pos.left+width-width1});
 		$('#comment2').offset({top: pos.top+height-height2, left:pos.left});
+		$('#comment2').width(width);
+
 
 		pos = $("img#pic3").offset();
 		width = $("img#pic3").width();
@@ -495,6 +499,8 @@ function place_label() {
 		$("h3#label3").offset({top: pos.top, left:pos.left});
 		$("#overlay3").offset({top: pos.top, left:pos.left+width-width1});
 		$('#comment3').offset({top: pos.top+height-height2, left:pos.left});
+		$('#comment3').width(width);
+
 
 		pos = $("img#pic4").offset();
 		width = $("img#pic4").width();
@@ -505,21 +511,29 @@ function place_label() {
 		$("h3#label4").offset({top: pos.top, left:pos.left});
 		$("#overlay4").offset({top: pos.top, left:pos.left+width-width1});
 		$('#comment4').offset({top: pos.top+height-height2, left:pos.left});
+		$('#comment4').width(width);
 	}
 	else{
 		var index = parseInt($('.carousel-indicators>.active').attr('data-slide-to'))+1;
 
 		pos = $(".filmstrip").offset();
+		width = $(".filmstrip").width();
 		height = $(".filmstrip").height();
 		height2	= $('#comment4').height();
 
 		$('.overlay').addClass('hidden');
 		$('.comment').addClass('hidden');
 
-		$('#overlay'+index).removeClass('hidden');
-		$('#comment'+index).removeClass('hidden');
-		$('#overlay'+index).offset({top: pos.top, left:pos.left});
-		$('#comment'+index).offset({top: pos.top+height-height2, left:pos.left});
+		if(window.appData.settings.exif == 'exif-on'){
+			$('#overlay'+index).removeClass('hidden');
+			$('#overlay'+index).offset({top: pos.top, left:pos.left});			
+		}
+
+		if (window.appData.settings.comment != 'off'){
+			$('#comment'+index).removeClass('hidden');
+			$('#comment'+index).offset({top: pos.top+height-height2, left:pos.left});
+			$('#comment'+index).width(width);
+		}
 	}
 }
 
@@ -596,6 +610,7 @@ function onSettingModalHide(event){
 	var relayout = false;
 	var reload = false;
 	var reloadComment = false;
+	var replaceLabel = false;
 
 	if(settings.imgsize != $('label.active:eq(0)').attr('id')){
 		reload = true;
@@ -607,6 +622,10 @@ function onSettingModalHide(event){
 
 	if (settings.comment != $('label.active:eq(2)').attr("id")){
 		reloadComment = true;
+	}
+
+	if (settings.exif != $('label.active:eq(3)').attr("id")){
+		replaceLabel = true;
 	}
 
 	settings.imgsize = $('label.active:eq(0)').attr('id');
@@ -638,6 +657,10 @@ function onSettingModalHide(event){
 
 	if (reloadComment){
 		load_comments();
+	}
+	
+	if(!reload && !reloadComment && replaceLabel){
+		place_label();
 	}
 }
 
@@ -715,19 +738,8 @@ function set_hook_functions(){
 	$('#userModal').on('hide.bs.modal', onUserModalHide);	
 
 	$('#carousel-example-generic').on('slid.bs.carousel', function(){
-		var index = parseInt($('.carousel-indicators>.active').attr('data-slide-to'));
-
-		console.log(window.appData.settings.exif);
-
-
-		if(window.appData.settings.exif == 'exif-on' && window.appData.settings.layout == 'film-strip'){
-			$('.overlay').addClass('hidden');
-			$('#overlay'+(index+1)).removeClass('hidden');
-			$('.comment').addClass('hidden');
-			$('#comment'+(index+1)).removeClass('hidden');
-			place_label()
-			// window.setTimeout(function(){place_label();},500);
-		}
+		place_label()
+		// window.setTimeout(function(){place_label();},500);
 	})
 }
 
