@@ -573,6 +573,12 @@ function onModalLoaded(event) {
 
         complete:  		function(msg){window.currModal.modal("hide");
     								window.currModal = null;
+
+    								if ((window.appData.settings.comment == 'my') || 
+    									((window.appData.settings.comment == 'mml')&& (window.appData.userInfo.name=='mml'))){
+    									console.log('reload comments');
+    									load_comments();
+    								}
     								return false},
         resetForm: true, 
         clearForm: true,
