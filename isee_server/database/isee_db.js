@@ -76,13 +76,14 @@ isee_db.addProject = function(project, callback){
 }
 
 
-isee_db.addScene = function(project, name, path, indice, callback){
+isee_db.addScene = function(project, name, path, indice, descs, callback){
 	assert(this.db);
 	var scene_info = {
 		'test': project,
 		'name': name,
 		'path': path,
 		'number': indice,
+		'desc': descs,
 		'cust_id': 2
 	};
 	this.db.collection(COL_PROJECT).insertOne(scene_info, callback);
@@ -115,7 +116,7 @@ isee_db.getProject = function(callback){
 							var prj = Object.keys(data)[i];
 
 							if(doc.projects.indexOf(prj) > -1){
-								data[prj].push({'name':doc.name, 'test':doc.test});
+								data[prj].push({'name':doc.name, 'test':doc.test, 'time':doc.time, 'desc':doc.desc});
 							}
 						}
 					}
@@ -136,7 +137,7 @@ isee_db.getScene = function(test, callback){
 
 	this.db.collection(COL_PROJECT).aggregate([
 		{$match:{"cust_id":2, "test":test}},
-		{$project:{"_id":0, "name":1, "path":1, "number":1}}
+		{$project:{"_id":0, "name":1, "path":1, "number":1, "desc":1}}
 		]).toArray(function(err, result){
 			callback(result);
 		}

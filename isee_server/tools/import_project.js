@@ -99,6 +99,13 @@ function create_scene_info(originalDir){
 
 	var folder = fs.readdirSync(originalDir);
 	var totalIndex = [];
+	var totalDesc = [];
+
+	var sceneDesc = [];
+	if (fs.existsSync(originalDir+'/scene.json')){
+		sceneDesc = JSON.parse(fs.readFileSync(originalDir+'/scene.json'));
+	}
+
 	folder.forEach(function(v,i,a){
 		var text = v.match(/_(\d+)\.jpg/i);
 		if(text && text.length > 1){
@@ -109,8 +116,21 @@ function create_scene_info(originalDir){
 		}
 	});
 	totalIndex.sort(function(a,b){return a-b});
+
+	totalDesc[totalIndex.length-1] = undefined;
+
+	if (sceneDesc && sceneDesc.length>0){
+		sceneDesc.forEach(function(v,i,a){
+			var ind = totalIndex.indexOf(v.index);
+			totalDesc[ind] = v.desc;
+		});
+
+
+	}
+
+
 	dbTransaction++;
-	isee_db.addScene(testName, sceneName, scenePath, totalIndex, function(){
+	isee_db.addScene(testName, sceneName, scenePath, totalIndex, totalDesc, function(){
 		dbTransaction--;
 	});	
 }

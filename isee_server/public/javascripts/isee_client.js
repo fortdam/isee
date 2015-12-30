@@ -50,7 +50,12 @@ function load_projects() {
 					window.appData.projectInfo.total[window.appData.projectInfo.total.length] = v.test;
 					offset = window.appData.projectInfo.total.length-1;
 				}
-				$('ul#project_'+index).append("<li><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+				if (v.desc || v.time){
+					$('ul#project_'+index).append("<li data-toggle=\"tooltip\" title=\" "+v.desc+" \n Time: "+v.time+"\"><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+				}
+				else{
+					$('ul#project_'+index).append("<li><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+				}
 			});
 		});
 
@@ -308,6 +313,20 @@ function select_page(index){
 		for (var i=0; i<numElt; i++){
 			$("a#page-index-"+(i+1)).attr("href", "javascript:select_page("+(i+pageInfo.start)+")");
 			$("a#page-index-"+(i+1)).text(i+pageInfo.start);
+
+			var descs = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].desc;
+			var descIndex = parseInt(pageInfo.start)+i-1;
+
+			if (descs && descs[descIndex] && descs[descIndex].length>0){
+				console.log('add tool tip '+i+pageInfo.start);
+				$("a#page-index-"+(i+1)).tooltip({"title":descs[descIndex]});
+			}
+			else{
+				console.log('no tool tip '+descIndex);
+
+				$("a#page-index-"+(i+1)).tooltip('destroy');
+			}
+
 		}		
 
 		if (pageInfo.start > 1){
