@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  header(class="navbar navbar-static-top bs-docs-nav", id="top", role="banner")
+  nav(class="navbar navbar-default", id="top", role="banner")
     .container
       .navbar-header
         .navbar-brand Projects
@@ -18,11 +18,11 @@ block content
             a(href="#", data-toggle="modal", data-target="#settingModal") 
               span(class="glyphicon glyphicon-cog" aria-hidden="true")
 
-  .container
+  .container(id="pic-container")
     .row
-      .col-md-9
+      .col-md-8
         ul(class="nav nav-tabs", id="scene-tab")
-      .col-md-3
+      .col-md-4
         nav
           ul(class="pagination")
             li(class="page-prev")

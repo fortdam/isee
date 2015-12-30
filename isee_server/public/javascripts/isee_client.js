@@ -770,7 +770,8 @@ function set_hook_functions(){
 }
 
 function toggle_fullscreen(){
-	var element = document.documentElement;
+	// var element = document.documentElement;
+	var element = document.getElementById('pic-container');
 
 	if (window.appData.fullscreen === false){
 		if (element.requestFullScreen){
