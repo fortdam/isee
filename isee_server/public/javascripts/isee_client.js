@@ -21,6 +21,10 @@ var appData = {
 		layout: "matrix",
 		comment: "off",
 		exif: "exif-off"
+	},
+
+	context: {
+		firstload: true
 	}
 };
 
@@ -33,6 +37,8 @@ function load_projects() {
 		//Clear the project information
 		window.appData.projectInfo.total = [];
 		$('#project-links').empty();
+
+		window.appData.context.firstload = true;
 
 		//Enumerate all the projects
 		Object.keys(res).forEach(function(val, index, array){
@@ -48,12 +54,31 @@ function load_projects() {
 			});
 		});
 
-		select_project(window.appData.projectInfo.total[1]);
+		//process deeplink
+		if ($('#dl-project').html().length>0){
+			var dl_project = $('#dl-project').html();
+			console.log("select project:"+dl_project);
+
+			if (window.appData.projectInfo.total.indexOf(dl_project) >= 0){
+				console.log("successfully select project");
+				select_project(dl_project);
+			}
+			else{
+				console.log('select old project');
+				select_project(window.appData.projectInfo.total[0]);
+			}
+		}
+		else 
+		{
+			console.log('select old project');
+			select_project(window.appData.projectInfo.total[0]);
+		}
 	}
 	request.send();
 }
 
 function select_project_num(index){
+	window.appData.context.firstload = false;
 	select_project(window.appData.projectInfo.total[index]);
 }
 
@@ -124,7 +149,7 @@ function ui_add_scene(scene, index){
 		i++;
 	}
 
-	insertElt = "<li><a href=\"javascript:select_scene("+index+")\"><p class=\"text-capitalize\">"+scene.name+"</p></a></li>"
+	insertElt = "<li><a href=\"javascript:select_scene_num("+index+")\"><p class=\"text-capitalize\">"+scene.name+"</p></a></li>"
 	currElt.append(insertElt);
 }
 
@@ -146,12 +171,44 @@ function load_scene() {
 			});
 
 			console.log(window.appData);
+
 			
-			select_scene(0);  
+
+			if (window.appData.context.firstload && $('#dl-scene').html().length>0){
+				var dl_scene = $('#dl-scene').html();
+				var scene_index = -1;
+
+				window.appData.sceneInfo.total.forEach(function(v,i,a){
+					console.log(v.name);
+					if (dl_scene.toLowerCase() == v.name.toLowerCase()){
+						scene_index = i;
+					}
+				});
+
+				if (scene_index >= 0){
+					console.log("successfully select scene "+scene_index);
+					select_scene(scene_index);
+				}
+				else{
+					console.log('select old scene 1')
+					select_scene(0);
+				}
+			}
+			else 
+			{
+				console.log('select old scene 2');
+				select_scene(0);
+			}
+ 
 		}
 	}
 
 	request.send(null);	
+}
+
+function select_scene_num(index){
+	window.appData.context.firstload = false;
+	select_scene(index);
 }
 
 function select_scene(index){
@@ -183,7 +240,26 @@ function load_page() {
 		}
 	}
 
-	select_page(1);
+
+	if (window.appData.context.firstload && $('#dl-index').html().length>0){
+		var dl_index = parseInt($('#dl-index').html());
+		var page_index = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number.indexOf(dl_index);
+
+		console.log(page_index);
+
+		if (page_index >= 0){
+			console.log("successfully select page "+page_index);
+			select_page(page_index+1);
+		}
+		else{
+			console.log('select old page 1')
+			select_page(1);
+		}
+	}
+	else {
+		select_page(1);
+	}	
+
 }
 
 function select_page(index){
