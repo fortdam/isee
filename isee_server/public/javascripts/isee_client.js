@@ -532,7 +532,6 @@ function place_label() {
 		pos = $(".filmstrip").offset();
 		width = $(".filmstrip").width();
 		height = $(".filmstrip").height();
-		height2	= $('#comment4').height();
 
 		$('.overlay').addClass('hidden');
 		$('.comment').addClass('hidden');
@@ -543,7 +542,11 @@ function place_label() {
 		}
 
 		if (window.appData.settings.comment != 'off'){
+			console.log("show comment");
+
 			$('#comment'+index).removeClass('hidden');
+			height2	= $('#comment'+index).height();
+
 			$('#comment'+index).offset({top: pos.top+height-height2, left:pos.left});
 			$('#comment'+index).width(width);
 		}
