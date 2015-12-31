@@ -103,17 +103,15 @@ function select_project(project) {
 
 			//Totally 4 matrix support in maximum
 			for (var i=0; i<4; i++){
+				// console.log("product num:"+res.products.length);
 				if(i<res.products.length){
 					$('#matrix-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
 					$('#carousel-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
-					$('#matrix-label-text-'+(i+1)).removeClass('hidden');
-					$('#carousel-label-text-'+(i+1)).removeClass('hidden');
+
 					$('.slot'+(i+1)).removeClass('hidden')
 				}
 				else{
-					$('#matrix-label-text-'+(i+1)).addClass('hidden');
-					$('#carousel-label-text-'+(i+1)).addClass('hidden');
-					// $('.slot'+(i+1)).addClass('hidden');
+
 					$('.slot'+(i+1)).addClass('hidden');
 				}
 			}
@@ -624,6 +622,15 @@ function place_label() {
 		$("#overlay4").offset({top: pos.top, left:pos.left+width-width1});
 		$('#comment4').offset({top: pos.top+height-height2, left:pos.left});
 		$('#comment4').width(width);
+
+		for(var i=1;i<=4; i++){
+			if (i<=window.appData.projectInfo.products.length){
+				$('#matrix-label-text-'+i).removeClass('hidden');
+			}
+			else{
+				$('#matrix-label-text-'+i).addClass('hidden');
+			}
+		}
 	}
 	else{
 		var index = parseInt($('.carousel-indicators>.active').attr('data-slide-to'))+1;
@@ -648,6 +655,15 @@ function place_label() {
 
 			$('#comment'+index).offset({top: pos.top+height-height2, left:pos.left});
 			$('#comment'+index).width(width);
+		}
+
+		for(var i=1;i<=4; i++){
+			if (i<=window.appData.projectInfo.products.length){
+				$('#carousel-label-text-'+i).removeClass('hidden');
+			}
+			else{
+				$('#carousel-label-text-'+i).addClass('hidden');
+			}
 		}
 	}
 }
