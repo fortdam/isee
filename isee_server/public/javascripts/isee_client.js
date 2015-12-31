@@ -1,5 +1,3 @@
-
-
 var appData = {
 	fullscreen: false,
 	projectInfo: {
