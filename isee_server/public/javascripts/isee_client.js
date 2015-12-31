@@ -30,51 +30,54 @@ function load_projects() {
 	var request = new XMLHttpRequest();
 	request.open("GET", "/meta_data/project");
 	request.onreadystatechange = function() {
-		var res = JSON.parse(request.response);	
-		console.log(request.response);
-		//Clear the project information
-		window.appData.projectInfo.total = [];
-		$('#project-links').empty();
+		if (request.readyState == 4 && request.status == 200){
+			var res = JSON.parse(request.response);
 
-		window.appData.context.firstload = true;
+			// console.log(request.response);
+			//Clear the project information
+			window.appData.projectInfo.total = [];
+			$('#project-links').empty();
 
-		//Enumerate all the projects
-		Object.keys(res).forEach(function(val, index, array){
-			$('#project-links').append("<li><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+val+"<b class=\"caret\"></b></a><ul class=\"dropdown-menu\" id=\"project_"+index+"\"></li>");
+			window.appData.context.firstload = true;
 
-			res[val].forEach(function(v,i,a){
-				var offset = window.appData.projectInfo.total.indexOf(v.test);
-				if(offset === -1){
-					window.appData.projectInfo.total[window.appData.projectInfo.total.length] = v.test;
-					offset = window.appData.projectInfo.total.length-1;
-				}
-				if (v.desc || v.time){
-					$('ul#project_'+index).append("<li data-toggle=\"tooltip\" title=\" "+v.desc+" \n Time: "+v.time+"\"><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+			//Enumerate all the projects
+			Object.keys(res).forEach(function(val, index, array){
+				$('#project-links').append("<li><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">"+val+"<b class=\"caret\"></b></a><ul class=\"dropdown-menu\" id=\"project_"+index+"\"></li>");
+
+				res[val].forEach(function(v,i,a){
+					var offset = window.appData.projectInfo.total.indexOf(v.test);
+					if(offset === -1){
+						window.appData.projectInfo.total[window.appData.projectInfo.total.length] = v.test;
+						offset = window.appData.projectInfo.total.length-1;
+					}
+					if (v.desc || v.time){
+						$('ul#project_'+index).append("<li data-toggle=\"tooltip\" title=\" "+v.desc+" \n Time: "+v.time+"\"><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+					}
+					else{
+						$('ul#project_'+index).append("<li><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+					}
+				});
+			});
+
+			//process deeplink
+			if ($('#dl-project').html().length>0){
+				var dl_project = $('#dl-project').html();
+				// console.log("select project:"+dl_project);
+
+				if (window.appData.projectInfo.total.indexOf(dl_project) >= 0){
+					// console.log("successfully select project");
+					select_project(dl_project);
 				}
 				else{
-					$('ul#project_'+index).append("<li><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
+					// console.log('select old project');
+					select_project(window.appData.projectInfo.total[0]);
 				}
-			});
-		});
-
-		//process deeplink
-		if ($('#dl-project').html().length>0){
-			var dl_project = $('#dl-project').html();
-			console.log("select project:"+dl_project);
-
-			if (window.appData.projectInfo.total.indexOf(dl_project) >= 0){
-				console.log("successfully select project");
-				select_project(dl_project);
 			}
-			else{
-				console.log('select old project');
+			else 
+			{
+				// console.log('select old project');
 				select_project(window.appData.projectInfo.total[0]);
 			}
-		}
-		else 
-		{
-			console.log('select old project');
-			select_project(window.appData.projectInfo.total[0]);
 		}
 	}
 	request.send();
@@ -94,7 +97,6 @@ function select_project(project) {
 		if (request.readyState === 4 && request.status === 200){
 			// console.log("get product");
 			var res = JSON.parse(request.response);
-			console.log(res);
 
 			window.appData.projectInfo.products = res.products;
 			window.appData.projectInfo.prefix = res.prefix;
@@ -173,7 +175,7 @@ function load_scene() {
 				ui_add_scene(x, i);	
 			});
 
-			console.log(window.appData);
+			// console.log(window.appData);
 
 			
 
@@ -182,24 +184,24 @@ function load_scene() {
 				var scene_index = -1;
 
 				window.appData.sceneInfo.total.forEach(function(v,i,a){
-					console.log(v.name);
+					// console.log(v.name);
 					if (dl_scene.toLowerCase() == v.name.toLowerCase()){
 						scene_index = i;
 					}
 				});
 
 				if (scene_index >= 0){
-					console.log("successfully select scene "+scene_index);
+					// console.log("successfully select scene "+scene_index);
 					select_scene(scene_index);
 				}
 				else{
-					console.log('select old scene 1')
+					// console.log('select old scene 1')
 					select_scene(0);
 				}
 			}
 			else 
 			{
-				console.log('select old scene 2');
+				// console.log('select old scene 2');
 				select_scene(0);
 			}
  
@@ -248,14 +250,14 @@ function load_page() {
 		var dl_index = parseInt($('#dl-index').html());
 		var page_index = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number.indexOf(dl_index);
 
-		console.log(page_index);
+		// console.log(page_index);
 
 		if (page_index >= 0){
-			console.log("successfully select page "+page_index);
+			// console.log("successfully select page "+page_index);
 			select_page(page_index+1);
 		}
 		else{
-			console.log('select old page 1')
+			// console.log('select old page 1')
 			select_page(1);
 		}
 	}
@@ -316,11 +318,11 @@ function select_page(index){
 			var descIndex = parseInt(pageInfo.start)+i-1;
 
 			if (descs && descs[descIndex] && descs[descIndex].length>0){
-				console.log('add tool tip '+i+pageInfo.start);
+				// console.log('add tool tip '+i+pageInfo.start);
 				$("a#page-index-"+(i+1)).tooltip({"title":descs[descIndex]});
 			}
 			else{
-				console.log('no tool tip '+descIndex);
+				// console.log('no tool tip '+descIndex);
 
 				$("a#page-index-"+(i+1)).tooltip('destroy');
 			}
@@ -403,7 +405,7 @@ function load_image(filePath, pos) {
 }
 
 function load_exifs(){
-	console.log('loading exif');
+	// console.log('loading exif');
 	var imageFilePath = '';
 
 	var currScene = window.appData.sceneInfo.total[window.appData.sceneInfo.curr];
@@ -433,45 +435,46 @@ function load_exif(filePath, pos){
 	var request = new XMLHttpRequest();
 	request.open("GET", filePath);
 	request.onreadystatechange = function() {
-		var res = JSON.parse(request.response);	
+		if (request.readyState === 4 && request.status === 200) {
+			var res = JSON.parse(request.response);	
 		
-		var manufactor = res.image.Make;
-		var model = res.image.Model;
-		var software = res.image.Software;
-		var width = res.exif.ExifImageWidth;
-		var height = res.exif.ExifImageHeight;
-		var shutter = res.exif.ExposureTime;
-		var iso = res.exif.ISO;
+			var manufactor = res.image.Make;
+			var model = res.image.Model;
+			var software = res.image.Software;
+			var width = res.exif.ExifImageWidth;
+			var height = res.exif.ExifImageHeight;
+			var shutter = res.exif.ExposureTime;
+			var iso = res.exif.ISO;
 
-		if (shutter < 0.1){
-			shutter = "1/"+Math.round(1/shutter)+" sec";
-		}
-		else {
-			shutter = shutter + " sec";
-		}
-		//Clear the project information
-
-		if (software.length > 20){
-			var newstr = software.slice(0,19);
-			software = software.substr(20);
-			while(software && software.length>0){
-				newstr += "<br>";
-				newstr += software.substr(0,19);
-				software = software.substr(20);
+			if (shutter < 0.1){
+				shutter = "1/"+Math.round(1/shutter)+" sec";
 			}
-			software = newstr;
-		}
+			else {
+				shutter = shutter + " sec";
+			}
+			//Clear the project information
 
-		var htmlContent = " <b>Maker:</b> "+manufactor
-			+"<br><b>Model:</b> "+model
-			+"<br><b>Software:</b> "+software
-			+"<br><b>Width:</b> "+width
-			+"<br><b>Height:</b> "+height
-			+"<br><b>Exposure:</b> "+shutter
-			+"<br><b>ISO:</b> "+iso;
+			if (software && software.length > 20){
+				var newstr = software.slice(0,19);
+				software = software.substr(20);
+				while(software && software.length>0){
+					newstr += "<br>";
+					newstr += software.substr(0,19);
+					software = software.substr(20);
+				}
+				software = newstr;
+			}
 
-		$('#overlay'+pos).empty().append(htmlContent);
-		
+			var htmlContent = " <b>Maker:</b> "+manufactor
+				+"<br><b>Model:</b> "+model
+				+"<br><b>Software:</b> "+software
+				+"<br><b>Width:</b> "+width
+				+"<br><b>Height:</b> "+height
+				+"<br><b>Exposure:</b> "+shutter
+				+"<br><b>ISO:</b> "+iso;
+
+			$('#overlay'+pos).empty().append(htmlContent);
+		}		
 	}
 	request.send();
 }
@@ -506,32 +509,34 @@ function load_comment(query, pos){
 
 	request.open("GET", queryStr);
 	request.onreadystatechange = function() {
-		var res = JSON.parse(request.response);	
-		// console.log('receive comment')
-		// console.log(request.response);
-		if(res.state == 'no'){
-			//Always hide the info
-			$('#comment'+pos).empty();
-		}
-		else {
-			//Fill in the content and display if needed
-			if (res.grade == 'good'){
-				$('#comment'+pos).css('background-color', 'green');
-				$('#comment'+pos).css('color', 'white');
-			}
-			else if(res.grade == 'poor'){
-				$('#comment'+pos).css('background-color', 'red');
-				$('#comment'+pos).css('color', 'white');
-			}
-			else{
-				$('#comment'+pos).css('background-color', 'yellow');
-				$('#comment'+pos).css('color', 'black');
-			}
 
-			$('#comment'+pos).empty().append(query.user.toUpperCase()+":"+res.review);
-		
+		if (request.readyState === 4 && request.status === 200) {
+			var res = JSON.parse(request.response);	
+	
+			if(res.state == 'no'){
+				//Always hide the info
+				$('#comment'+pos).empty();
+			}
+			else {
+				//Fill in the content and display if needed
+				if (res.grade == 'good'){
+					$('#comment'+pos).css('background-color', 'green');
+					$('#comment'+pos).css('color', 'white');
+				}
+				else if(res.grade == 'poor'){
+					$('#comment'+pos).css('background-color', 'red');
+					$('#comment'+pos).css('color', 'white');
+				}
+				else{
+					$('#comment'+pos).css('background-color', 'yellow');
+					$('#comment'+pos).css('color', 'black');
+				}
+
+				$('#comment'+pos).empty().append(query.user.toUpperCase()+":"+res.review);
+			
+			}
+			place_label();
 		}
-		place_label();
 	}
 	request.send();
 }
@@ -635,7 +640,7 @@ function place_label() {
 		}
 
 		if (window.appData.settings.comment != 'off'){
-			console.log("show comment");
+			// console.log("show comment");
 
 			$('#comment'+index).removeClass('hidden');
 			height2	= $('#comment'+index).height();
@@ -666,7 +671,7 @@ function onModalLoaded(event) {
         							a[a.length] = {name:"user", value:window.appData.userInfo.name};
         							a[a.length] = {name:"email", value:window.appData.userInfo.email};
         							a[a.length] = {name:"imgsize", value:window.appData.settings.imgsize};
-        							console.log(a)
+        							// console.log(a)
         							},  // pre-submit callback 
 
         complete:  		function(msg){window.currModal.modal("hide");
@@ -674,7 +679,7 @@ function onModalLoaded(event) {
 
     								if ((window.appData.settings.comment == 'my') || 
     									((window.appData.settings.comment == 'mml') && (window.appData.userInfo.name=='mml'))){
-    									console.log('reload comments');
+    									// console.log('reload comments');
     									load_comments();
     								}
     								return true},
@@ -699,8 +704,8 @@ function onModalLoaded(event) {
 	    $(this).find('form').submit(function() { 
 	        // inside event callbacks 'this' is the DOM element so we first 
 	        // wrap it in a jQuery object and then invoke ajaxSubmit 
-	        console.log("trigger submit");
-	        console.log(pos);
+	        // console.log("trigger submit");
+	        // console.log(pos);
 	        $(this).ajaxSubmit(options); 
 	 
 	        // !!! Important !!! 
@@ -790,7 +795,7 @@ function onUserModalLoaded(event){
 
 	var userInfo = window.appData.userInfo;
 
-	console.log(userInfo.name);
+	// console.log(userInfo.name);
 
 	$(this).find('input#username').attr('value', userInfo.name);
 	$(this).find('input#email').attr('value', userInfo.email);
@@ -886,7 +891,7 @@ function toggle_fullscreen(){
 		window.appData.fullscreen = true;
 	}
 	else{
-		console.log('exit full screen')
+		// console.log('exit full screen')
 		if(document.exitFullScreen){
 			document.exitFullScreen();
 		} 
