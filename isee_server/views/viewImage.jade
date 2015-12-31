@@ -59,27 +59,27 @@ block content
     .filmstrip
       div(id="carousel-example-generic", class="carousel slide", data-ride="carousel", data-interval=50000, data-keyboard=true)
         ol.carousel-indicators
-          li.active(data-target="#carousel-example-generic" data-slide-to="0")
-          li(data-target="#carousel-example-generic" data-slide-to="1")
-          li(data-target="#carousel-example-generic" data-slide-to="2")
-          li(data-target="#carousel-example-generic" data-slide-to="3")
+          li.active(data-target="#carousel-example-generic" data-slide-to="0" class="slot1")
+          li(data-target="#carousel-example-generic" data-slide-to="1" class="slot2")
+          li(data-target="#carousel-example-generic" data-slide-to="2" class="slot3")
+          li(data-target="#carousel-example-generic" data-slide-to="3" class="slot4")
         .carousel-inner(role="listbox")
-          .item(class="active")
+          .item(class="active slot1")
             img(src=default_img, id="pic1" ,data-toggle="modal", data-target="#myModal1", trigger-place="1")
             .carousel-caption
               h3
                 span(class="label label-primary", id='carousel-label-text-1') a
-          .item
+          .item(class="slot2")
             img(src=default_img, id="pic2" ,data-toggle="modal", data-target="#myModal2", trigger-place="2")
             .carousel-caption
               h3
                 span(class="label label-info", id='carousel-label-text-2')  b
-          .item
+          .item(class="slot3")
             img(src=default_img, id="pic3" ,data-toggle="modal", data-target="#myModal3", trigger-place="3")
             .carousel-caption
               h3
                 span(class="label label-default", id='carousel-label-text-3')  c        
-          .item
+          .item(class="slot4")
             img(src=default_img, id="pic4" ,data-toggle="modal", data-target="#myModal4", trigger-place="4")
             .carousel-caption
               h3

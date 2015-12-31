@@ -106,14 +106,15 @@ function select_project(project) {
 				if(i<res.products.length){
 					$('#matrix-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
 					$('#carousel-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
-					$('#matrix-label-text-'+(i+1)).show();
-					$('#carousel-label-text-'+(i+1)).show();
-					$('.slot'+(i+1)).show()
+					$('#matrix-label-text-'+(i+1)).removeClass('hidden');
+					$('#carousel-label-text-'+(i+1)).removeClass('hidden');
+					$('.slot'+(i+1)).removeClass('hidden')
 				}
 				else{
-					$('#matrix-label-text-'+(i+1)).hide();
-					$('#carousel-label-text-'+(i+1)).hide();
-					$('.slot'+(i+1)).hide();
+					$('#matrix-label-text-'+(i+1)).addClass('hidden');
+					$('#carousel-label-text-'+(i+1)).addClass('hidden');
+					// $('.slot'+(i+1)).addClass('hidden');
+					$('.slot'+(i+1)).addClass('hidden');
 				}
 			}
 			load_scene();
