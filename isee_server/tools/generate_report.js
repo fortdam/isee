@@ -40,6 +40,7 @@ function genReport(project, product, user){
 				}
 				if (currIndex != v.index){
 					os.write('  #'+v.index+"\r\n");
+					os.write('  Link: http://172.24.197.23:3000/photos?project='+project+"&scene="+v.scene+"&index="+v.index+"\r\n");
 					currIndex = v.index;
 				}
 				var strComment = "    "+v.user;
