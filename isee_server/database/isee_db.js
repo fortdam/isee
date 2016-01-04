@@ -163,8 +163,10 @@ isee_db.sendComment = function(comment){
 	var db = this.db;
 	var sent = false;
 
+	comment.user = comment.user.toLowerCase();
+
 	this.db.collection(COL_COMMENT).deleteMany({
-		"user":comment.user.toLowerCase(), 
+		"user":comment.user, 
 		"project": comment.project, 
 		"scene":comment.scene, 
 		"index":comment.index, 
