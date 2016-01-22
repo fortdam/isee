@@ -169,13 +169,37 @@ function subsample_image_kernel(originalFile, resizeType){
   var targetFile = originalFile.replace(PHOTO_PATH, RESIZE_CONFIG[resizeType].path);
 
   if (!fs.existsSync(targetFile)){
-	console.log("Create:"+targetFile);
 
-  	gm(originalFile)
-  		.resize(RESIZE_CONFIG[resizeType].width)
-  		.quality(RESIZE_CONFIG[resizeType].quality)
-  		.write(targetFile, function(err){});
+	var entry = {};
+	entry.originalFile = originalFile;
+	entry.width = RESIZE_CONFIG[resizeType].width;
+	entry.quality = RESIZE_CONFIG[resizeType].quality;
+	entry.targetFile = targetFile;
+
+	cache_files.push(entry);
+
+  	// gm(originalFile)
+  	// 	.resize(RESIZE_CONFIG[resizeType].width)
+  	// 	.quality(RESIZE_CONFIG[resizeType].quality)
+  	// 	.write(targetFile, function(err){});
   }
+}
+
+function perform_image_cache(err){
+	if (cache_files.length > 0){
+		var entry = cache_files.shift();
+
+		console.log("Create:"+entry.targetFile);
+
+		gm(entry.originalFile)
+	  		.resize(entry.width)
+	  		.quality(entry.quality)
+	  		.write(entry.targetFile, perform_image_cache);
+	}
+	else
+	 {
+		close_db_after_pending_works();
+	}
 }
 
 function extract_exif(originalFile){
@@ -184,6 +208,7 @@ function extract_exif(originalFile){
 	if (!fs.existsSync(exifFile)){
 		new ExifImage({ image : originalFile }, function (error, exifData) {
 	        if (!error){
+	        	console.log(exifFile);
 	            fs.writeFileSync(exifFile, JSON.stringify(exifData)); // Do something with your data!
 	        }            
 	    });	
@@ -202,7 +227,11 @@ function project_import(project){
 		add_project_info_2_db(PHOTO_PATH+project, function(){
 			process_all_files(PHOTO_PATH+project+'/', 
 				[prepare_subsample_dirs, create_scene_info], //For folders
-				[name_normalize, subsample_images, extract_exif]  //For filez
+				[
+				name_normalize, 
+				subsample_images, 
+				extract_exif
+				]  //For filez
 			);  		
 		});
 	});
@@ -214,6 +243,7 @@ function project_import(project){
 // }
 
 var dbTransaction = 0;
+var cache_files = [];
 
 function close_db_after_pending_works(){
 	if(dbTransaction == 0){
@@ -232,7 +262,7 @@ else {
 	if (fs.existsSync(PHOTO_PATH+process.argv[2])){
 		// read_project_info(process.argv[2]);
 		project_import(process.argv[2]);
-		setTimeout(close_db_after_pending_works,5000);
+		setTimeout(perform_image_cache,5000);
 	}
 	else{
 		console.log("The project doesn't exist, please make sure the project <"+PHOTO_PATH+process.argv[2]+"> exists");
