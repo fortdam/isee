@@ -1,0 +1,24 @@
+.modal-dialog(role="document")
+  .modal-content
+    .modal-header
+      div(class="modal-title") 
+        button(type="button", class="close", data-dismiss="modal", aria-label="Close") 
+          span(aria-hidden="true") &times
+        h4.modal-title-text Report Settings
+      .modal-body
+        b Comment:
+        br
+        .btn-group(data-toggle="buttons", class="comment-group")
+          label(class="btn btn-default", id="my", filter="report-setting")
+            input(type="radio", name="comment", id="my", value="my", autocomplete="off") 
+            span My
+          label(class="btn btn-default", id="mml", filter="report-setting")
+            input(type="radio", name="comment", id="mml", value="mml", autocomplete="off") 
+            span MML        
+          label(class="btn btn-default", id="all", filter="report-setting")
+            input(type="radio", name="comment", id="all", value="all", autocomplete="off") 
+            span All
+      .modal-footer
+        button(type="button", class="btn btn-default", data-dismiss="modal") Close
+        a(href="#")
+          button(type="submit", class="btn btn-primary") Generate

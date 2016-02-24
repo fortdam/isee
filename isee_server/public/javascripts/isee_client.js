@@ -21,6 +21,11 @@ var appData = {
 		exif: "exif-off"
 	},
 
+	reportSettings: {
+		comment: "all",
+		product: 15
+	},
+
 	context: {
 		firstload: true
 	}
@@ -731,8 +736,37 @@ function onModalLoaded(event) {
 	        return false; 
 	    }); 
  	}
+}
 
+function onReportModalLoaded(event){
 
+	var reportSettings = window.appData.reportSettings;
+	var href = $(this).find('a');
+
+	$(this).find('#'+reportSettings.comment).addClass('active btn-primary');
+
+	$(this).find('label').change(function(){
+		$("label[filter='report-setting']").removeClass("btn-primary");
+		$("label[filter='report-setting'].active").addClass("btn-primary");
+
+		window.appData.reportSettings.comment = $('label.active:eq(0)').attr('id');
+		localStorage.reportComment = window.appData.reportSettings.comment;
+		console.log('update'+ window.appData.reportSettings.comment);
+
+		if(window.appData.reportSettings.comment == 'my'){
+			href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.userInfo.name);
+		}
+		else {
+			href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.reportSettings.comment);
+		}
+	});
+
+	if(window.appData.reportSettings.comment == 'my'){
+		href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.userInfo.name);
+	}
+	else {
+		href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.reportSettings.comment);
+	}
 }
 
 function onSettingModalLoaded(event){
@@ -855,6 +889,14 @@ function preload_local_settings(){
 		window.appData.settings.exif = localStorage.exif;
 	}
 
+	if (localStorage.reportComment){
+		window.appData.reportSettings.comment = localStorage.reportComment;
+	}
+
+	if (localStorage.reportProduct){
+		window.appData.reportSettings.products = localStorage.reportProduct;
+	}
+
 	if (window.appData.settings.layout == 'matrix'){
 		$('.filmstrip').addClass('hidden');
 	}
@@ -875,6 +917,8 @@ function set_hook_functions(){
 	$('#myModal2').on('show.bs.modal', onModalLoaded);
 	$('#myModal3').on('show.bs.modal', onModalLoaded);
 	$('#myModal4').on('show.bs.modal', onModalLoaded);
+
+	$('#reportModal').on('show.bs.modal', onReportModalLoaded);
 
 	$('#settingModal').on('show.bs.modal', onSettingModalLoaded);
 	$('#settingModal').on('hide.bs.modal', onSettingModalHide);

@@ -6,8 +6,11 @@ var isee_db = require('../database/isee_db');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   //res.render('index', { title: req.query.project });
-  genReport(req.query.project, "", "", res);
-
+  if (req.query.from == 'all'){
+  	req.query.from = "";
+  }
+  
+  genReport(req.query.project, "", req.query.from, res);
 });
 
 
@@ -45,38 +48,10 @@ function genReport(project, product, user, res){
 				entry.comment = v.review;
 				entry.level = v.grade;
 
-				// if (currScene != v.scene){
-				// 	currIndex = '';
-				// 	strOut += ("====="+v.scene+"=====\r\n");
-				// 	currScene = v.scene;
-				// }
-				// if (currIndex != v.index){
-				// 	strOut += ('li  #'+v.index+"\r\n");
-				// 	strOut += ('li  Link: http://172.24.197.23:3000/photos?project='+project+"&scene="+v.scene+"&index="+v.index+"\r\n");
-				// 	currIndex = v.index;
-				// }
-				// var strComment = "    "+v.user;
-
-				// while (strComment.length < 20){
-				// 	strComment += ' ';
-				// }
-				// strComment += ("@"+v.product);
-				// while (strComment.length < 34){
-				// 	strComment += ' ';
-				// }
-				// strComment += ("#"+v.grade);
-				// while (strComment.length < 42){
-				// 	strComment += ' ';
-				// }
-				// strComment += (':'+v.review+'\r\n');
-
-				// strOut += (strComment);
 				total_entries.push(entry);
 			});
 
-res.render('report', { comments: JSON.stringify(total_entries)})
-			//os.end();
-			//isee_db.close();
+			res.render('report', { comments: JSON.stringify(total_entries)});
 		})
 	//})
 }
