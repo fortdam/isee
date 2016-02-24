@@ -8,13 +8,19 @@ block content
       .nav(id="bs-navbar", class="collapse navbar-collapse")
         ul(class="nav navbar-nav", id="project-links")
         ul(class="nav navbar-nav navbar-right")
-          li
+          li(data-toggle="tool-tip", data-placement="bottom", title="Toggle Full Screen")
             a(href="javascript:toggle_fullscreen()") 
               span(class="glyphicon glyphicon-resize-full" aria-hidden="true")
-          li
+          li(data-toggle="tool-tip", data-placement="bottom", title="User Information")
             a(href="#", data-toggle="modal", data-target="#userModal") 
               span(class="glyphicon glyphicon-user" aria-hidden="true")
-          li
+          li(data-toggle="tool-tip", data-placement="bottom", title="Download Pictures")
+            a(href="#") 
+              span(class="glyphicon glyphicon-download-alt" aria-hidden="true")
+          li(data-toggle="tool-tip", data-placement="bottom", title="Read Report")
+            a(id="report-linkage", href="/report") 
+              span(class="glyphicon glyphicon-list-alt" aria-hidden="true")
+          li(data-toggle="tool-tip", data-placement="bottom", title="Settings")
             a(href="#", data-toggle="modal", data-target="#settingModal") 
               span(class="glyphicon glyphicon-cog" aria-hidden="true")
 

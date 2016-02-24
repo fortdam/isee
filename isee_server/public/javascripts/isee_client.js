@@ -115,6 +115,7 @@ function select_project(project) {
 					$('.slot'+(i+1)).addClass('hidden');
 				}
 			}
+			$('a#report-linkage').attr('href', "/report?project="+project); //Update the link href
 			load_scene();
 		}
 	}

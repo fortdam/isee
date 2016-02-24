@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  #dl-comments(class="hidden") #{comments}
+  table(class="table")
+    tr
+      th Scene
+      th Author
+      th Product
+      th Comment
+
+block append javascript
+  script(src="/javascripts/comment.js")
+
+      
