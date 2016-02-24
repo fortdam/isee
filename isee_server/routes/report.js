@@ -51,7 +51,14 @@ function genReport(project, product, user, res){
 				total_entries.push(entry);
 			});
 
-			res.render('report', { comments: JSON.stringify(total_entries)});
+			isee_db.getOneProject(project, function(prjInfo){
+				res.render('report', { comments: JSON.stringify(total_entries),
+										title: prjInfo.name,
+										desc: ' - '+prjInfo.desc,
+										time: ' - '+prjInfo.time});
+			})
+
+			
 		})
 	//})
 }

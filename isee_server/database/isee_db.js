@@ -90,6 +90,14 @@ isee_db.addScene = function(project, name, path, indice, descs, callback){
 }
 
 
+isee_db.getOneProject = function(test, callback){
+	var db = this.db;
+
+	db.collection(COL_PROJECT).find({'cust_id':1, "test":test}).toArray(function(err, docs){
+		callback(docs[0]);
+	});
+}
+
 isee_db.getProject = function(callback){
 	var db = this.db;
 
