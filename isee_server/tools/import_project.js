@@ -164,7 +164,7 @@ function subsample_images(originalFile){
 }
 
 function subsample_image_kernel(originalFile, resizeType){
-  var pic = gm(originalFile);
+  // var pic = gm(originalFile);
 
   var targetFile = originalFile.replace(PHOTO_PATH, RESIZE_CONFIG[resizeType].path);
 
@@ -267,6 +267,4 @@ else {
 	else{
 		console.log("The project doesn't exist, please make sure the project <"+PHOTO_PATH+process.argv[2]+"> exists");
 	}
-
 }
-
