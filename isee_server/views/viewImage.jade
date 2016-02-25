@@ -14,6 +14,9 @@ block content
           li(data-toggle="tool-tip", data-placement="bottom", title="User Information")
             a(href="#", data-toggle="modal", data-target="#userModal") 
               span(class="glyphicon glyphicon-user" aria-hidden="true")
+          li(data-toggle="tool-tip", data-placement="bottom", title="Generate Link")
+            a(href="#", data-toggle="modal", data-target="#linkModal")
+              span(class="glyphicon glyphicon-link" aria-hidden="true")                
           li(data-toggle="tool-tip", data-placement="bottom", title="Download Pictures")
             a(href="#") 
               span(class="glyphicon glyphicon-download-alt" aria-hidden="true")
@@ -111,6 +114,9 @@ block content
 
     .modal(class="fade", id="settingModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
       include ./setting_dialog.jade
+
+    .modal(class="fade", id="linkModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./link_dialog.jade          
 
     .modal(class="fade", id="reportModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
       include ./report_dialog.jade      

@@ -843,6 +843,13 @@ function onSettingModalHide(event){
 	}
 }
 
+function onLinkModalLoaded(event){
+
+	$(this).find('p#url').text("http://172.24.197.23:3000/photos/?project="+window.appData.projectInfo.curr
+											+"&scene="+window.appData.sceneInfo.total[window.appData.sceneInfo.curr].name
+											+"&index="+window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number[window.appData.pageInfo.curr-1]);
+}
+
 function onUserModalLoaded(event){
 
 	var userInfo = window.appData.userInfo;
@@ -919,6 +926,8 @@ function set_hook_functions(){
 	$('#myModal4').on('show.bs.modal', onModalLoaded);
 
 	$('#reportModal').on('show.bs.modal', onReportModalLoaded);
+
+	$('#linkModal').on('show.bs.modal', onLinkModalLoaded);
 
 	$('#settingModal').on('show.bs.modal', onSettingModalLoaded);
 	$('#settingModal').on('hide.bs.modal', onSettingModalHide);
