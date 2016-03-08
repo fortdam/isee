@@ -18,7 +18,7 @@ block content
             a(href="#", data-toggle="modal", data-target="#linkModal")
               span(class="glyphicon glyphicon-link" aria-hidden="true")                
           li(data-toggle="tool-tip", data-placement="bottom", title="Download Pictures")
-            a(href="#") 
+            a(href="#", data-toggle="modal", data-target="#downloadModal") 
               span(class="glyphicon glyphicon-download-alt" aria-hidden="true")
           li(data-toggle="tool-tip", data-placement="bottom", title="Read Report")
             a(href="#", data-toggle="modal", data-target="#reportModal") 
@@ -116,7 +116,10 @@ block content
       include ./setting_dialog.jade
 
     .modal(class="fade", id="linkModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
-      include ./link_dialog.jade          
+      include ./link_dialog.jade  
+
+    .modal(class="fade", id="downloadModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./download_dialog.jade                
 
     .modal(class="fade", id="reportModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
       include ./report_dialog.jade      

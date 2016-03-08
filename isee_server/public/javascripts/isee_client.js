@@ -847,6 +847,11 @@ function onSettingModalHide(event){
 	}
 }
 
+function onDownloadModalLoaded(event){
+	$(this).find('a#download-pic').attr('href', 'http://172.24.197.23:3000/photos/cache/__bundle__/'+window.appData.projectInfo.curr+'.tar.gz');
+	$(this).find('a#download-apk').attr('href',"http://172.24.197.23:3000/quickreview.apk");	
+}
+
 function onLinkModalLoaded(event){
 
 	$(this).find('p#url').text("http://172.24.197.23:3000/photos/?project="+window.appData.projectInfo.curr
@@ -931,6 +936,7 @@ function set_hook_functions(){
 
 	$('#reportModal').on('show.bs.modal', onReportModalLoaded);
 
+	$('#downloadModal').on('show.bs.modal', onDownloadModalLoaded);
 	$('#linkModal').on('show.bs.modal', onLinkModalLoaded);
 
 	$('#settingModal').on('show.bs.modal', onSettingModalLoaded);
