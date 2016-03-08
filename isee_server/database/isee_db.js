@@ -8,6 +8,7 @@ var isee_db = {};
 
 var COL_PROJECT = "project";
 var COL_COMMENT = "comment";
+var COL_PERF = "performance";
 
 
 isee_db.open = function(callback){
@@ -237,8 +238,90 @@ isee_db.getCommentSummary = function(project, product, user, callback){
 	})
 }
 
+
+isee_db.addPerfTest = function(data, callback){
+	assert(this.db);
+
+	var inst_db = this.db;
+
+	this.db.collection(COL_PERF).deleteMany({
+		'product': data.product,
+		'baseline': data.baseline,
+		'hardware': data.hardware,
+		'software': data.software,
+		'app': data.app,
+		'cust_id': 1
+	}, function(){
+		inst_db.collection(COL_PERF).insertOne(data, callback);
+	})
+}
+
+isee_db.addPerfRef = function(data, callback){
+	assert(this.db);
+
+	var inst_db = this.db;
+
+	this.db.collection(COL_PERF).deleteMany({
+		'product': data.product,
+		'cust_id': 2,
+	}, function(){
+		inst_db.collection(COL_PERF).insertOne(data, callback);
+	})
+}
+
+isee_db.findPerfTest = function(project, version, callback){
+
+	var name_pattern;
+	var sw_pattern;
+
+	if (project.match(/idol4s/i)){
+		name_pattern = /Idol 4S/i;
+	}
+	else if (project.match(/gandalf/i) || project.match(/vodafone/i) ||  project.match(/vdf/i)){
+		name_pattern = /VDF/i;
+	}
+	else {
+		name_pattern = /idol 4$/i;
+	}
+
+	if (version){
+		if (version.match(/sw/i)){
+			version = version.slice(2,5);
+		}
+
+		sw_pattern = new RegExp(version.slice(0,2)+"\\w{2}"+version.slice(2,3),'i');
+
+		var inst_db = this.db;
+
+		this.db.collection(COL_PERF).find({software:{$regex:sw_pattern}, product:{$regex:name_pattern}, cust_id:1}).toArray(function(err, docs){
+			inst_db.collection(COL_PERF).find({product:{$regex:name_pattern}, cust_id:2}).toArray(function(ierr, idocs){
+				if (docs.length > 0) {
+					docs[0].reference = idocs[0]; //We assume there's only one record in doc & idoc
+				}
+				callback(docs);
+			})
+		})
+	}
+	else {
+		var inst_db = this.db;
+
+		this.db.collection(COL_PERF).find({product:{$regex:name_pattern}, cust_id:1}).toArray(function(err, docs){
+			inst_db.collection(COL_PERF).find({product:{$regex:name_pattern}, cust_id:2}).toArray(function(ierr, idocs){
+				if (docs.length > 0){
+									console.log(idocs[0])
+
+					docs[0].reference = idocs[0]; //We assume there's only one record in doc & idoc
+				}
+				callback(docs);
+			})
+		})
+	}
+
+
+}
+
 isee_db.test = function(){
-	var cursor = this.db.collection(COL_PROJECT).find();
+	var cursor = this.db.collection(COL_PERF).find({'cust_id': 2});
 
 	cursor.each(function(err, doc) {
       assert.equal(err, null);

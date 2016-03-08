@@ -28,5 +28,10 @@ router.get('/product', function(req, res, next){
 	})
 })
 
+router.get('/performance', function(req, res, next){
+	isee_db.findPerfTest(req.query.project, req.query.ver, function(data){
+		res.send(data);
+	})
+})
 
 module.exports = router;

@@ -62,6 +62,10 @@ function load_projects() {
 						$('ul#project_'+index).append("<li><a href=\"javascript:select_project_num("+offset+")\">"+v.name+"</li>");
 					}
 				});
+
+
+				$('ul#project_'+index).append("<li><a href=/performance?project="+val+">"+"Performance"+"</li>");
+
 			});
 
 			//process deeplink

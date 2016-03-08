@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  #dl-project(class='hidden') #{project}
+  #dl-version(class='hidden') #{version}
+  .headerbar
+    h1(id="header-product")
+    h3(id="header-hw")
+    h3(id="header-sw")
+    h3(id="header-baseline")
+    h3(id="header-cam-app")
+  .container(id="chart-container")
+    .row
+      .col-md-6
+        h3(id="slot1")
+        canvas(id="slot1")
+      .col-md-6
+        h3(id="slot2")
+        canvas(id="slot2")
+    .row
+      .col-md-6
+        h3(id="slot3")      	
+        canvas(id="slot3")
+      .col-md-6
+        h3(id="slot4")
+        canvas(id="slot4")
+    .row
+      .col-md-6
+        h3(id="slot5")
+        canvas(id="slot5")
+      .col-md-6
+        h3(id="slot6")
+        canvas(id="slot6")
+    .row
+      .col-md-6
+        h3(id="slot7")
+        canvas(id="slot7")
+      .col-md-6
+        h3(id="slot8")
+        canvas(id="slot8")
+block append javascript
+  script(src="Chart.js")
+  script(src="/javascripts/isee_client_perf.js")
