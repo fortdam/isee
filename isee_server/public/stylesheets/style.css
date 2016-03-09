@@ -11,6 +11,20 @@ canvas {
   width: 90%;
 }
 
+#reference-color {
+  width: 90px;
+  height: 14px;
+  vertical-align: middle;
+  background-color: rgb(255,0,0);
+}
+
+#actual-color {
+  width: 90px;
+  height: 14px;
+  vertical-align: middle;
+  background-color: rgb(151,187,205);
+}
+
 .overlay {  
 /*	width: 50;
 	height:100;*/
