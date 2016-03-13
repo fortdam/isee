@@ -1,0 +1,110 @@
+-----Main-----
+[Product]    ALCATEL Idol 4
+[Baseline]    MSM8976.LA.1.0.1-00120-STD.PRO
+[Hardware]    PIO1
+[Software]    Y1A2L5D1BX20
+[KernelBuild]    Performance (=Performance?)
+[com.tct.camera]    v5.2.9.3.0025.0_0229
+
+
+--Time For Camera Launch(Cold)--
+721 ms
+686 ms
+708 ms
+718 ms
+692 ms
+674 ms
+727 ms
+675 ms
+672 ms
+672 ms
+Average: 695 ms
+
+--Time For Camera Launch(Warm)--
+561 ms
+573 ms
+558 ms
+568 ms
+581 ms
+584 ms
+561 ms
+580 ms
+607 ms
+571 ms
+Average: 574 ms
+
+--Time For Switch Mode--
+959 ms
+854 ms
+719 ms
+847 ms
+727 ms
+836 ms
+720 ms
+862 ms
+722 ms
+812 ms
+704 ms
+832 ms
+719 ms
+833 ms
+709 ms
+874 ms
+712 ms
+875 ms
+729 ms
+896 ms
+Average: 797 ms
+
+--Time For Toggle Camera(HAL)--
+966 ms
+858 ms
+968 ms
+876 ms
+948 ms
+875 ms
+964 ms
+877 ms
+949 ms
+876 ms
+968 ms
+834 ms
+947 ms
+838 ms
+976 ms
+909 ms
+953 ms
+882 ms
+956 ms
+890 ms
+Average: 916 ms
+
+--Time For Take Picture(HAL)--
+445 ms
+402 ms
+414 ms
+408 ms
+411 ms
+441 ms
+429 ms
+386 ms
+382 ms
+411 ms
+Average: 413 ms
+
+--Time-lapse between Burst Capture(HAL)--
+109 ms
+84 ms
+130 ms
+186 ms
+132 ms
+320 ms
+144 ms
+191 ms
+212 ms
+231 ms
+Average: 174 ms
+
+--Time For Instant Capture--
+Average: NaN ms
+

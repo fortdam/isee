@@ -6,12 +6,20 @@ var isee_db = require('../database/isee_db');
 function test_import(file){
 	var result = {
 		cold_start: [],
+		cold_start_hal: [],
 		warm_start: [],
+		warm_start_hal: [],
 		switch_mode: [],
+		switch_mode_hal: [],
 		switch_camera: [],
+		switch_camera_hal: [],
 		capture: [],
+		capture_hal: [],
 		burst: [],
+		burst_hal: [],
 		boom: [],
+		boom_ui: [],
+		boom_hal: [],
 		cust_id: 1
 	};
 
@@ -44,23 +52,47 @@ function test_import(file){
 		else if (v.indexOf('--Time For Camera Launch(Cold)--') >= 0){
 			current_dataset = result.cold_start;
 		}
+		else if (v.indexOf('--Time For Camera Launch(Cold)-(HAL)--') >= 0){
+			current_dataset = result.cold_start_hal;
+		}
 		else if (v.indexOf('--Time For Camera Launch(Warm)--') >= 0){
 			current_dataset = result.warm_start;
+		}
+		else if (v.indexOf('--Time For Camera Launch(Warm)-(HAL)--') >= 0){
+			current_dataset = result.warm_start_hal;
 		}
 		else if (v.indexOf('--Time For Switch Mode--') >= 0){
 			current_dataset = result.switch_mode;
 		}
-		else if (v.indexOf('--Time For Toggle Camera(HAL)--') >= 0){
+		else if (v.indexOf('--Time For Switch Mode-(HAL)--') >= 0){
+			current_dataset = result.switch_mode_hal;
+		}
+		else if (v.indexOf('--Time For Toggle Camera--') >= 0){
 			current_dataset = result.switch_camera;
 		}
-		else if (v.indexOf('--Time For Take Picture(HAL)--') >= 0){
+		else if (v.indexOf('--Time For Toggle Camera-(HAL)--') >= 0){
+			current_dataset = result.switch_camera_hal;
+		}
+		else if (v.indexOf('--Time For Take Picture--') >= 0){
 			current_dataset = result.capture;
 		}
-		else if (v.indexOf('--Time-lapse between Burst Capture(HAL)--') >= 0){
+		else if (v.indexOf('--Time For Take Picture-(HAL)--') >= 0){
+			current_dataset = result.capture_hal;
+		}
+		else if (v.indexOf('--Time-lapse between Burst capture--') >= 0){
 			current_dataset = result.burst;
+		}
+		else if (v.indexOf('--Time-lapse between Burst capture-(HAL)--') >= 0){
+			current_dataset = result.burst_hal;
 		}
 		else if (v.indexOf('--Time For Instant Capture--') >= 0) {
 			current_dataset = result.boom;
+		}
+		else if (v.indexOf('--Time For Instant Capture-(UI)--') >= 0) {
+			current_dataset = result.boom_ui;
+		}
+		else if (v.indexOf('--Time For Instant Capture-(HAL)--') >= 0) {
+			current_dataset = result.boom_hal;
 		}
 		else if (v.indexOf('ms')>=0 && v.indexOf('Average') < 0){
 			var time = v.match(/(\d+) ms/);
@@ -81,38 +113,61 @@ function reference_import(){
 		{
 			'cust_id':2,
 			'product': "Idol 4",
-			'cold_start': 807,
-			'warm_start': 602,
-			'switch_mode': 507,
-			'switch_camera': 735,
-			'capture': 249,
+			'cold_start': 1000, 
+			'cold_start_hal': 807,
+			'warm_start': 800,
+			'warm_start_hal': 602,
+			'switch_mode': 700,
+			'switch_mode_hal': 507,
+			'switch_camera': 850,
+			'switch_camera_hal': 735,
+			'capture': 300,
+			'capture_hal': 249,
 			'burst': 164,
-			'boom': 600
+			'burst_hal': 164,
+			'boom': 1200,
+			'boom_ui': 1600,
+			'boom_hal': 600
 
 		},
 		{
 			'cust_id':2,
 			'product': "Idol 4s",
-			'cold_start': 830,
-			'warm_start': 610,
-			'switch_mode': 484,
-			'switch_camera': 749,
-			'capture': 277,
-			'burst': 182,
-			'boom': 600
+			'cold_start': 1000,
+			'cold_start_hal': 830,
+			'warm_start': 800,
+			'warm_start_hal': 610,
+			'switch_mode': 700,
+			'switch_mode_hal': 484,
+			'switch_camera': 850,
+			'switch_camera_hal': 749,
+			'capture': 300,
+			'capture_hal': 277,
+			'burst': 180,
+			'burst_hal': 182,
+			'boom':1100,
+			'boom_ui': 1500,
+			'boom_hal': 600
 		},
 		{
 			'cust_id':2,
 			'product': 'Idol4S VDF',
-			'cold_start': 830,
-			'warm_start': 610,
-			'switch_mode': 484,
-			'switch_camera': 749,
-			'capture': 277,
-			'burst': 182,
-			'boom': 600
+			'cold_start': 1000,
+			'cold_start_hal': 830,
+			'warm_start': 800,
+			'warm_start_hal': 610,
+			'switch_mode': 700,
+			'switch_mode_hal': 484,
+			'switch_camera': 850,
+			'switch_camera_hal': 749,
+			'capture': 300,
+			'capture_hal': 277,
+			'burst': 180,
+			'burst_hal': 182,
+			'boom':1100,
+			'boom_ui':1500,
+			'boom_hal': 600
 		}
-
 	];
 
 	isee_db.open(function(){

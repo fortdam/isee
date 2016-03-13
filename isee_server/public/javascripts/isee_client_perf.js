@@ -1,11 +1,17 @@
 
 
 function plot_line(cell, title, labels, curves, reference){
-
 	var ctx = $("canvas#slot"+cell).get(0).getContext("2d");
 	var myNewChart = new Chart(ctx);
 
-	var numOfLine = curves.length;
+	var numOfLine;
+
+	if(curves && typeof(curves) == "array"){
+		numOfLine = curves.length;
+	} 
+	else {
+		numOfLine = 0;
+	}
 
 	var fillColors = ["rgba(255,0,0,0)", "rgba(151,187,205,0)"];
 	var strokeColors = ["rgba(255,0,0,1)", "rgba(151,187,205,1)"];
@@ -65,7 +71,7 @@ function plot_line(cell, title, labels, curves, reference){
 
     var options = {
     	scaleLabel: "<%=value%> ms",
-    	bezierCurve: false
+    	bezierCurve: false,
     }
 
 
@@ -74,8 +80,38 @@ function plot_line(cell, title, labels, curves, reference){
 
 
 	$('h3#slot'+cell).text(title);
+	$('h3#slot'+cell).attr('title', 'hahahaha adsfjsroawefs;');
 
 	return lineChart;
+}
+
+var ALL_TOKENS = ['cold_start', 'cold_start_hal', 'warm_start', 'warm_start_hal',  'switch_mode', 'switch_mode_hal', 'switch_camera', 'switch_camera_hal','capture', 'capture_hal','burst', 'burst_hal', 'boom', 'boom_ui', 'boom_hal'];
+var ALL_TITLES = ['Cold Start', 'Cold Start(HAL)', 'Warm Start', 'Warm Start(HAL)', 'Switch Mode', 'Switch Mode(HAL)','Switch Camera', 'Switch Camera(HAL)', 'Take Picture', 'Take Picture(HAL)','Burst Capture', 'Burst Capture(HAL)', 'Boom Capture', 'Boom Capture(UI Display)', 'Boom Capture(HAL)'];
+var CELL_IDS = [11, 12, 21, 22, 31, 32, 41, 42, 51, 52, 61, 62, 71, 72, 73]
+
+var ALL_DESC = [
+	"APP start --> Start preview and first frame displayed", //cold start
+	"(HAL)Camera open --> Start preview and first frame ready", //cold start hal
+	"APP resume --> Start preiew and first frame displayed", //warm start
+	"(HAL)Camera open --> Start prview and first frame ready", //warm start hal
+	"User swipe --> Restart preview and first frame displayed for new mode", //mode switch
+	"(HAL) Preview stop --> Restart preview and first frame available for new mode", //mode switch hal
+	"User click toggle camera --> Restart preview and first frame available for the other camera", //camera switch
+	"(HAL) Camera stop --> Restart preview and first frame available for the other camera", //camera switch hal
+	"User click capture --> Capture animation start",//capture
+	"(HAL) Take picture --> JPEG done ",//capture hal
+	"Everytime number indicator updtate",//burst
+	"(HAL) Everytime JPEG done",//burst hal
+	"User (double) click boom --> Picture take",//boom
+	"User (double) click boom --> Display the photo",//boom ui,
+	"(HAL) Open camera -> JPEG done"//boom hal
+];
+
+function update_description() {
+	ALL_TITLES.forEach(function(v,i,a){
+		$('table#test-desc').append('<tr><td>'+v+'</td><td>'+ALL_DESC[i]+'</td></tr>')
+	})
+	
 }
 
 function draw_project_sw_result(project, version){
@@ -97,13 +133,17 @@ function draw_project_sw_result(project, version){
 			$('#header-baseline').text('-Baseline: '+data.baseline);
 			$('#header-cam-app').text('-com.tct.camera: '+data.app);
 
-			plot_line(1, 'Cold Start', labels.slice(0, data.cold_start.length), [{data: data.cold_start}], data.reference.cold_start);
-			plot_line(2, 'Warm Start', labels.slice(0, data.warm_start.length), [{data: data.warm_start}], data.reference.warm_start);
-			plot_line(3, 'Switch Mode', labels.slice(0, data.switch_mode.length), [{data: data.switch_mode}], data.reference.switch_mode);
-			plot_line(4, 'Switch Camera', labels.slice(0, data.switch_camera.length), [{data: data.switch_camera}], data.reference.switch_camera);
-			plot_line(5, 'Take Picture', labels.slice(0, data.capture.length), [{data: data.capture}], data.reference.capture);
-			plot_line(6, 'Burst Capture', labels.slice(0, data.burst.length), [{data: data.burst}], data.reference.burst);
-			plot_line(7, 'Boom Capture', labels.slice(0, data.boom.length), [{data: data.boom}], data.reference.boom);
+			ALL_TITLES.forEach(function(v,i,a){
+				$('table#test-desc').append('<tr><td><b>'+v+'</b></td><td>'+ALL_DESC[i]+'</td></tr>')
+			})
+
+			ALL_TITLES.forEach(function(v,i,a){
+				var token = ALL_TOKENS[i];
+				var title = v;
+				var cellId = CELL_IDS[i];
+				console.log(token);
+				plot_line(cellId, title, labels.slice(0, data[token].length), [{data: data[token]}], data.reference[token]);
+			})
 		}
 	}
 	request.send();
@@ -143,8 +183,6 @@ function draw_project_result(project){
 				}
 			});
 
-			var ALL_TOKENS = ['cold_start', 'warm_start', 'switch_mode', 'switch_camera', 'capture', 'burst', 'boom'];
-			var ALL_TITLES = ['Cold Start', 'Warm Start', 'Switch Mode', 'Switch Camera', 'Take Picture', 'Burst Capture', 'Boom Capture'];
 
 			var data = {};
 
@@ -178,13 +216,16 @@ function draw_project_result(project){
 
 			$('#header-product').text(res[0].product);
 
-			console.log(reference);
+			// console.log(reference);
+
+			ALL_TITLES.forEach(function(v,i,a){
+				$('table#test-desc').append('<tr><td><b>'+v+'</b></td><td>'+ALL_DESC[i]+'</td></tr>')
+			})
 
 			ALL_TOKENS.forEach(function(v,i,a){
-				console.log(i);
-				var cellID = i+1;
-				var chart = plot_line(cellID, ALL_TITLES[i], labels, [{'data': data[v]}], reference[v]);
-				$('canvas#slot'+cellID).click(function(evt){
+				console.log(ALL_TITLES[i]);
+				var chart = plot_line(CELL_IDS[i], ALL_TITLES[i], labels, [{'data': data[v]}], reference[v]);
+				$('canvas#slot'+CELL_IDS[i]).click(function(evt){
 					var activePoints = chart.getPointsAtEvent(evt);
 					location.href = "/performance?project="+project+"&version="+activePoints[0].label;
 				})

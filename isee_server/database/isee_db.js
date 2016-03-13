@@ -308,27 +308,26 @@ isee_db.findPerfTest = function(project, version, callback){
 		this.db.collection(COL_PERF).find({product:{$regex:name_pattern}, cust_id:1}).toArray(function(err, docs){
 			inst_db.collection(COL_PERF).find({product:{$regex:name_pattern}, cust_id:2}).toArray(function(ierr, idocs){
 				if (docs.length > 0){
-									console.log(idocs[0])
-
 					docs[0].reference = idocs[0]; //We assume there's only one record in doc & idoc
 				}
 				callback(docs);
 			})
 		})
 	}
-
-
 }
 
-isee_db.test = function(){
-	var cursor = this.db.collection(COL_PERF).find({'cust_id': 2});
+isee_db.test = function(cb){
+	var cursor = this.db.collection(COL_PERF).find({'cust_id': 1});
 
 	cursor.each(function(err, doc) {
       assert.equal(err, null);
       if (doc != null) {
-         console.dir(doc);
+         //console.dir(doc);
+         if (cb && typeof(cb)=='function'){
+         	cb(doc);
+         }
       } else {
-         console.log(doc);
+         //console.log(doc);
       }
    });
 }
