@@ -562,7 +562,6 @@ function xy(x) {
 }
 
 
-
 function place_label() {
 
 	var pos;
@@ -571,12 +570,15 @@ function place_label() {
 	var height;
 	var height2;
 
+	var leftPadding;
+
 	if (window.appData.settings.layout == 'matrix'){
-		pos = $("img#pic1").offset();
-		width = $("img#pic1").width();
+		pos = $(".matrix .slot1").offset();
+		width = $(".matrix .slot1").width();
 		width1 = $("#overlay1").width();
-		height = $("img#pic1").height();
+		height = $(".matrix .slot1").height();
 		height2	= $('#comment1').height();
+		leftPadding = parseInt($('.matrix .slot1').css('padding-left'));
 
 		if (window.appData.settings.exif == 'exif-on'){
 			$('.overlay').removeClass('hidden');
@@ -592,46 +594,49 @@ function place_label() {
 			$('.comment').removeClass('hidden');
 		}
 
-		$("h3#label1").offset({top: pos.top, left:pos.left});
-		$("#overlay1").offset({top: pos.top, left:pos.left+width-width1});
-		$('#comment1').offset({top: pos.top+height-height2, left:pos.left});
+		$("h3#label1").offset({top: pos.top, left:pos.left+leftPadding});
+		$("#overlay1").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
+		$('#comment1').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
 		$('#comment1').width(width);
 
-		pos = $("img#pic2").offset();
-		width = $("img#pic2").width();
+		pos = $(".matrix .slot2").offset();
+		width = $(".matrix .slot2").width();
 		width1  = $("#overlay2").width();
-		height = $("img#pic2").height();
+		height = $(".matrix .slot2").height();
 		height2	= $('#comment2').height();
+		leftPadding = parseInt($('.matrix .slot2').css('padding-left'));		
 
-
-		$("h3#label2").offset({top: pos.top, left:pos.left});
-		$("#overlay2").offset({top: pos.top, left:pos.left+width-width1});
-		$('#comment2').offset({top: pos.top+height-height2, left:pos.left});
+		$("h3#label2").offset({top: pos.top, left:pos.left+leftPadding});
+		$("#overlay2").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
+		$('#comment2').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
 		$('#comment2').width(width);
 
 
-		pos = $("img#pic3").offset();
-		width = $("img#pic3").width();
+		pos = $(".matrix .slot3").offset();
+		width = $(".matrix .slot3").width();
 		width1  = $("#overlay3").width();
-		height = $("img#pic3").height();
+		height = $(".matrix .slot3").height();
 		height2	= $('#comment3').height();	
+		leftPadding = parseInt($('.matrix .slot3').css('padding-left'));
 
-		$("h3#label3").offset({top: pos.top, left:pos.left});
+		$("h3#label3").offset({top: pos.top, left:pos.left+leftPadding});
 		$("#overlay3").offset({top: pos.top, left:pos.left+width-width1});
-		$('#comment3').offset({top: pos.top+height-height2, left:pos.left});
+		$('#comment3').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
 		$('#comment3').width(width);
 
 
-		pos = $("img#pic4").offset();
-		width = $("img#pic4").width();
+		pos = $(".matrix .slot4").offset();
+		width = $(".matrix .slot4").width();
 		width1  = $("#overlay4").width();
-		height = $("img#pic4").height();
+		height = $(".matrix .slot4").height();
 		height2	= $('#comment4').height();	
+		leftPadding = parseInt($('.matrix .slot4').css('padding-left'));		
 
-		$("h3#label4").offset({top: pos.top, left:pos.left});
-		$("#overlay4").offset({top: pos.top, left:pos.left+width-width1});
-		$('#comment4').offset({top: pos.top+height-height2, left:pos.left});
+		$("h3#label4").offset({top: pos.top, left:pos.left+leftPadding});
+		$("#overlay4").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
+		$('#comment4').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
 		$('#comment4').width(width);
+
 
 		for(var i=1;i<=4; i++){
 			if (i<=window.appData.projectInfo.products.length){
@@ -677,6 +682,53 @@ function place_label() {
 		}
 	}
 }
+
+function show_zoom(zoom_level){
+	var width;
+	var height;
+
+	width = $('.matrix .slot1').width();
+	height = $('.matsrix .slot1').height();
+
+	$('.matrix .slot1').width(width);
+	$('.matrix .slot1').height(height);
+	$('.matrix .slot1').css('overflow', 'hidden');
+
+	$('.matrix img#pic1').css('max-width', "200%");
+
+	width = $('.matrix .slot2').width();
+	height = $('.matrix .slot2').height();
+
+	$('.matrix .slot2').width(width);
+	$('.matrix .slot2').height(height);
+	$('.matrix .slot2').css('overflow', 'hidden');
+
+	$('.matrix img#pic2').css('max-width', "200%");
+
+	width = $('.matrix .slot3').width();
+	height = $('.matrix .slot3').height();
+
+	$('.matrix .slot3').width(width);
+	$('.matrix .slot3').height(height);
+	$('.matrix .slot3').css('overflow', 'hidden');
+
+	$('.matrix img#pic3').css('max-width', "200%");
+
+	width = $('.matrix .slot4').width();
+	height = $('.matrix .slot4').height();
+
+	$('.matrix .slot4').width(width);
+	$('.matrix .slot4').height(height);
+	$('.matrix .slot4').css('overflow', 'hidden');
+
+	$('.matrix img#pic4').css('max-width', "200%");	
+}
+
+function hide_zoom(){
+	$('.zoom-overlay').addClass('hidden');
+}
+
+
 var modalRegistered = [];
 
 function onModalLoaded(event) {
