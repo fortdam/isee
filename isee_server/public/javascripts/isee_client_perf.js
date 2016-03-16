@@ -163,11 +163,11 @@ function draw_project_result(project){
 
 
 			res.sort(function(a,b){
-				var a1 = parseInt(a[3]);
-				var b1 = parseInt(b[3]);
+				var a1 = parseInt(a.software[3]);
+				var b1 = parseInt(b.software[3]);
 
-				var a2 = a[6];
-				var b2 = b[6];
+				var a2 = a.software[6];
+				var b2 = b.software[6];
 
 				if (a1 < b1){
 					return -1;
