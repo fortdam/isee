@@ -109,3 +109,7 @@ function set_zoom(zoom_level){
 	move_picture(3, 0, 0);
 	move_picture(4, 0, 0); 
 }
+
+$('#zoom-slider').bind('change', function(e){
+	set_zoom(e.target.value/100);
+})
