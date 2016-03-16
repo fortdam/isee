@@ -55,16 +55,20 @@ block content
     .matrix
       .row
         .col-md-6(class='slot1')
-          img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#myModal1", trigger-place="1") 
+          .img-holder(id='img-holder1')
+            img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#myModal1", trigger-place="1") 
         .col-md-6(class='slot2')
           //- .overlay
-          img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#myModal2", trigger-place="2")
+          .img-holder(id='img-holder2')
+            img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#myModal2", trigger-place="2")
       br
       .row
         .col-md-6(class='slot3')
-          img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#myModal3", trigger-place="3")
+          .img-holder(id='img-holder3')
+            img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#myModal3", trigger-place="3")
         .col-md-6(class='slot4')
-          img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#myModal4", trigger-place="4")
+          .img-holder(id='img-holder4')
+            img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#myModal4", trigger-place="4")
     .filmstrip
       div(id="carousel-example-generic", class="carousel slide", data-ride="carousel", data-interval=50000, data-keyboard=true)
         ol.carousel-indicators
@@ -144,7 +148,7 @@ block content
     p.comment(id="comment1" style="position:fixed")
     p.comment(id="comment2" style="position:fixed")
     p.comment(id="comment3" style="position:fixed")
-    p.comment(id="comment4" style="position:fixed")
+    p.comment(id="comment4" style="position:fixed")  
 
     #dl-project(class='hidden') #{project}
     #dl-scene(class='hidden') #{scene}

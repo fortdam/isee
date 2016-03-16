@@ -7,7 +7,7 @@
     <link rel='stylesheet' href='stylesheets/bootstrap.min.css'/>
     <link rel='stylesheet' href='stylesheets/bootstrap-theme.min.css'/>
 
-
+<link rel='stylesheet' href='stylesheets/slider.css'/>
 
 </head>
 <body>
@@ -48,8 +48,12 @@
 <div id="drop_area">将图片拖拽到此区域</div> 
 <div id="preview"></div> 
 
+<input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-14" data-slider-orientation="vertical" data-slider-selection="after"data-slider-tooltip="hide">
+
+
   <script type="text/javascript" src="javascripts/jquery.min.js"></script>
 <script src="javascripts/bootstrap.min.js"></script>
+<script src="javascripts/bootstrap-slider.js"></script>
 <script src="javascripts/exif.js"></script>
    <script>
 
@@ -117,5 +121,7 @@ EXIF.getData(document.getElementById('preview'), function(){
 }); 
       
    </script>
+
+   <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-14" data-slider-orientation="vertical" data-slider-selection="after"data-slider-tooltip="hide">
 </body>
 </html>

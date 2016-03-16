@@ -620,7 +620,7 @@ function place_label() {
 		leftPadding = parseInt($('.matrix .slot3').css('padding-left'));
 
 		$("h3#label3").offset({top: pos.top, left:pos.left+leftPadding});
-		$("#overlay3").offset({top: pos.top, left:pos.left+width-width1});
+		$("#overlay3").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
 		$('#comment3').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
 		$('#comment3').width(width);
 
@@ -681,51 +681,6 @@ function place_label() {
 			}
 		}
 	}
-}
-
-function show_zoom(zoom_level){
-	var width;
-	var height;
-
-	width = $('.matrix .slot1').width();
-	height = $('.matsrix .slot1').height();
-
-	$('.matrix .slot1').width(width);
-	$('.matrix .slot1').height(height);
-	$('.matrix .slot1').css('overflow', 'hidden');
-
-	$('.matrix img#pic1').css('max-width', "200%");
-
-	width = $('.matrix .slot2').width();
-	height = $('.matrix .slot2').height();
-
-	$('.matrix .slot2').width(width);
-	$('.matrix .slot2').height(height);
-	$('.matrix .slot2').css('overflow', 'hidden');
-
-	$('.matrix img#pic2').css('max-width', "200%");
-
-	width = $('.matrix .slot3').width();
-	height = $('.matrix .slot3').height();
-
-	$('.matrix .slot3').width(width);
-	$('.matrix .slot3').height(height);
-	$('.matrix .slot3').css('overflow', 'hidden');
-
-	$('.matrix img#pic3').css('max-width', "200%");
-
-	width = $('.matrix .slot4').width();
-	height = $('.matrix .slot4').height();
-
-	$('.matrix .slot4').width(width);
-	$('.matrix .slot4').height(height);
-	$('.matrix .slot4').css('overflow', 'hidden');
-
-	$('.matrix img#pic4').css('max-width', "200%");	
-}
-
-function hide_zoom(){
-	$('.zoom-overlay').addClass('hidden');
 }
 
 
@@ -1087,8 +1042,14 @@ document.addEventListener("msfullscreenchange", function( event ) {
   	}
 });
 
+function load_js(file){
+	$('body').append("<script src='/javascripts/"+file+"'></script>")
+}
 
 //Main Routine
 set_hook_functions();
 preload_local_settings();
 window.setTimeout(place_label, 500);
+
+load_js('viewimage/zoom.js');
+load_js('viewimage/dragable.js');
