@@ -62,6 +62,7 @@ function set_zoom(zoom_level){
 	$('.matrix .slot1').height(height);
 	$('.matrix .slot1').css('overflow', 'hidden');
 
+	$('.matrix img#pic1').css('width', ratio); 
 	$('.matrix img#pic1').css('max-width', ratio); 
 
 	width = $('.matrix .slot2').width();
@@ -71,6 +72,7 @@ function set_zoom(zoom_level){
 	$('.matrix .slot2').height(height);
 	$('.matrix .slot2').css('overflow', 'hidden');
 
+	$('.matrix img#pic2').css('width', ratio); 
 	$('.matrix img#pic2').css('max-width', ratio);
 
 	width = $('.matrix .slot3').width();
@@ -80,6 +82,7 @@ function set_zoom(zoom_level){
 	$('.matrix .slot3').height(height);
 	$('.matrix .slot3').css('overflow', 'hidden');
 
+	$('.matrix img#pic3').css('width', ratio); 
 	$('.matrix img#pic3').css('max-width', ratio);
 
 	width = $('.matrix .slot4').width();
@@ -89,6 +92,7 @@ function set_zoom(zoom_level){
 	$('.matrix .slot4').height(height);
 	$('.matrix .slot4').css('overflow', 'hidden');
 
+	$('.matrix img#pic4').css('width', ratio); 
 	$('.matrix img#pic4').css('max-width', ratio);	
 
 	if(zoom_level == 1){
