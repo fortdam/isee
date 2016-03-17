@@ -8,11 +8,19 @@ block content
   table(class="table")
     tr
       th Scene
+        a(id='sort-scene')
+          span(id='sort-scene', class='glyphicon glyphicon-triangle-bottom')
       th Author
+        a(id='sort-author')
+          span(id='sort-author', class='glyphicon glyphicon-triangle-bottom')
       th Product
+        a(id='sort-product')
+          span(id='sort-product', class='glyphicon glyphicon-triangle-bottom')
       th Comment
+        a(id='sort-comment')
+          span(id='sort-comment', class='glyphicon glyphicon-triangle-bottom')
 
 block append javascript
-  script(src="/javascripts/comment.js")
+  script(src="/javascripts/report/main.js")
 
       
