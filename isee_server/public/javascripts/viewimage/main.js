@@ -1042,9 +1042,7 @@ document.addEventListener("msfullscreenchange", function( event ) {
   	}
 });
 
-function load_js(file){
-	$('body').append("<script src='/javascripts/"+file+"'></script>")
-}
+
 
 //Main Routine
 set_hook_functions();
