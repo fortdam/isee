@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  #dl-account(class='hidden') #{account}
+  #dl-mail(class='hidden') #{mail}
+  h2 Processing...
+
+block append javascript
+  script(src="/javascripts/steptonext/main.js")

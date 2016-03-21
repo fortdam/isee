@@ -8,9 +8,9 @@
     .modal-body
       .form-group
         label(for="username") User name
-          input.form-control(type="text", id="username", placeholder="Name")
+          input.form-control(type="text", id="username", readonly="readonly", placeholder="Name")
       .form-group
         label(for="email") Email address
-          input.form-control(type="email" id="email" placeholder="Email")        
+          input.form-control(type="email" id="email", readonly="readonly", placeholder="Email")        
     .modal-footer
-      button(type="button", class="btn btn-default", data-dismiss="modal") Close
+      button(type="button", class="btn btn-default", id="user-logout") Logout

@@ -12,6 +12,7 @@ var meta_data = require('./routes/meta_data');
 var comment = require('./routes/comment');
 var report = require('./routes/report');
 var perf = require('./routes/perf');
+var login = require('./routes/login');
 
 var fs = require('fs');
 var images = require("images");
@@ -32,6 +33,23 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules/chart.js')));
 
+
+app.use('/login', login);
+app.use('/steptonext', login);
+
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  console.log(req);
+  if (req.cookies.account === undefined){
+    res.redirect('/login');
+  }
+  else {
+    next();
+  }
+});
+
+
 app.use('/', routes);
 app.use('/users', users);
 app.use('/photos', photos);
@@ -39,6 +57,8 @@ app.use('/meta_data', meta_data);
 app.use('/comment', comment);
 app.use('/report', report);
 app.use('/performance', perf);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

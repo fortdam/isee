@@ -867,34 +867,35 @@ function onLinkModalLoaded(event){
 }
 
 function onUserModalLoaded(event){
-
 	var userInfo = window.appData.userInfo;
-
-	// console.log(userInfo.name);
 
 	$(this).find('input#username').attr('value', userInfo.name);
 	$(this).find('input#email').attr('value', userInfo.email);
+
+	$(this).find('#user-logout').bind('click', function(){
+		console.log('xxxxx')
+		window.location.href = '/login';
+	});
 }
 
 function onUserModalHide(event){
-	var userInfo = window.appData.userInfo;
-
-	userInfo.name = $(this).find('input#username').val();
-	localStorage.username = userInfo.name;
-
-	userInfo.email = $(this).find('input#email').val();
-	localStorage.email = userInfo.email;
 }
 
 
 function preload_local_settings(){
-	if (localStorage.username){
-		window.appData.userInfo.name = localStorage.username;
-	}
+	var list = document.cookie.split('; ');
+	var cookies = {};
 
-	if (localStorage.email){
-		window.appData.userInfo.email = localStorage.email;
+	for (var i=0; i<list.length; i++){
+		var cookie = list[i];
+		var p = cookie.indexOf('=');
+		var name = cookie.substring(0,p);
+		var value = cookie.substring(p+1);
+		cookies[name] = value;
 	}
+	console.log(cookies);
+	window.appData.userInfo.name = cookies['account'];
+	window.appData.userInfo.email = cookies['mail'];
 
 	if (localStorage.imgsize){
 		window.appData.settings.imgsize = localStorage.imgsize;
