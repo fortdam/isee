@@ -410,7 +410,7 @@ function load_images(){
 
 function load_image(filePath, pos) {
 	$('img#pic'+pos).attr('src', filePath);
-	$('img#pic'+pos).onload = place_label;
+	// $('img#pic'+pos).bind('load', place_label);
 }
 
 function load_exifs(){
@@ -542,9 +542,7 @@ function load_comment(query, pos){
 				}
 
 				$('#comment'+pos).empty().append(query.user.toUpperCase()+":"+res.review);
-			
 			}
-			place_label();
 		}
 	}
 	request.send();
@@ -563,7 +561,6 @@ function xy(x) {
 
 
 function place_label() {
-
 	var pos;
 	var width;
 	var width1;
@@ -955,7 +952,6 @@ function set_hook_functions(){
 
 	$('#carousel-example-generic').on('slid.bs.carousel', function(){
 		place_label()
-		// window.setTimeout(function(){place_label();},500);
 	})
 }
 
@@ -1048,7 +1044,7 @@ document.addEventListener("msfullscreenchange", function( event ) {
 //Main Routine
 set_hook_functions();
 preload_local_settings();
-window.setTimeout(place_label, 500);
+window.setTimeout(place_label, 1000);
 
 load_js('viewimage/zoom.js');
 load_js('viewimage/dragable.js');
