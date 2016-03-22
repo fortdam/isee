@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var db = require('../database/db');
 var isee_db = require('../database/isee_db');
 var fs= require('fs');
 
