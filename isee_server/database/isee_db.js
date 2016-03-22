@@ -47,11 +47,11 @@ isee_db.clear = function(callback){
 isee_db.addPath = function(projectPath, callback){
 
 	if(!fs.existsSync(projectPath)){
-		console.log("The path doesn't exist: "+projectPath);
+		// console.log("The path doesn't exist: "+projectPath);
 		return;
 	}
 	if(!fs.existsSync(projectPath+"/project.json")){
-		console.log("The <<project.json>> doesn't exist in "+projectPath);
+		// console.log("The <<project.json>> doesn't exist in "+projectPath);
 		return;
 	}
 
@@ -130,7 +130,7 @@ isee_db.getProject = function(callback){
 						}
 					}
 					else{
-						console.log(data);
+						// console.log(data);
 						if (callback){
 							callback(data);
 						}			
@@ -180,7 +180,7 @@ isee_db.sendComment = function(comment){
 		"scene":comment.scene, 
 		"index":comment.index, 
 		"product":comment.product}, function(){
-			console.log("check double insert!")
+			// console.log("check double insert!")
 			if (comment.review.length>0 && sent==false){ //elsewhere we consider user want to delete a comment
 				sent = true;
 				db.collection(COL_COMMENT).insertOne(comment);
@@ -231,7 +231,7 @@ isee_db.getCommentSummary = function(project, product, user, callback){
 		sortCriteria.product = 1;
 	}
 
-	console.log(sortCriteria);
+	// console.log(sortCriteria);
 
 	this.db.collection(COL_COMMENT).find(findCriteria).sort(sortCriteria).toArray(function(err, docs){
 		callback(docs);
