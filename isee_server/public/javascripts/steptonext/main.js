@@ -6,5 +6,13 @@ function write_cookie(){
 	document.cookie = 'mail='+mail+';max-age='+100000000;
 }
 
-write_cookie();
-window.location.href = "/photos";
+var error = $('#dl-error').text();
+
+if (error && error.length > 0){
+	alert("Authentication Fail");
+	window.location.href="/login";
+}
+else {
+    write_cookie();
+    window.location.href = "/photos";	
+}

@@ -3,13 +3,22 @@ extends layout
 block content
   #dl-comments(class="hidden") #{account}
   div(class='form col-xs-12 col-sm-6 col-md-6 col-lg-6 col-centered')
-    h3 Login ISEE
+    h2 Login isee
     form(class='form', method='post', action='/login')
+      .form-group
+        label(for='domain') Domain
+          select.form-control(id='domain', name='domain')
+            option ta-cn
+            option ta-nb
+            option ta-cd
+            option ta-sz
+            option ta-hz
       .form-group
         label(for='acct') Account
           input.form-control(type='text', id='acct', name='acct')
       .form-group
-        label(for='mail') Email
-          input.form-control(type='text', id='mail', name='mail')
+        label(for='password') Password
+          input.form-control(type='password', id='mail', name='password')
       .form-group
         button(type='submit', class='btn btn-primary btn-signup') Log in
+      a(href="/steptonext?acct=guest&mail=unknown") Log in as Guest        
