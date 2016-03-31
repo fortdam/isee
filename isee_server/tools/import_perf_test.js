@@ -79,10 +79,10 @@ function test_import(file){
 		else if (v.indexOf('--Time For Take Picture-(HAL)--') >= 0){
 			current_dataset = result.capture_hal;
 		}
-		else if (v.indexOf('--Time-lapse between Burst capture--') >= 0){
+		else if (v.indexOf('--Time-lapse between Burst Capture--') >= 0){
 			current_dataset = result.burst;
 		}
-		else if (v.indexOf('--Time-lapse between Burst capture-(HAL)--') >= 0){
+		else if (v.indexOf('--Time-lapse between Burst Capture-(HAL)--') >= 0){
 			current_dataset = result.burst_hal;
 		}
 		else if (v.indexOf('--Time For Instant Capture--') >= 0) {
