@@ -137,3 +137,5 @@ function load_page_done(){
 }
 
 document.body.onload = load_page_done;
+
+load_js('check_browser.js');

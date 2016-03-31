@@ -1046,5 +1046,8 @@ set_hook_functions();
 preload_local_settings();
 window.setTimeout(place_label, 1000);
 
+
 load_js('viewimage/zoom.js');
 load_js('viewimage/dragable.js');
+
+load_js('check_browser.js');

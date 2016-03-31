@@ -236,13 +236,11 @@ function draw_project_result(project){
 }
 
 
-function test(){
-
-	//draw_project_sw_result('idol4', 'SWA2d');
-
+function main(){
 	var project = $('#dl-project').text();
 	var version = $('#dl-version').text();
 
+	load_js('check_browser.js');
 
 	if (version){
 		draw_project_sw_result(project, version);
@@ -250,22 +248,6 @@ function test(){
 	else {
 		draw_project_result(project);
 	}
-	
-
-	// var data = 
-	// 		[
-	// 			{
-	// 				label:"haha", 
-	// 				data:[555,716,708,703, 683, 716, 720, 756, 688, 694]
-	// 			}
-	// 		];
-
-
-	// plot_line(1, "", ['test #1', 'test #2', 'test #3', 'test #4', 'test #5', 'test #6', 'test #7', 'test #8', 'test #9', 'test #10'], data,600);
-	// plot_line(2, "", ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], data,600);
-	// plot_line(3, "", ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], data,600);
-
-
 }
 
-test()
+main();
