@@ -103,7 +103,13 @@ function create_scene_info(originalDir){
 
 	var sceneDesc = [];
 	if (fs.existsSync(originalDir+'/scene.json')){
-		sceneDesc = JSON.parse(fs.readFileSync(originalDir+'/scene.json'));
+		try{
+			sceneDesc = JSON.parse(fs.readFileSync(originalDir+'/scene.json'));
+		}
+		catch(e){
+			console.log('Wrong JSON file:'+originalDir+'/scene.json');
+			throw(e);
+		}
 	}
 
 	folder.forEach(function(v,i,a){

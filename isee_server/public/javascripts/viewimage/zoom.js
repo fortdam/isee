@@ -1,5 +1,6 @@
 
 
+
 function move_pic_callback(index, dx, dy){
 	if (index == 0){
 		move_picture(1, dx, dy);
@@ -42,7 +43,46 @@ function move_picture(index, dx, dy){
 	imgOffset.top += dy;
 
 	$('img#pic'+index).offset(imgOffset);
+}
 
+function need_record_size_for_zoom(){
+	if (window.appData.zoomOriginSize === undefined){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function record_size_for_zoom(){
+	var width;
+	var height;
+
+	window.appData.zoomOriginSize = {};
+
+	width = $('.matrix .slot1').width();
+	height = $('.matrix .slot1').height();
+
+	window.appData.zoomOriginSize.width1 = width;
+	window.appData.zoomOriginSize.height1 = height;
+
+	width = $('.matrix .slot2').width();
+	height = $('.matrix .slot2').height();
+
+	window.appData.zoomOriginSize.width2 = width;
+	window.appData.zoomOriginSize.height2 = height;
+
+	width = $('.matrix .slot3').width();
+	height = $('.matrix .slot3').height();
+
+	window.appData.zoomOriginSize.width3 = width;
+	window.appData.zoomOriginSize.height3 = height;
+
+	width = $('.matrix .slot4').width();
+	height = $('.matrix .slot4').height();
+
+	window.appData.zoomOriginSize.width4 = width;
+	window.appData.zoomOriginSize.height4 = height;
 }
 
 function set_zoom(zoom_level){
@@ -55,43 +95,30 @@ function set_zoom(zoom_level){
 
 	$('.img-holder').css('overflow', 'hidden');
 
-	width = $('.matrix .slot1').width();
-	height = $('.matrix .slot1').height();
-
-	$('.matrix .slot1').width(width);
-	$('.matrix .slot1').height(height);
+	$('.matrix .slot1').width(window.appData.zoomOriginSize.width1);
+	$('.matrix .slot1').height(window.appData.zoomOriginSize.height1);
 	$('.matrix .slot1').css('overflow', 'hidden');
-
 	$('.matrix img#pic1').css('width', ratio); 
 	$('.matrix img#pic1').css('max-width', ratio); 
 
-	width = $('.matrix .slot2').width();
-	height = $('.matrix .slot2').height();
 
-	$('.matrix .slot2').width(width);
-	$('.matrix .slot2').height(height);
+	$('.matrix .slot2').width(window.appData.zoomOriginSize.width2);
+	$('.matrix .slot2').height(window.appData.zoomOriginSize.height2);
 	$('.matrix .slot2').css('overflow', 'hidden');
-
 	$('.matrix img#pic2').css('width', ratio); 
 	$('.matrix img#pic2').css('max-width', ratio);
 
-	width = $('.matrix .slot3').width();
-	height = $('.matrix .slot3').height();
 
-	$('.matrix .slot3').width(width);
-	$('.matrix .slot3').height(height);
+	$('.matrix .slot3').width(window.appData.zoomOriginSize.width3);
+	$('.matrix .slot3').height(window.appData.zoomOriginSize.height3);
 	$('.matrix .slot3').css('overflow', 'hidden');
-
 	$('.matrix img#pic3').css('width', ratio); 
 	$('.matrix img#pic3').css('max-width', ratio);
 
-	width = $('.matrix .slot4').width();
-	height = $('.matrix .slot4').height();
 
-	$('.matrix .slot4').width(width);
-	$('.matrix .slot4').height(height);
+	$('.matrix .slot4').width(window.appData.zoomOriginSize.width4);
+	$('.matrix .slot4').height(window.appData.zoomOriginSize.height4);
 	$('.matrix .slot4').css('overflow', 'hidden');
-
 	$('.matrix img#pic4').css('width', ratio); 
 	$('.matrix img#pic4').css('max-width', ratio);	
 
@@ -115,5 +142,8 @@ function set_zoom(zoom_level){
 }
 
 $('#zoom-slider').bind('change', function(e){
+	if (need_record_size_for_zoom()){
+		record_size_for_zoom();
+	}
 	set_zoom(e.target.value/100);
 })

@@ -55,7 +55,16 @@ isee_db.addPath = function(projectPath, callback){
 		return;
 	}
 
-	var project_info = JSON.parse(fs.readFileSync(projectPath+'/project.json'));
+	var project_info;
+
+	try{
+		project_info = JSON.parse(fs.readFileSync(projectPath+'/project.json'));
+	}
+	catch(e){
+		console.log('Wrong JSON File:'+projectPath+'/project.json');
+		throw(e);
+	}
+
 	var paths = projectPath.split("/");
 
 	project_info['test'] = paths[paths.length-1];
