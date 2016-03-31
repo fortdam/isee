@@ -995,6 +995,8 @@ function toggle_fullscreen(){
 	}	
 }
 
+load_js('check_browser.js');
+
 document.addEventListener("fullscreenchange", function( event ) {
 	if (!document.fullscreenElement) {
     	$('.glyphicon-resize-small').removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
@@ -1050,4 +1052,3 @@ window.setTimeout(place_label, 1000);
 load_js('viewimage/zoom.js');
 load_js('viewimage/dragable.js');
 
-load_js('check_browser.js');

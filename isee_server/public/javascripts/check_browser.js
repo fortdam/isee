@@ -1,8 +1,6 @@
 
-console.log('checking browser...');
-
 if (sessionStorage.declineBrowserInstall === undefined) {
-	if(navigator.vendor.indexOf('Google') < 0){
+	if(navigator.vendor == null ||  navigator.vendor.indexOf('Google') < 0){
 	//User is using some other browser than Chrome
 		var str = "The ISEE only works on Google Chrome, download it now?";
 		var winChrome = "http://172.24.220.144/pub/software/Chrome_win.exe";
