@@ -9,6 +9,7 @@ var isee_db = {};
 var COL_PROJECT = "project";
 var COL_COMMENT = "comment";
 var COL_PERF = "performance";
+var COL_GROUP = "group";
 
 
 isee_db.open = function(callback){
@@ -325,20 +326,129 @@ isee_db.findPerfTest = function(project, version, callback){
 	}
 }
 
-isee_db.test = function(cb){
-	var cursor = this.db.collection(COL_PERF).find({'cust_id': 1});
+isee_db.addMember = function(group, user, callback){
+	var inst_db = this.db;
 
-	cursor.each(function(err, doc) {
-      assert.equal(err, null);
-      if (doc != null) {
-         //console.dir(doc);
-         if (cb && typeof(cb)=='function'){
-         	cb(doc);
-         }
-      } else {
-         //console.log(doc);
-      }
-   });
+	this.db.collection(COL_GROUP).find({'name': group, 'cust_id':1}).toArray(function(err, docs){
+		if (docs.length > 0){
+			inst_db.collection(COL_GROUP).deleteMany({'name': group, 'cust_id':1}, function(){
+				if(typeof(user) == 'string'){
+					if (user in docs[0].member){
+					}
+					else {
+						docs[0].member.push(user);
+					}
+				}
+				else if(user.length > 0){
+					user.forEach(function(v,i,a){
+						if(v in docs[0].member){
+						}
+						else{
+							docs[0].member.push(v);
+						}
+					})
+				}
+
+				inst_db.collection(COL_GROUP).insertOne({'name': group, 'member':docs[0].member, 'cust_id':1}, callback);
+			});
+		}
+		else {
+			if(typeof(user) == 'string'){
+				inst_db.collection(COL_GROUP).insertOne({'name': group, 'member':[user], 'cust_id':1}, callback);
+			}
+			else if(user.length > 0){
+				inst_db.collection(COL_GROUP).insertOne({'name': group, 'member':user, 'cust_id':1}, callback);
+			}
+		}
+	})
+}
+
+isee_db.delMember = function(group, user, callback){
+	var inst_db = this.db;
+
+	this.db.collection(COL_GROUP).find({'name': group, 'cust_id':1}).toArray(function(err, docs){
+		if (docs.length > 0){
+			inst_db.collection(COL_GROUP).deleteMany({'name': group, 'cust_id':1}, function(){
+
+				var members = docs[0].member.filter(function(x,i,a){
+					if (typeof(user) == 'string'){
+						if(user.toLowerCase() == x.toLowerCase()){
+							return false;
+						}
+						else {
+							return true;
+						}
+					}
+					else if (user.length > 0){
+						var i = 0;
+						for (i=0; i<user.length; i++){
+							if(user[i].toLowerCase() == x.toLowerCase()){
+								return false;
+							}
+						}
+						return true;
+
+					}
+					else {
+						return true;
+					}
+				});
+
+				inst_db.collection(COL_GROUP).insertOne({'name': group, 'member':members, 'cust_id':1}, callback);
+			});
+		}
+		else if(callback && typeof(callback) == 'function'){
+			callback();
+		}
+	})
+}
+
+isee_db.verifyMember = function(group, user, callback){
+	var inst_db = this.db;
+
+	this.db.collection(COL_GROUP).find({'name': group, 'cust_id':1}).toArray(function(err, docs){
+		if(docs.length == 0){
+			if (callback && typeof(callback) == 'function'){
+				callback(false);
+			}
+		}
+		else {
+			var i = 0;
+
+			for (i=0; i<docs[0].member.length; i++){
+				if(docs[0].member[i].toLowerCase() == user.toLowerCase()){
+					if (callback && typeof(callback) == 'function'){
+						callback(true);
+					}
+					return;
+				}
+			}
+			if (callback && typeof(callback) == 'function'){
+				callback(false);
+			}
+			return;
+		}
+	})
+}
+
+isee_db.test = function(cb){
+	// this.delMember('mml', 'Zhiming tang');
+	//this.addMember('mml', ['zhiming tang', 'junqi xie', 'terry yin']);
+	this.verifyMember('mml', 'junqixie', function(a){console.log(a)});
+
+	// var cursor = this.db.collection(COL_GROUP).find({'cust_id': 1});
+
+	// cursor.each(function(err, doc) {
+ //      assert.equal(err, null);
+ //      if (doc != null) {
+ //         //console.dir(doc);
+ //         if (cb && typeof(cb)=='function'){
+ //         	cb(doc);
+ //         }
+ //      } else {
+ //         //console.log(doc);
+ //      }
+ //   });
 }
 
 module.exports = isee_db;
