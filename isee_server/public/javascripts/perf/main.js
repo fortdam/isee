@@ -240,8 +240,6 @@ function main(){
 	var project = $('#dl-project').text();
 	var version = $('#dl-version').text();
 
-	load_js('check_browser.js');
-
 	if (version){
 		draw_project_sw_result(project, version);
 	}

@@ -33,7 +33,8 @@ var appData = {
 
 function load_projects() {
 	var request = new XMLHttpRequest();
-	request.open("GET", "/meta_data/project");
+
+	request.open("GET", "/meta_data/project?user="+window.appData.userInfo.email);
 	request.onreadystatechange = function() {
 		if (request.readyState == 4 && request.status == 200){
 			var res = JSON.parse(request.response);
@@ -869,8 +870,10 @@ function onUserModalLoaded(event){
 	$(this).find('input#username').attr('value', userInfo.name);
 	$(this).find('input#email').attr('value', userInfo.email);
 
+
 	$(this).find('#user-logout').bind('click', function(){
-		console.log('xxxxx')
+		document.cookie = "mail=;max-age=0;path=/";
+		document.cookie = "account=;max-age=0;path=/"
 		window.location.href = '/login';
 	});
 }
@@ -994,8 +997,6 @@ function toggle_fullscreen(){
 		window.appData.fullscreen = false;
 	}	
 }
-
-load_js('check_browser.js');
 
 document.addEventListener("fullscreenchange", function( event ) {
 	if (!document.fullscreenElement) {
