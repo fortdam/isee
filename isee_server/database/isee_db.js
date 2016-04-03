@@ -20,9 +20,14 @@ isee_db.open = function(callback){
 	MongoClient.connect(url,function(err,db){
 		assert.equal(null, err);
 		isee_db.db = db;
-		if(callback){
-			callback(db);
-		}
+		db.collection(COL_GROUP).find({'cust_id':1}).toArray(function(err, docs){
+			//Pre-populate the group information
+			isee_db.groups = docs;
+			if(callback){
+				callback(db);
+			}
+		});
+
 	})
 }
 
@@ -109,7 +114,36 @@ isee_db.getOneProject = function(test, callback){
 	});
 }
 
-isee_db.getProject = function(callback){
+isee_db._VerifyUserInGroupList = function(user, group){
+	var inGroup = [];
+	var result = false;
+
+
+	isee_db.groups.forEach(function(v,i,a){
+		if (v.member.indexOf(user)>=0 && inGroup.indexOf(v)<0){
+			inGroup.push(v.name);
+		}
+	});
+
+
+	if(group instanceof Array){
+		group.forEach(function(v,i,a){
+			if(inGroup.indexOf(v)>=0){
+				result = true;
+			}
+		})
+	}
+	else if (typeof(group) == 'string'){
+		return (inGroup.indexOf(group)>=0);
+	}
+	else {
+		return true;
+	}
+
+	return result;
+}
+
+isee_db.getProject = function(user, callback){
 	var db = this.db;
 
 	db.collection(COL_PROJECT).aggregate([
@@ -129,18 +163,15 @@ isee_db.getProject = function(callback){
 				var cursor = db.collection(COL_PROJECT).find({"cust_id":1});
 				cursor.each(function(err,doc){
 					if (doc){
-						//console.log(doc);
-
 						for(var i=0;i<Object.keys(data).length; i++){
 							var prj = Object.keys(data)[i];
 
-							if(doc.projects.indexOf(prj) > -1){
+							if(doc.projects.indexOf(prj) > -1 && isee_db._VerifyUserInGroupList(user, doc.group)){
 								data[prj].push({'name':doc.name, 'test':doc.test, 'time':doc.time, 'desc':doc.desc});
 							}
 						}
 					}
 					else{
-						// console.log(data);
 						if (callback){
 							callback(data);
 						}			
@@ -329,21 +360,22 @@ isee_db.findPerfTest = function(project, version, callback){
 isee_db.addMember = function(group, user, callback){
 	var inst_db = this.db;
 
+	group = group.toLowerCase();
+
 	this.db.collection(COL_GROUP).find({'name': group, 'cust_id':1}).toArray(function(err, docs){
+
 		if (docs.length > 0){
 			inst_db.collection(COL_GROUP).deleteMany({'name': group, 'cust_id':1}, function(){
 				if(typeof(user) == 'string'){
-					if (user in docs[0].member){
-					}
-					else {
+					user = user.toLowerCase();
+					if (docs[0].member.indexOf(user) < 0){
 						docs[0].member.push(user);
 					}
 				}
-				else if(user.length > 0){
+				else if(user instanceof Array){
 					user.forEach(function(v,i,a){
-						if(v in docs[0].member){
-						}
-						else{
+						v = v.toLowerCase();
+						if(docs[0].member.indexOf(v) < 0){
 							docs[0].member.push(v);
 						}
 					})
@@ -366,30 +398,34 @@ isee_db.addMember = function(group, user, callback){
 isee_db.delMember = function(group, user, callback){
 	var inst_db = this.db;
 
+	group = group.toLowerCase();
+
 	this.db.collection(COL_GROUP).find({'name': group, 'cust_id':1}).toArray(function(err, docs){
+
 		if (docs.length > 0){
 			inst_db.collection(COL_GROUP).deleteMany({'name': group, 'cust_id':1}, function(){
 
 				var members = docs[0].member.filter(function(x,i,a){
 					if (typeof(user) == 'string'){
-						if(user.toLowerCase() == x.toLowerCase()){
-							return false;
+						if(user.toLowerCase() == x){
+							return false; //to filter out
 						}
 						else {
 							return true;
 						}
 					}
-					else if (user.length > 0){
-						var i = 0;
-						for (i=0; i<user.length; i++){
-							if(user[i].toLowerCase() == x.toLowerCase()){
-								return false;
+					else if (user instanceof Array){
+						
+						for (var i=0; i<user.length; i++){
+							if(user[i].toLowerCase() == x){
+								return false; //to filter out
 							}
 						}
+
 						return true;
 
 					}
-					else {
+					else{
 						return true;
 					}
 				});
@@ -402,6 +438,7 @@ isee_db.delMember = function(group, user, callback){
 		}
 	})
 }
+
 
 isee_db.verifyMember = function(group, user, callback){
 	var inst_db = this.db;
@@ -431,10 +468,16 @@ isee_db.verifyMember = function(group, user, callback){
 	})
 }
 
+isee_db.getGroupList = function(user, callback){
+	var inst_db = this.db;
+}
+
 isee_db.test = function(cb){
 	// this.delMember('mml', 'Zhiming tang');
 	//this.addMember('mml', ['zhiming tang', 'junqi xie', 'terry yin']);
-	this.verifyMember('mml', 'junqixie', function(a){console.log(a)});
+	// this.verifyMember('mml', 'junqixie', function(a){console.log(a)});
+
+	console.log(this._VerifyUserInGroupList('junqi xe', null))
 
 	// var cursor = this.db.collection(COL_GROUP).find({'cust_id': 1});
 

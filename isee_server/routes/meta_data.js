@@ -7,7 +7,7 @@ var fs= require('fs');
 isee_db.open();
 /* GET users listing. */
 router.get('/project', function(req, res, next) {
-	isee_db.getProject(function(data){
+	isee_db.getProject(req.query.user, function(data){
 		res.send(data);
 	});
 });
