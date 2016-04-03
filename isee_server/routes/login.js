@@ -19,7 +19,13 @@ router.get('/', function(req, res, next) {
     res.render('login');
   }
   else if(req.originalUrl.indexOf('steptonext')){
-  	res.render('steptonext', {'account':req.query.acct, 'mail':req.query.mail, 'error':req.query.error});
+    if (req.query.url){
+      var url = new Buffer(req.query.url, 'base64').toString();
+      res.redirect(url);
+    }
+    else{
+      res.render('steptonext', {'account':req.query.acct, 'mail':req.query.mail, 'error':req.query.error});
+    }
   }
 });
 

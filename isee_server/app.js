@@ -41,7 +41,8 @@ app.use('/steptonext', login);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   if (req.cookies.account === undefined){
-    res.redirect('/login');
+    var link = new Buffer(req.url).toString('base64');
+    res.redirect('/login?url='+link);
   }
   else {
     next();

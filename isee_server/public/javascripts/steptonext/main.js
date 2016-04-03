@@ -14,5 +14,13 @@ if (error && error.length > 0){
 }
 else {
     write_cookie();
-    window.location.href = "/photos";	
+
+    if(sessionStorage.url && sessionStorage.url.length>0){
+    	var url = sessionStorage.url;
+    	sessionStorage.url = "";
+    	window.location.href = "/steptonext?url="+url;
+    }
+    else {
+    	window.location.href = "/photos";	    	
+    }
 }
