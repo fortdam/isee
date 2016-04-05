@@ -15,12 +15,12 @@ function move_pic_callback(index, dx, dy){
 
 function move_picture(index, dx, dy){
 
-	var holder = $('#img-holder'+index);
+	var holder = $('.matrix #img-holder'+index);
 	var holderWidth = holder.width();
 	var holderHeight = $('.matrix .slot'+index).height();  //Fuck! use the height for slot, since inner div sshare the same height as pic
 	var holderOffset = holder.offset();
 
-	var img = $('img#pic'+index);
+	var img = $('.matrix img#pic'+index);
 	var imgWidth = img.width();
 	var imgHeight = img.height();
 	var imgOffset = img.offset()
@@ -42,7 +42,7 @@ function move_picture(index, dx, dy){
 	imgOffset.left += dx;
 	imgOffset.top += dy;
 
-	$('img#pic'+index).offset(imgOffset);
+	$('.matrix img#pic'+index).offset(imgOffset);
 }
 
 function need_record_size_for_zoom(){
@@ -83,6 +83,10 @@ function record_size_for_zoom(){
 
 	window.appData.zoomOriginSize.width4 = width;
 	window.appData.zoomOriginSize.height4 = height;
+}
+
+function getLayout(){
+	return window.appData.settings.layout;
 }
 
 function set_zoom(zoom_level){
