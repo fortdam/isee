@@ -83,6 +83,33 @@ isee_db.addPath = function(projectPath, callback){
 		});
 }
 
+isee_db.deleteProject = function(projectPath, callback){
+	if(!fs.existsSync(projectPath)){
+		// console.log("The path doesn't exist: "+projectPath);
+		return;
+	}
+	if(!fs.existsSync(projectPath+"/project.json")){
+		// console.log("The <<project.json>> doesn't exist in "+projectPath);
+		return;
+	}
+
+	var project_info = {};
+
+
+	var paths = projectPath.split("/");
+
+	project_info['test'] = paths[paths.length-1];
+	project_info['cust_id'] = 1;
+
+	var inst = this;
+	this.db.collection(COL_PROJECT).deleteMany({"test":project_info['test']},
+		function(){
+			if(callback && typeof(callback) == 'function'){
+				callback();
+			}
+		});	
+}
+
 
 isee_db.addProject = function(project, callback){
 	assert(this.db);
