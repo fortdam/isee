@@ -83,66 +83,8 @@ function prepare_subsample_dirs(originalDir){
 	prepare_subsample_dir_kernel(originalDir, "exif");
 }
 
-function create_scene_info(originalDir){
-	var folder = fs.readdirSync(originalDir);
-
-	for (var i=0; i<folder.length; i++){
-		if (fs.lstatSync(originalDir+folder[i]).isDirectory()){
-			return; //Not a leaf, return
-		}
-	}
-
-	var splittedPath = originalDir.match(/\.\.\/(?:\w+)\/(?:\w+)\/(.*)\/(\w+)\/$/);
-	var sceneName = splittedPath[2];
-	var scenePath = splittedPath[1].split('/');
-	var testName = scenePath.shift();
-
-	var folder = fs.readdirSync(originalDir);
-	var totalIndex = [];
-	var totalDesc = [];
-
-	var sceneDesc = [];
-	if (fs.existsSync(originalDir+'/scene.json')){
-		try{
-			sceneDesc = JSON.parse(fs.readFileSync(originalDir+'/scene.json'));
-		}
-		catch(e){
-			console.log('Wrong JSON file:'+originalDir+'/scene.json');
-			throw(e);
-		}
-	}
-
-	folder.forEach(function(v,i,a){
-		var text = v.match(/_(\d+)\.jpg/i);
-		if(text && text.length > 1){
-			var num = parseInt(text[1]);
-			if (totalIndex.indexOf(num) < 0){
-				totalIndex.push(num);
-			}
-		}
-	});
-	totalIndex.sort(function(a,b){return a-b});
-
-	totalDesc[totalIndex.length-1] = undefined;
-
-	if (sceneDesc && sceneDesc.length>0){
-		sceneDesc.forEach(function(v,i,a){
-			var ind = totalIndex.indexOf(v.index);
-			totalDesc[ind] = v.desc;
-		});
-
-
-	}
-
-
-	dbTransaction++;
-	isee_db.addScene(testName, sceneName, scenePath, totalIndex, totalDesc, function(){
-		dbTransaction--;
-	});	
-}
-
 function add_project_info_2_db(projectDir, callback){
-	isee_db.addProjectPath(projectDir, callback);
+	isee_db.addSurveyPath(projectDir, callback);
 }
 
 function prepare_subsample_dir_kernel(originalDir, resizeType){
@@ -227,26 +169,47 @@ function name_normalize(orignalFile){
 	}
 }
 
+function prepare_subsample_dirs(originalDir){
+	prepare_subsample_dir_kernel(originalDir, "small");
+	prepare_subsample_dir_kernel(originalDir, "medium");
+	prepare_subsample_dir_kernel(originalDir, "large");
+
+	prepare_subsample_dir_kernel(originalDir, "exif");
+}
+
+function prepare_subsample_dir_kernel(originalDir, resizeType){
+	var targetDir = originalDir.replace(PHOTO_PATH, RESIZE_CONFIG[resizeType].path);
+
+	var splittedPath = targetDir.split('/');
+
+	var currPath = splittedPath.shift() + "/";
+
+	while(splittedPath.length>0 && splittedPath[0].length>0){
+		currPath += splittedPath.shift() + "/";
+		console.log(currPath);
+		if (!fs.existsSync(currPath)){
+			fs.mkdirSync(currPath);
+		}
+	}
+}
+
 function project_import(project){
 	prepare_mipmap();
 	isee_db.open(function(){
 		add_project_info_2_db(PHOTO_PATH+project, function(){
+			prepare_subsample_dirs(PHOTO_PATH+project+'/');
+			
 			process_all_files(PHOTO_PATH+project+'/', 
-				[prepare_subsample_dirs, create_scene_info], //For folders
+				[], //For folders
 				[
-				name_normalize, 
-				subsample_images, 
-				extract_exif
+					name_normalize, 
+					subsample_images, 
+					extract_exif
 				]  //For filez
 			);  		
 		});
 	});
 }
-
-// function read_project_info(project){
-// 	projectInfo = JSON.parse(fs.readFileSync(PHOTO_PATH+project+'/project.json'));
-// 	console.log(projectInfo);
-// }
 
 var dbTransaction = 0;
 var cache_files = [];
@@ -262,7 +225,7 @@ function close_db_after_pending_works(){
 
 //Main routine starts here
 if (process.argv.length < 2) {
-	console.log('The command is: node import_project.js <project name>');
+	console.log('The command is: node import_survey.js <project name>');
 }
 else {
 	if (fs.existsSync(PHOTO_PATH+process.argv[2])){

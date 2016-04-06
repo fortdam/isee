@@ -1,0 +1,189 @@
+extends layout
+
+block content
+  nav(class="navbar navbar-default", id="top", role="banner")
+    .container
+      .navbar-header
+        .navbar-brand Projects
+      .nav(id="bs-navbar", class="collapse navbar-collapse")
+        //- ul(class="nav navbar-nav", id="project-links")
+        ul(class="nav navbar-nav navbar-right")
+          li(data-toggle="tool-tip", data-placement="bottom", title="User Information")
+            a(href="#", data-toggle="modal", data-target="#userModal") 
+              span(class="glyphicon glyphicon-user" aria-hidden="true")
+          li(data-toggle="tool-tip", data-placement="bottom", title="Toggle Full Screen")
+            a(href="javascript:toggle_fullscreen()") 
+              span(class="glyphicon glyphicon-resize-full" aria-hidden="true")
+          //- li(data-toggle="tool-tip", data-placement="bottom", title="Generate Link")
+          //-   a(href="#", data-toggle="modal", data-target="#linkModal")
+          //-     span(class="glyphicon glyphicon-link" aria-hidden="true")                
+          //- li(data-toggle="tool-tip", data-placement="bottom", title="Download Pictures")
+          //-   a(href="#", data-toggle="modal", data-target="#downloadModal") 
+          //-     span(class="glyphicon glyphicon-download-alt" aria-hidden="true")
+          //- li(data-toggle="tool-tip", data-placement="bottom", title="Read Report")
+          //-   a(href="#", data-toggle="modal", data-target="#reportModal") 
+          //-     span(class="glyphicon glyphicon-list-alt" aria-hidden="true")
+          li(data-toggle="tool-tip", data-placement="bottom", title="Settings")
+            a(href="#", data-toggle="modal", data-target="#settingModal") 
+              span(class="glyphicon glyphicon-cog" aria-hidden="true")
+
+  .container(id="pic-container")
+    .row
+      //- .col-md-6
+      //-   ul(class="nav nav-tabs", id="scene-tab")
+      .col-md-5
+        nav
+          ul(class="pagination")
+            li(class="page-prev")
+              a(href="#", aria-label="Previous", id="page-prev-arrow")
+                span(aria-hidden="true") &laquo;
+            li#page-item-1
+              a(href="javascript:select_page(1)", id="page-index-1") 1
+            li#page-item-2
+              a(href="javascript:select_page(2)", id="page-index-2") 2
+            li#page-item-3
+              a(href="javascript:select_page(3)", id="page-index-3") 3
+            li#page-item-4
+              a(href="javascript:select_page(4)", id="page-index-4") 4
+            li#page-item-5
+              a(href="javascript:select_page(5)", id="page-index-5") 5
+
+            li(class="page-next")
+              a(href="javascript:select_page(6)", aria-label="Next", id="page-next-arrow")
+                span(aria-hidden="true") &raquo
+      .col-md-5
+      .col-md-2
+        input(id="zoom-slider", type="range", min="100", max="1000", value="100")
+
+    .matrix
+      .row
+        .col-md-6(class='slot1')
+          .img-holder(id='img-holder1')
+            img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#mySurveyModal1", trigger-place="1") 
+        .col-md-6(class='slot2')
+          //- .overlay
+          .img-holder(id='img-holder2')
+            img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#mySurveyModal2", trigger-place="2")
+      br
+      .row
+        .col-md-6(class='slot3')
+          .img-holder(id='img-holder3')
+            img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#mySurveyModal3", trigger-place="3")
+        .col-md-6(class='slot4')
+          .img-holder(id='img-holder4')
+            img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#mySurveyModal4", trigger-place="4")
+      br
+      .row
+        .col-md-6(class='slot5')
+          .img-holder(id='img-holder5')
+            img(src=default_img, class="img-responsive center-block", id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="5")
+        .col-md-6(class='slot4')
+          .img-holder(id='img-holder6')
+            img(src=default_img, class="img-responsive center-block", id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="6")    
+    .filmstrip
+      div(id="carousel-example-generic", class="carousel slide", data-ride="carousel", data-interval=50000, data-keyboard=true)
+        ol.carousel-indicators
+          li.active(data-target="#carousel-example-generic" data-slide-to="0" class="slot1")
+          li(data-target="#carousel-example-generic" data-slide-to="1" class="slot2")
+          li(data-target="#carousel-example-generic" data-slide-to="2" class="slot3")
+          li(data-target="#carousel-example-generic" data-slide-to="3" class="slot4")
+          li(data-target="#carousel-example-generic" data-slide-to="4" class="slot5")
+          li(data-target="#carousel-example-generic" data-slide-to="5" class="slot6")
+        .carousel-inner(role="listbox")
+          .item(class="active slot1")
+            img(src=default_img, id="pic1" ,data-toggle="modal", data-target="#mySurveyModal1", trigger-place="1")
+            .carousel-caption
+              h3
+                span(class="label label-primary", id='carousel-label-text-1') a
+          .item(class="slot2")
+            img(src=default_img, id="pic2" ,data-toggle="modal", data-target="#mySurveyModal2", trigger-place="2")
+            .carousel-caption
+              h3
+                span(class="label label-info", id='carousel-label-text-2')  b
+          .item(class="slot3")
+            img(src=default_img, id="pic3" ,data-toggle="modal", data-target="#mySurveyModal3", trigger-place="3")
+            .carousel-caption
+              h3
+                span(class="label label-default", id='carousel-label-text-3')  c        
+          .item(class="slot4")
+            img(src=default_img, id="pic4" ,data-toggle="modal", data-target="#mySurveyModal4", trigger-place="4")
+            .carousel-caption
+              h3
+                span(class="label label-success", id='carousel-label-text-4')  d
+          .item(class="slot5")
+            img(src=default_img, id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="4")
+            .carousel-caption
+              h3
+                span(class="label label-success", id='carousel-label-text-5')  e
+          .item(class="slot6")
+            img(src=default_img, id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="4")
+            .carousel-caption
+              h3
+                span(class="label label-success", id='carousel-label-text-6')  f
+        a(class="left carousel-control"  href="#carousel-example-generic" role="button" data-slide="prev")
+          span(class="glyphicon glyphicon-chevron-left" aria-hidden="true")
+          span(class="sr-only") Previous
+        a(class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next")
+          span(class="glyphicon glyphicon-chevron-right" aria-hidden="true")
+          span(class="sr-only") Next
+
+    .modal(class="fade", id="mySurveyModal1", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./questionair_dialog.jade 
+
+    .modal(class="fade", id="mySurveyModal2", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./questionair_dialog.jade 
+
+    .modal(class="fade", id="mySurveyModal3", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./questionair_dialog.jade 
+
+    .modal(class="fade", id="mySurveyModal4", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./questionair_dialog.jade 
+
+
+    //- .modal(class="fade", id="linkModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+    //-   include ./link_dialog.jade  
+
+    //- .modal(class="fade", id="downloadModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+    //-   include ./download_dialog.jade                
+
+    //- .modal(class="fade", id="reportModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+    //-   include ./report_dialog.jade      
+
+    .modal(class="fade", id="userModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./user_dialog.jade
+
+    .modal(class="fade", id="settingModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./setting_dialog.jade
+
+    h3(id="label1", style="position:fixed")
+      span(class="label label-primary matrix", id='matrix-label-text-1')  a
+    h3(id="label2", style="position:fixed")
+      span(class="label label-primary matrix", id='matrix-label-text-2')  b
+    h3(id="label3", style="position:fixed")
+      span(class="label label-primary matrix", id='matrix-label-text-3')  c
+    h3(id="label4", style="position:fixed")
+      span(class="label label-primary matrix", id='matrix-label-text-4')  d
+    h3(id="label5", style="position:fixed")
+      span(class="label label-primary matrix", id='matrix-label-text-5')  e
+    h3(id="label6", style="position:fixed")
+      span(class="label label-primary matrix", id='matrix-label-text-6')  f
+
+
+    //- p.overlay(id="overlay1" style="position:fixed" rows='10')
+    //- p.overlay(id="overlay2" style="position:fixed" rows='10')  
+    //- p.overlay(id="overlay3" style="position:fixed" rows='10')
+    //- p.overlay(id="overlay4" style="position:fixed" rows='10')
+    //- p.overlay(id="overlay5" style="position:fixed" rows='10')
+    //- p.overlay(id="overlay6" style="position:fixed" rows='10')
+
+    //- p.comment(id="comment1" style="position:fixed")
+    //- p.comment(id="comment2" style="position:fixed")
+    //- p.comment(id="comment3" style="position:fixed")
+    //- p.comment(id="comment4" style="position:fixed")  
+
+    #dl-project(class='hidden') #{project}
+    #dl-scene(class='hidden') #{scene}
+    #dl-index(class='hidden') #{index}
+block append javascript
+  script(src="/javascripts/jquery/jquery.form.min.js")
+  script(src="/javascripts/survey/main.js")

@@ -13,6 +13,7 @@ var comment = require('./routes/comment');
 var report = require('./routes/report');
 var perf = require('./routes/perf');
 var login = require('./routes/login');
+var survey = require('./routes/survey');
 
 var fs = require('fs');
 var images = require("images");
@@ -57,7 +58,7 @@ app.use('/meta_data', meta_data);
 app.use('/comment', comment);
 app.use('/report', report);
 app.use('/performance', perf);
-
+app.use('/survey', survey);
 
 
 // catch 404 and forward to error handler

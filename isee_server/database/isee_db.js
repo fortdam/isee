@@ -11,6 +11,9 @@ var COL_COMMENT = "comment";
 var COL_PERF = "performance";
 var COL_GROUP = "group";
 
+var COL_SURVEY = "survey";
+var COL_SURVEY_COMMENT = "surveycomment";
+
 
 isee_db.open = function(callback){
 	if (this.db){
@@ -50,59 +53,77 @@ isee_db.clear = function(callback){
 	});
 }
 
-isee_db.addPath = function(projectPath, callback){
 
-	if(!fs.existsSync(projectPath)){
-		// console.log("The path doesn't exist: "+projectPath);
+isee_db.addTest = function(test, callback, col){
+	assert(this.db);
+	assert(typeof(test) === 'object');
+
+	this.db.collection(col).insertOne(test,callback);
+}
+
+
+isee_db.addPath = function(path, callback, col){
+
+	if(!fs.existsSync(path)){
+		// console.log("The path doesn't exist: "+path);
 		return;
 	}
-	if(!fs.existsSync(projectPath+"/project.json")){
-		// console.log("The <<project.json>> doesn't exist in "+projectPath);
+	if(!fs.existsSync(path+"/project.json")){
+		// console.log("The <<project.json>> doesn't exist in "+path);
 		return;
 	}
 
 	var project_info;
 
 	try{
-		project_info = JSON.parse(fs.readFileSync(projectPath+'/project.json'));
+		project_info = JSON.parse(fs.readFileSync(path+'/project.json'));
 	}
 	catch(e){
-		console.log('Wrong JSON File:'+projectPath+'/project.json');
+		console.log('Wrong JSON File:'+path+'/project.json');
 		throw(e);
 	}
 
-	var paths = projectPath.split("/");
+	var paths = path.split("/");
 
 	project_info['test'] = paths[paths.length-1];
 	project_info['cust_id'] = 1;
 
 	var inst = this;
-	this.db.collection(COL_PROJECT).deleteMany({"test":project_info['test']},
+	this.db.collection(col).deleteMany({"test":project_info['test']},
 		function(){
-			inst.addProject(project_info, callback);
+			inst.addTest(project_info, callback, col);
 		});
 }
 
-isee_db.deleteProject = function(projectPath, callback){
-	if(!fs.existsSync(projectPath)){
-		// console.log("The path doesn't exist: "+projectPath);
+isee_db.addProjectPath = function(projectPath, callback){
+	this.addPath(projectPath, callback, COL_PROJECT);
+}
+
+
+isee_db.addSurveyPath = function(surveytPath, callback){
+	this.addPath(surveytPath, callback, COL_SURVEY);
+}
+
+isee_db.deletePath = function(path, callback, col){
+	if(!fs.existsSync(path)){
+		// console.log("The path doesn't exist: "+path);
 		return;
 	}
-	if(!fs.existsSync(projectPath+"/project.json")){
-		// console.log("The <<project.json>> doesn't exist in "+projectPath);
+	if(!fs.existsSync(path+"/project.json")){
+		// console.log("The <<project.json>> doesn't exist in "+path);
 		return;
 	}
 
 	var project_info = {};
 
 
-	var paths = projectPath.split("/");
+	var paths = path.split("/");
 
 	project_info['test'] = paths[paths.length-1];
 	project_info['cust_id'] = 1;
 
 	var inst = this;
-	this.db.collection(COL_PROJECT).deleteMany({"test":project_info['test']},
+	this.db.collection(col).deleteMany({"test":project_info['test']},
 		function(){
 			if(callback && typeof(callback) == 'function'){
 				callback();
@@ -110,13 +131,15 @@ isee_db.deleteProject = function(projectPath, callback){
 		});	
 }
 
-
-isee_db.addProject = function(project, callback){
-	assert(this.db);
-	assert(typeof(project) === 'object');
-
-	this.db.collection(COL_PROJECT).insertOne(project,callback);
+isee_db.deleteProject = function(projectPath, callback){
+	this.deletePath(projectPath, callback, COL_PROJECT);
 }
+
+isee_db.deleteSurvey = function(surveyPath, callback){
+	this.deletePath(surveyPath, callback, COL_SURVEY);
+}
+
+
 
 
 isee_db.addScene = function(project, name, path, indice, descs, callback){
@@ -207,6 +230,16 @@ isee_db.getProject = function(user, callback){
 			}
 		}
 	);
+}
+
+isee_db.getSurvey = function(user, callback){
+	var db = this.db;
+
+	db.collection(COL_SURVEY).find({"cust_id":1}).toArray(function(err, docs){
+		if(callback && typeof(callback)=='function'){
+			callback(docs);
+		}
+	})
 }
 
 isee_db.getScene = function(test, callback){
@@ -504,7 +537,9 @@ isee_db.test = function(cb){
 	//this.addMember('mml', ['zhiming tang', 'junqi xie', 'terry yin']);
 	// this.verifyMember('mml', 'junqixie', function(a){console.log(a)});
 
-	console.log(this._VerifyUserInGroupList('junqi xe', null))
+	this.db.collection(COL_SURVEY).find({}).toArray(function(err, docs){
+		console.log(docs);
+	})
 
 	// var cursor = this.db.collection(COL_GROUP).find({'cust_id': 1});
 

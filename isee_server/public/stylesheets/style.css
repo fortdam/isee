@@ -6,6 +6,10 @@ a {
   color: #00B7FF;
 }
 
+img {
+  webkit-background-size: 100%
+}
+
 canvas {
   margin: 20px;
   width: 90%;

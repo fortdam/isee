@@ -1,0 +1,47 @@
+.modal-dialog(role="document")
+  .modal-content
+    .modal-header
+      div(class="modal-title", id="myModalLabel") 
+        button(type="button", class="close", data-dismiss="modal", aria-label="Close") 
+          span(aria-hidden="true") &times
+        h4.modal-title-text Your thoughts of 
+    form(action="/questionair", method="post", id="dddd")
+      .modal-body
+        b Score: from 0(poor) to 10(outstanding)
+        .btn-group(data-toggle="buttons", id="imgsize-group")
+          label(class="btn btn-default", id="score-1", filter="questionair-score")
+            input(type="radio", id="score-1", value="1", autocomplete="off") 
+            span 1
+          label(class="btn btn-default", id="score-2", filter="questionair-score")
+            input(type="radio", id="score-1", value="2", autocomplete="off") 
+            span 2
+          label(class="btn btn-default", id="score-3", filter="questionair-score")
+            input(type="radio", id="score-3", value="3", autocomplete="off") 
+            span 3
+          label(class="btn btn-default", id="score-4", filter="questionair-score")
+            input(type="radio", id="score-4", value="4", autocomplete="off") 
+            span 4
+          label(class="btn btn-default", id="score-5", filter="questionair-score")
+            input(type="radio", id="score-5", value="5", autocomplete="off") 
+            span 5
+          label(class="btn btn-default", id="score-6", filter="questionair-score")
+            input(type="radio", id="score-6", value="6", autocomplete="off") 
+            span 6
+          label(class="btn btn-default", id="score-7", filter="questionair-score")
+            input(type="radio", id="score-7", value="7", autocomplete="off") 
+            span 7
+          label(class="btn btn-default", id="score-8", filter="questionair-score")
+            input(type="radio", id="score-8", value="8", autocomplete="off") 
+            span 8
+          label(class="btn btn-default", id="score-9", filter="questionair-score")
+            input(type="radio", id="score-9", value="9", autocomplete="off") 
+            span 9
+          label(class="btn btn-default", id="score-10", filter="questionair-score")
+            input(type="radio", id="score-10", value="10", autocomplete="off") 
+            span 10
+        .form-group
+          label.control-label(for="comment_message") Comment
+          textarea.form-control(rows="3", name="comment_message", id="comment_message",placeholder="Some thing to say...",value="aa")
+      .modal-footer
+        button(type="button", class="btn btn-default", data-dismiss="modal") Close
+        button(type="submit", class="btn btn-primary") Send
