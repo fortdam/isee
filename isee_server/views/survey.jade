@@ -77,11 +77,11 @@ block content
         .col-md-6(class='slot5')
           .img-holder(id='img-holder5')
             img(src=default_img, class="img-responsive center-block", id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="5")
-        .col-md-6(class='slot4')
+        .col-md-6(class='slot6')
           .img-holder(id='img-holder6')
             img(src=default_img, class="img-responsive center-block", id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="6")    
     .filmstrip
-      div(id="carousel-example-generic", class="carousel slide", data-ride="carousel", data-interval=50000, data-keyboard=true)
+      div(id="carousel-example-generic", class="carousel slide", data-ride="carousel", data-interval=5000000, data-keyboard=true)
         ol.carousel-indicators
           li.active(data-target="#carousel-example-generic" data-slide-to="0" class="slot1")
           li(data-target="#carousel-example-generic" data-slide-to="1" class="slot2")
@@ -99,27 +99,27 @@ block content
             img(src=default_img, id="pic2" ,data-toggle="modal", data-target="#mySurveyModal2", trigger-place="2")
             .carousel-caption
               h3
-                span(class="label label-info", id='carousel-label-text-2')  b
+                span(class="label label-primary", id='carousel-label-text-2')  b
           .item(class="slot3")
             img(src=default_img, id="pic3" ,data-toggle="modal", data-target="#mySurveyModal3", trigger-place="3")
             .carousel-caption
               h3
-                span(class="label label-default", id='carousel-label-text-3')  c        
+                span(class="label label-primary", id='carousel-label-text-3')  c        
           .item(class="slot4")
             img(src=default_img, id="pic4" ,data-toggle="modal", data-target="#mySurveyModal4", trigger-place="4")
             .carousel-caption
               h3
-                span(class="label label-success", id='carousel-label-text-4')  d
+                span(class="label label-primary", id='carousel-label-text-4')  d
           .item(class="slot5")
-            img(src=default_img, id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="4")
+            img(src=default_img, id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="5")
             .carousel-caption
               h3
-                span(class="label label-success", id='carousel-label-text-5')  e
+                span(class="label label-primary", id='carousel-label-text-5')  e
           .item(class="slot6")
-            img(src=default_img, id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="4")
+            img(src=default_img, id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="6")
             .carousel-caption
               h3
-                span(class="label label-success", id='carousel-label-text-6')  f
+                span(class="label label-primary", id='carousel-label-text-6')  f
         a(class="left carousel-control"  href="#carousel-example-generic" role="button" data-slide="prev")
           span(class="glyphicon glyphicon-chevron-left" aria-hidden="true")
           span(class="sr-only") Previous
@@ -139,7 +139,11 @@ block content
     .modal(class="fade", id="mySurveyModal4", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
       include ./questionair_dialog.jade 
 
+    .modal(class="fade", id="mySurveyModal5", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./questionair_dialog.jade       
 
+    .modal(class="fade", id="mySurveyModal6", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      include ./questionair_dialog.jade 
     //- .modal(class="fade", id="linkModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
     //-   include ./link_dialog.jade  
 

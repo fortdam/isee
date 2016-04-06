@@ -289,6 +289,26 @@ isee_db.sendComment = function(comment){
 		});
 }
 
+isee_db.sendSurveyComment = function(comment){
+	assert(this.db);
+
+	var db = this.db;
+	var sent = false;
+
+	comment.user = comment.user.toLowerCase();
+
+	this.db.collection(COL_SURVEY_COMMENT).deleteMany({
+		"user":comment.user, 
+		"project": comment.project, 
+		"index":comment.index, 
+		"product":comment.product}, function(){
+			if (comment.review.length>0 && sent==false){ //elsewhere we consider user want to delete a comment
+				sent = true;
+				db.collection(COL_SURVEY_COMMENT).insertOne(comment);
+			}
+		});
+}
+
 isee_db.getComment = function(user, project, scene, index, product, callback){
 	assert(this.db);
 
@@ -298,6 +318,37 @@ isee_db.getComment = function(user, project, scene, index, product, callback){
 		"scene": scene, 
 		"index": index, 
 		"product": product});
+
+	cursor.toArray(function(err, data){
+		callback(data)
+	});
+}
+
+isee_db.getSurveyComment = function(user, project, index, product, callback){
+	assert(this.db);
+
+
+	var criteria = {};
+
+	if(user && user.length>0){
+		criteria.user = user.toLowerCase();
+	}
+
+	if(project && project.length>0) {
+		criteria.project = project;
+	}
+
+	if (index && index>=0){
+		criteria.index = index;
+	}
+
+	if (product && product.length>0){
+		criteria.product = product;
+	}
+
+	console.log(criteria);
+
+	var cursor = this.db.collection(COL_SURVEY_COMMENT).find(criteria);
 
 	cursor.toArray(function(err, data){
 		callback(data)
@@ -537,7 +588,7 @@ isee_db.test = function(cb){
 	//this.addMember('mml', ['zhiming tang', 'junqi xie', 'terry yin']);
 	// this.verifyMember('mml', 'junqixie', function(a){console.log(a)});
 
-	this.db.collection(COL_SURVEY).find({}).toArray(function(err, docs){
+	this.getSurveyComment(null, null, null, null, function(docs){
 		console.log(docs);
 	})
 

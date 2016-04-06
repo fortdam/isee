@@ -204,9 +204,7 @@ function select_page(index){
 
 	load_images();
 	load_exifs();
-	if(window.appData.settings.comment != 'off'){
-		load_comments();
-	}
+	load_comments();
 }
 
 
@@ -309,60 +307,51 @@ function load_exif(filePath, pos){
 	request.send();
 }
 
-function load_comments(){
-	var query = {};
-	if (window.appData.settings.comment == 'mml'){
-		query.user = "mml";
-	}
-	else{
-		query.user = window.appData.userInfo.name;
-	}
-
-	query.project = window.appData.projectInfo.curr;
-	query.scene = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].name;
-	query.index = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number[window.appData.pageInfo.curr-1];
-
-	for (var i=1; i<=window.appData.projectInfo.products.length; i++){
-		query.product = window.appData.projectInfo.products[i-1];
-		load_comment(query, i);
-	}
+function findProductName(index){
+	var pos = window.appData.projectInfo.random.indexOf(index);
+	return window.appData.projectInfo.products[pos];
 }
 
-function load_comment(query, pos){
+function findProductPos(product){
+	var index = window.appData.projectInfo.products.indexOf(product);
+	return window.appData.projectInfo.random[index];
+}
+
+function load_comments(){
 	var request = new XMLHttpRequest();
-	var queryStr = '/comment?'+
-		'user='+query.user+
-		'&project='+query.project+
-		'&scene='+query.scene+
-		'&index='+query.index+
-		'&product='+query.product;
+	var queryStr = '/questionair?'+
+		'user='+window.appData.userInfo.name+
+		'&email='+window.appData.userInfo.email+
+		'&project='+window.appData.projectInfo.curr+
+		'&index='+window.appData.pageInfo.curr;
+
+
+	for(var i=1; i<=window.appData.projectInfo.prefix.length; i++){
+		$('#matrix-label-text-'+i).html('Not rated');
+		$('#carousel-label-text-'+i).html('Not rated');
+	}
 
 	request.open("GET", queryStr);
 	request.onreadystatechange = function() {
 
 		if (request.readyState === 4 && request.status === 200) {
 			var res = JSON.parse(request.response);	
-	
-			if(res.state == 'no'){
-				//Always hide the info
-				$('#comment'+pos).empty();
+
+
+			if(res.state == 'yes'){
+				window.appData.comments = res.data;
+
+				window.appData.comments.forEach(function(v,i,a){
+					if(v.product && v.product.length>0){
+						var pos = findProductPos(v.product);;
+
+						$('#matrix-label-text-'+pos).html(v.score);
+						$('#carousel-label-text-'+pos).html(v.score);
+					}
+				})
 			}
 			else {
-				//Fill in the content and display if needed
-				if (res.grade == 'good'){
-					$('#comment'+pos).css('background-color', 'green');
-					$('#comment'+pos).css('color', 'white');
-				}
-				else if(res.grade == 'poor'){
-					$('#comment'+pos).css('background-color', 'red');
-					$('#comment'+pos).css('color', 'white');
-				}
-				else{
-					$('#comment'+pos).css('background-color', 'yellow');
-					$('#comment'+pos).css('color', 'black');
-				}
-
-				$('#comment'+pos).empty().append(query.user.toUpperCase()+":"+res.review);
+				window.appData.comments = {};
 			}
 		}
 	}
@@ -509,17 +498,40 @@ function onModalLoaded(event) {
   var pos = imageElt.attr("trigger-place");
 
   window.currModal = $(this);
-  
 
-  $(this).find('.modal-title-text').text('Tell us your thoughts about this picture(' + window.appData.projectInfo.products[pos-1]+')');
+  //Clear
+  $("label[filter='questionair-score']").removeClass('btn-primary active');
+  $("textarea").text("");
+
+  //Fill in content if necessary
+  for(var i=0; i<window.appData.comments.length; i++){
+  	var index = findProductPos(window.appData.comments[i].product);
+
+  	if (index == parseInt(pos)){
+  		$("label[filter='questionair-score']").removeClass('btn-primary active');
+  		$("label#score-"+window.appData.comments[i].score).addClass('btn-primary active');
+
+  		$("textarea").text(window.appData.comments[i].review);
+  	}
+  }
+  
+//Cannot use such color-mask due to it doesn't sometimes
+  $(this).find("label[filter='questionair-score']").bind('change', function(){
+  	console.log('aaaa '+pos);
+  	$("label[filter='questionair-score']").removeClass('btn-primary');
+  	$("label[filter='questionair-score'].active").addClass('btn-primary');
+  })
+
+  // //TODO: Fill in the comment before...
+
+  // // $(this).find('.modal-title-text').text('Tell us your thoughts about this picture(' + window.appData.projectInfo.products[pos-1]+')');
 
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
         beforeSubmit:  function(a,b,c){
         							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
-        							a[a.length] = {name:"scene", value:window.appData.sceneInfo.total[window.appData.sceneInfo.curr].name};
-        							a[a.length] = {name:"index", value:window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number[window.appData.pageInfo.curr-1]};
-        							a[a.length] = {name:"product", value:window.appData.projectInfo.products[pos-1]};
+        							a[a.length] = {name:"index", value:window.appData.pageInfo.curr};
+        							a[a.length] = {name:"product", value: window.appData.projectInfo.products[window.appData.projectInfo.random.indexOf(parseInt(pos))]};
         							a[a.length] = {name:"user", value:window.appData.userInfo.name};
         							a[a.length] = {name:"email", value:window.appData.userInfo.email};
         							a[a.length] = {name:"imgsize", value:window.appData.settings.imgsize};
@@ -529,11 +541,7 @@ function onModalLoaded(event) {
         complete:  		function(msg){window.currModal.modal("hide");
     								window.currModal = null;
 
-    								if ((window.appData.settings.comment == 'my') || 
-    									((window.appData.settings.comment == 'mml') && (window.appData.userInfo.name=='mml'))){
-    									// console.log('reload comments');
-    									load_comments();
-    								}
+    								load_comments();
     								return true},
         resetForm: true, 
         clearForm: true,
@@ -551,8 +559,8 @@ function onModalLoaded(event) {
     }; 
  
  	if (modalRegistered.indexOf(pos) == -1){
- 		    // bind to the form's submit event 
- 		    modalRegistered.push(pos);
+ 		// bind to the form's submit event 
+ 		modalRegistered.push(pos);
 	    $(this).find('form').submit(function() { 
 	        // inside event callbacks 'this' is the DOM element so we first 
 	        // wrap it in a jQuery object and then invoke ajaxSubmit 
@@ -565,37 +573,6 @@ function onModalLoaded(event) {
 	        return false; 
 	    }); 
  	}
-}
-
-function onReportModalLoaded(event){
-
-	var reportSettings = window.appData.reportSettings;
-	var href = $(this).find('a');
-
-	$(this).find('#'+reportSettings.comment).addClass('active btn-primary');
-
-	$(this).find('label').change(function(){
-		$("label[filter='report-setting']").removeClass("btn-primary");
-		$("label[filter='report-setting'].active").addClass("btn-primary");
-
-		window.appData.reportSettings.comment = $('label.active:eq(0)').attr('id');
-		localStorage.reportComment = window.appData.reportSettings.comment;
-		console.log('update'+ window.appData.reportSettings.comment);
-
-		if(window.appData.reportSettings.comment == 'my'){
-			href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.userInfo.name);
-		}
-		else {
-			href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.reportSettings.comment);
-		}
-	});
-
-	if(window.appData.reportSettings.comment == 'my'){
-		href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.userInfo.name);
-	}
-	else {
-		href.attr('href', '/report?project='+window.appData.projectInfo.curr+"&from="+window.appData.reportSettings.comment);
-	}
 }
 
 function onSettingModalLoaded(event){
@@ -749,10 +726,10 @@ function set_hook_functions(){
 	// window.onresize = place_label;
 	// window.onscroll = place_label;
 
-	// $('#myModal1').on('show.bs.modal', onModalLoaded);
-	// $('#myModal2').on('show.bs.modal', onModalLoaded);
-	// $('#myModal3').on('show.bs.modal', onModalLoaded);
-	// $('#myModal4').on('show.bs.modal', onModalLoaded);
+	for(var i=1; i<=6; i++){ //TO fix me
+		$('#mySurveyModal'+i).on('show.bs.modal', onModalLoaded);
+	}
+
 
 	// $('#reportModal').on('show.bs.modal', onReportModalLoaded);
 

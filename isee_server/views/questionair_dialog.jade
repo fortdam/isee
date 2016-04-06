@@ -7,37 +7,37 @@
         h4.modal-title-text Your thoughts of 
     form(action="/questionair", method="post", id="dddd")
       .modal-body
-        b Score: from 0(poor) to 10(outstanding)
-        .btn-group(data-toggle="buttons", id="imgsize-group")
+        b Score: from 1(poor) to 10(outstanding)
+        .btn-group(data-toggle="buttons", id="score-group")
           label(class="btn btn-default", id="score-1", filter="questionair-score")
-            input(type="radio", id="score-1", value="1", autocomplete="off") 
+            input(type="radio", name="score", id="score-1", value="1", autocomplete="off") 
             span 1
           label(class="btn btn-default", id="score-2", filter="questionair-score")
-            input(type="radio", id="score-1", value="2", autocomplete="off") 
+            input(type="radio", name="score", id="score-1", value="2", autocomplete="off") 
             span 2
           label(class="btn btn-default", id="score-3", filter="questionair-score")
-            input(type="radio", id="score-3", value="3", autocomplete="off") 
+            input(type="radio", name="score", id="score-3", value="3", autocomplete="off") 
             span 3
           label(class="btn btn-default", id="score-4", filter="questionair-score")
-            input(type="radio", id="score-4", value="4", autocomplete="off") 
+            input(type="radio", name="score", id="score-4", value="4", autocomplete="off") 
             span 4
           label(class="btn btn-default", id="score-5", filter="questionair-score")
-            input(type="radio", id="score-5", value="5", autocomplete="off") 
+            input(type="radio", name="score", id="score-5", value="5", autocomplete="off") 
             span 5
           label(class="btn btn-default", id="score-6", filter="questionair-score")
-            input(type="radio", id="score-6", value="6", autocomplete="off") 
+            input(type="radio", name="score", id="score-6", value="6", autocomplete="off") 
             span 6
           label(class="btn btn-default", id="score-7", filter="questionair-score")
-            input(type="radio", id="score-7", value="7", autocomplete="off") 
+            input(type="radio", name="score", id="score-7", value="7", autocomplete="off") 
             span 7
           label(class="btn btn-default", id="score-8", filter="questionair-score")
-            input(type="radio", id="score-8", value="8", autocomplete="off") 
+            input(type="radio", name="score", id="score-8", value="8", autocomplete="off") 
             span 8
           label(class="btn btn-default", id="score-9", filter="questionair-score")
-            input(type="radio", id="score-9", value="9", autocomplete="off") 
+            input(type="radio", name="score", id="score-9", value="9", autocomplete="off") 
             span 9
           label(class="btn btn-default", id="score-10", filter="questionair-score")
-            input(type="radio", id="score-10", value="10", autocomplete="off") 
+            input(type="radio", name="score", id="score-10", value="10", autocomplete="off") 
             span 10
         .form-group
           label.control-label(for="comment_message") Comment

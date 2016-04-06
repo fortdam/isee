@@ -14,6 +14,7 @@ var report = require('./routes/report');
 var perf = require('./routes/perf');
 var login = require('./routes/login');
 var survey = require('./routes/survey');
+var survey_comment = require('./routes/survey_comment')
 
 var fs = require('fs');
 var images = require("images");
@@ -59,7 +60,7 @@ app.use('/comment', comment);
 app.use('/report', report);
 app.use('/performance', perf);
 app.use('/survey', survey);
-
+app.use('/questionair', survey_comment);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
