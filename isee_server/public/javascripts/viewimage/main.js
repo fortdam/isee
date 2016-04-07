@@ -354,6 +354,7 @@ function select_page(index){
 		else{
 			$("li#page-next").addClass("disabled");
 		}
+
 	}
 
 	var activeIndex = pageInfo.curr - pageInfo.start + 1;
@@ -371,6 +372,8 @@ function select_page(index){
 	if(window.appData.settings.comment != 'off'){
 		load_comments();
 	}
+
+	reset_zoom();
 }
 
 

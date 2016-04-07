@@ -112,6 +112,11 @@ function set_zoom(zoom_level){
 	}
 }
 
+function reset_zoom(){
+	$('#zoom-slider').val('100');
+	set_zoom(1);
+}
+
 $('#zoom-slider').bind('change', function(e){
 	if (need_record_size_for_zoom()){
 		record_size_for_zoom();

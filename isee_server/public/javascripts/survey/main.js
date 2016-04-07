@@ -214,6 +214,8 @@ function select_page(index){
 	load_images();
 	load_exifs();
 	load_comments();
+
+	reset_zoom();
 }
 
 
