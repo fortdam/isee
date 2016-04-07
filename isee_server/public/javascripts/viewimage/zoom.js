@@ -107,7 +107,7 @@ function set_zoom(zoom_level){
 		}
 	}
 
-	for(var i=1; i<totalPic; i++){
+	for(var i=1; i<=totalPic; i++){
 		move_pic_callback(i, 0, 0);
 	}
 }
