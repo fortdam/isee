@@ -2,7 +2,7 @@ extends layout
 
 block content
   nav(class="navbar navbar-default", id="top", role="banner")
-    .container
+    .container-fluid
       .navbar-header
         .navbar-brand Projects
       .nav(id="bs-navbar", class="collapse navbar-collapse")
@@ -27,7 +27,7 @@ block content
             a(href="#", data-toggle="modal", data-target="#settingModal") 
               span(class="glyphicon glyphicon-cog" aria-hidden="true")
 
-  .container(id="pic-container")
+  .container-fluid(id="pic-container")
     .row
       //- .col-md-6
       //-   ul(class="nav nav-tabs", id="scene-tab")
@@ -57,27 +57,25 @@ block content
 
     .matrix
       .row
-        .col-md-6(class='slot1')
+        .col-md-4(class='slot1')
           .img-holder(id='img-holder1')
             img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#mySurveyModal1", trigger-place="1") 
-        .col-md-6(class='slot2')
+        .col-md-4(class='slot2')
           //- .overlay
           .img-holder(id='img-holder2')
             img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#mySurveyModal2", trigger-place="2")
+        .col-md-4(class='slot3')
+          .img-holder(id='img-holder3')
+            img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#mySurveyModal3", trigger-place="3")              
       br
       .row
-        .col-md-6(class='slot3')
-          .img-holder(id='img-holder3')
-            img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#mySurveyModal3", trigger-place="3")
-        .col-md-6(class='slot4')
+        .col-md-4(class='slot4')
           .img-holder(id='img-holder4')
             img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#mySurveyModal4", trigger-place="4")
-      br
-      .row
-        .col-md-6(class='slot5')
+        .col-md-4(class='slot5')
           .img-holder(id='img-holder5')
             img(src=default_img, class="img-responsive center-block", id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="5")
-        .col-md-6(class='slot6')
+        .col-md-4(class='slot6')
           .img-holder(id='img-holder6')
             img(src=default_img, class="img-responsive center-block", id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="6")    
     .filmstrip
