@@ -76,7 +76,16 @@ function select_project(index){
 	window.appData.projectInfo.curr = window.appData.projectInfo.total[index].test;
 	window.appData.projectInfo.products = window.appData.projectInfo.total[index].products;
 	window.appData.projectInfo.prefix = window.appData.projectInfo.total[index].prefix;
-	window.appData.projectInfo.pages = window.appData.projectInfo.total[index].total;
+
+	if(window.appData.projectInfo.total[index].select == undefined){
+		window.appData.projectInfo.total[index].select = [];
+
+		for (var i=0; i<window.appData.projectInfo.total[index].total; i++){
+			window.appData.projectInfo.total[index].select[i] = i+1;
+		}
+	}
+	
+	window.appData.projectInfo.pages = window.appData.projectInfo.total[index].select;
 
 	$('.navbar-brand').html(window.appData.projectInfo.total[index].name);
 
@@ -87,7 +96,7 @@ function select_project(index){
 function load_page() {
 
 	window.appData.pageInfo = {
-		'total': window.appData.projectInfo.pages,
+		'total': window.appData.projectInfo.pages.length,
 		'start': 1,
 		'curr': undefined
 	}
@@ -218,7 +227,7 @@ function load_images(){
 
 
 	var prefix = window.appData.projectInfo.prefix;
-	var appendix = currPage;
+	var appendix = window.appData.projectInfo.pages[currPage-1];
 
 	for (var i=0; i<prefix.length; i++){
 		if (window.appData.settings.imgsize == 'small'){
@@ -249,7 +258,7 @@ function load_exifs(){
 	var path1 = window.appData.projectInfo.curr; 
 
 	var prefix = window.appData.projectInfo.prefix;
-	var appendix = currPage;
+	var appendix = window.appData.projectInfo.pages[currPage-1];
 
 	for (var i=1; i<=prefix.length; i++){
 		var totalPath = "/photos/cache/__exif__/"+path1+"/"+prefix[i-1]+"_"+appendix+".exif"
@@ -323,13 +332,15 @@ function load_comments(){
 		'user='+window.appData.userInfo.name+
 		'&email='+window.appData.userInfo.email+
 		'&project='+window.appData.projectInfo.curr+
-		'&index='+window.appData.pageInfo.curr;
+		'&index='+ window.appData.projectInfo.pages[window.appData.pageInfo.curr-1];
 
 
 	for(var i=1; i<=window.appData.projectInfo.prefix.length; i++){
 		$('#matrix-label-text-'+i).html('Not rated');
 		$('#carousel-label-text-'+i).html('Not rated');
 	}
+
+	window.appData.comments = {};
 
 	request.open("GET", queryStr);
 	request.onreadystatechange = function() {
@@ -349,9 +360,6 @@ function load_comments(){
 						$('#carousel-label-text-'+pos).html(v.score);
 					}
 				})
-			}
-			else {
-				window.appData.comments = {};
 			}
 		}
 	}
@@ -380,72 +388,23 @@ function place_label() {
 	var leftPadding;
 
 	if (window.appData.settings.layout == 'matrix'){
-		pos = $(".matrix .slot1").offset();
-		width = $(".matrix .slot1").width();
-		width1 = $("#overlay1").width();
-		height = $(".matrix .slot1").height();
-		height2	= $('#comment1').height();
-		leftPadding = parseInt($('.matrix .slot1').css('padding-left'));
+		var totalPic = window.appData.projectInfo.prefix.length;
 
-		if (window.appData.settings.exif == 'exif-on'){
-			$('.overlay').removeClass('hidden');
-		}
-		else{
-			$('.overlay').addClass('hidden');
-		}
+		for (var i=1; i<=totalPic; i++){
+			pos = $(".matrix .slot"+i).offset();
+			width = $(".matrix .slot"+i).width();
+			width1 = $("#overlay"+i).width();
+			height = $(".matrix .slot"+i).height();
+			height2	= $('#comment'+i).height();
+			leftPadding = parseInt($('.matrix .slot'+i).css('padding-left'));
 
-		if (window.appData.settings.comment == 'off'){
-			$('.comment').addClass('hidden');
-		}
-		else{
-			$('.comment').removeClass('hidden');
+			$("h3#label"+i).offset({top: pos.top, left:pos.left+leftPadding});
+			$("#overlay"+i).offset({top: pos.top, left:pos.left+width-width1+leftPadding});
+			$('#comment'+i).offset({top: pos.top+height-height2, left:pos.left+leftPadding});
+			$('#comment'+i).width(width);
 		}
 
-		$("h3#label1").offset({top: pos.top, left:pos.left+leftPadding});
-		$("#overlay1").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
-		$('#comment1').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
-		$('#comment1').width(width);
-
-		pos = $(".matrix .slot2").offset();
-		width = $(".matrix .slot2").width();
-		width1  = $("#overlay2").width();
-		height = $(".matrix .slot2").height();
-		height2	= $('#comment2').height();
-		leftPadding = parseInt($('.matrix .slot2').css('padding-left'));		
-
-		$("h3#label2").offset({top: pos.top, left:pos.left+leftPadding});
-		$("#overlay2").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
-		$('#comment2').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
-		$('#comment2').width(width);
-
-
-		pos = $(".matrix .slot3").offset();
-		width = $(".matrix .slot3").width();
-		width1  = $("#overlay3").width();
-		height = $(".matrix .slot3").height();
-		height2	= $('#comment3').height();	
-		leftPadding = parseInt($('.matrix .slot3').css('padding-left'));
-
-		$("h3#label3").offset({top: pos.top, left:pos.left+leftPadding});
-		$("#overlay3").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
-		$('#comment3').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
-		$('#comment3').width(width);
-
-
-		pos = $(".matrix .slot4").offset();
-		width = $(".matrix .slot4").width();
-		width1  = $("#overlay4").width();
-		height = $(".matrix .slot4").height();
-		height2	= $('#comment4').height();	
-		leftPadding = parseInt($('.matrix .slot4').css('padding-left'));		
-
-		$("h3#label4").offset({top: pos.top, left:pos.left+leftPadding});
-		$("#overlay4").offset({top: pos.top, left:pos.left+width-width1+leftPadding});
-		$('#comment4').offset({top: pos.top+height-height2, left:pos.left+leftPadding});
-		$('#comment4').width(width);
-
-
-		for(var i=1;i<=4; i++){
+		for(var i=1;i<=totalPic; i++){
 			if (i<=window.appData.projectInfo.products.length){
 				$('#matrix-label-text-'+i).removeClass('hidden');
 			}
@@ -479,7 +438,7 @@ function place_label() {
 			$('#comment'+index).width(width);
 		}
 
-		for(var i=1;i<=4; i++){
+		for(var i=1;i<=window.appData.projectInfo.prefix.length; i++){
 			if (i<=window.appData.projectInfo.products.length){
 				$('#carousel-label-text-'+i).removeClass('hidden');
 			}
@@ -530,7 +489,7 @@ function onModalLoaded(event) {
        // target:        '#output',   // target element(s) to be updated with server response 
         beforeSubmit:  function(a,b,c){
         							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
-        							a[a.length] = {name:"index", value:window.appData.pageInfo.curr};
+        							a[a.length] = {name:"index", value:window.appData.projectInfo.pages[window.appData.pageInfo.curr-1]};
         							a[a.length] = {name:"product", value: window.appData.projectInfo.products[window.appData.projectInfo.random.indexOf(parseInt(pos))]};
         							a[a.length] = {name:"user", value:window.appData.userInfo.name};
         							a[a.length] = {name:"email", value:window.appData.userInfo.email};
@@ -624,6 +583,7 @@ function onSettingModalHide(event){
 	localStorage.exif = settings.exif;
 
 	if(relayout){
+		console.log('relayout')
 		if (settings.layout == 'matrix'){
 			$('.matrix').removeClass('hidden');
 			$('.filmstrip').addClass('hidden');
@@ -723,8 +683,8 @@ function preload_local_settings(){
 function set_hook_functions(){
 	document.body.onload = load_projects;//select_project('idol4');
 
-	// window.onresize = place_label;
-	// window.onscroll = place_label;
+	window.onresize = place_label;
+	window.onscroll = place_label;
 
 	for(var i=1; i<=6; i++){ //TO fix me
 		$('#mySurveyModal'+i).on('show.bs.modal', onModalLoaded);

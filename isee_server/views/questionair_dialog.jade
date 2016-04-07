@@ -4,10 +4,11 @@
       div(class="modal-title", id="myModalLabel") 
         button(type="button", class="close", data-dismiss="modal", aria-label="Close") 
           span(aria-hidden="true") &times
-        h4.modal-title-text Your thoughts of 
+        h4.modal-title-text Rate this photo 
     form(action="/questionair", method="post", id="dddd")
       .modal-body
-        b Score: from 1(poor) to 10(outstanding)
+        b Rate: from 1(worst) to 10(best)
+        br
         .btn-group(data-toggle="buttons", id="score-group")
           label(class="btn btn-default", id="score-1", filter="questionair-score")
             input(type="radio", name="score", id="score-1", value="1", autocomplete="off") 
@@ -40,8 +41,9 @@
             input(type="radio", name="score", id="score-10", value="10", autocomplete="off") 
             span 10
         .form-group
-          label.control-label(for="comment_message") Comment
-          textarea.form-control(rows="3", name="comment_message", id="comment_message",placeholder="Some thing to say...",value="aa")
+          br
+          label.control-label(for="comment_message") Extra Comment
+          textarea.form-control(rows="3", name="comment_message", id="comment_message",placeholder="Please give some comment to help us understand...(for score <6 or >8)",value="aa")
       .modal-footer
         button(type="button", class="btn btn-default", data-dismiss="modal") Close
         button(type="submit", class="btn btn-primary") Send
