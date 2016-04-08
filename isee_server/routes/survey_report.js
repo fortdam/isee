@@ -39,10 +39,12 @@ function genReport(project, user, res){
 						}
 					}
 
+					commentInfo.project = project.test;
 					commentInfo.indice = project.select;
 					commentInfo.user = user;
 					commentInfo.products = project.products;
-					commentInfo.comment = idata
+					commentInfo.prefix = project.prefix;
+					commentInfo.comment = idata;
 
 					res.render('survey_report', {'comments': JSON.stringify(commentInfo)});
 				})

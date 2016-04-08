@@ -29,10 +29,10 @@ function fillin_comment(){
 
 	insertElement += "</tr>";
 
-	$('table').append(insertElement);
+	$('table#total').append(insertElement);
 
 	commentInfo.indice.forEach(function(v,i,a){
-		insertElement = "<tr><td>"+(i+1)+"</td>";
+		insertElement = "<tr><td><a href=\"/survey?propject="+commentInfo.project+"&index="+(i+1)+"\">"+(i+1)+"</td>";
 
 		for(var ii=0; ii<commentInfo.products.length; ii++){
 			var entries = commentInfo.comment.filter(function(x){
@@ -50,6 +50,8 @@ function fillin_comment(){
 			}
 			else {
 				var score;
+				var tooltip = "";
+				var href = ""
 
 				if(entries.length > 1){
 					console.log(entries);
@@ -62,23 +64,37 @@ function fillin_comment(){
 						}
 					})
 					score = (score/effectiveEle).toFixed(1);
+					href = "<a href=javascript:display_breakdown("+i+","+ii+")>";
+					console.log(href);
 				}
 				else {
 					score = parseInt(entries[0].score);
+					tooltip = entries[0].review;
 				}
 
 				if(score <= 3){
-					insertElement += "<td class=\"poor\">"+score+"</td>";
+					insertElement += "<td class=\"poor\"";
 				}
 				else if(score <= 5){
-					insertElement += "<td class=\"bad\">"+score+"</td>";
+					insertElement += "<td class=\"bad\"";
 				}
 				else if(score <= 7){
-					insertElement += "<td class=\"normal\">"+score+"</td>";
+					insertElement += "<td class=\"normal\"";
 				}
 				else {
-					insertElement += "<td class=\"good\">"+score+"</td>";					
+					insertElement += "<td class=\"good\"";					
 				}
+
+				if(tooltip.length > 0){
+					insertElement += "data-toggle=\"tooltip\" title=\""+tooltip+"\"><font color=\"blue\">"+score+"</font></td>";
+				}
+				else if(href.length > 0){
+					insertElement += ">"+href+score+"</a></td>";
+				}
+				else{
+					insertElement += " >"+score+"</td>"
+				}
+
 
 				totalScore[ii].push(score);
 			}
@@ -86,7 +102,7 @@ function fillin_comment(){
 
 		insertElement += "</tr>"
 
-		$('table').append(insertElement);
+		$('table#total').append(insertElement);
 	});
 
 	insertElement = "<tr><td><b>Avg.</b></td>";
@@ -123,7 +139,52 @@ function fillin_comment(){
 	}
 	insertElement += "</tr>"
 
-	$('table').append(insertElement);
+	$('table#total').append(insertElement);
+}
+
+function display_breakdown(sceneIndex, productIndex){
+	$('#breakdown-title').removeClass('hidden');
+	$('#breakdown-title').html('Scene #'+(sceneIndex+1)+" | "+window.commentInfo.products[productIndex]);
+
+	$('img').removeClass('hidden');
+	$('img').attr('src', '/photos/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
+	$('table#breakdown').empty();
+
+	var currComment = window.commentInfo.comment.filter(function(x){
+		if(x.product == commentInfo.products[productIndex] && parseInt(x.index) == commentInfo.indice[sceneIndex]){
+			return true;
+		}
+	});
+
+	var insertElement = "";
+
+	if(currComment.length > 0){
+		insertElement = "<tr><th>User</th><th>Score</th><th>Comment</th>";
+		$('table#breakdown').append(insertElement);
+
+	}
+
+	currComment.forEach(function(v,i,a){
+		var score = parseInt(v.score);
+
+		if(score <= 3){
+			insertElement = "<tr class=\"poor\">";
+		}
+		else if(score <= 5){
+			insertElement = "<tr class=\"bad\">";
+		}
+		else if(score <= 7){
+			insertElement = "<tr class=\"normal\">";
+		}
+		else {
+			insertElement = "<tr class=\"good\">";
+		}
+
+		insertElement += "<td>"+v.user+"</td><td>"+v.score+"</td><td>"+v.review+"</td></tr>";
+		$('table#breakdown').append(insertElement);		
+	});
+
+	apply_color();
 }
 
 function apply_color(){
