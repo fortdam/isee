@@ -55,6 +55,31 @@ block content
         .col-md-5
         .col-md-2
           input(id="zoom-slider", type="range", min="100", max="1000", value="100")
+      .matrix
+        .row
+          .col-md-6(class='slot1')
+            .img-holder(id='img-holder1')
+              img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#mySurveyModal1", trigger-place="1") 
+          .col-md-6(class='slot2')
+            //- .overlay
+            .img-holder(id='img-holder2')
+              img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#mySurveyModal2", trigger-place="2")
+        br
+        .row
+          .col-md-6(class='slot3')
+            .img-holder(id='img-holder3')
+              img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#mySurveyModal3", trigger-place="3")              
+          .col-md-6(class='slot4')
+            .img-holder(id='img-holder4')
+              img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#mySurveyModal4", trigger-place="4")
+        br
+        .row
+          .col-md-6(class='slot5')
+            .img-holder(id='img-holder5')
+              img(src=default_img, class="img-responsive center-block", id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="5")
+          .col-md-6(class='slot6')
+            .img-holder(id='img-holder6')
+              img(src=default_img, class="img-responsive center-block", id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="6")            
       .filmstrip
         div(id="carousel-example-generic", class="carousel slide", data-ride="carousel", data-interval=5000000, data-keyboard=true)
           ol.carousel-indicators
@@ -101,48 +126,23 @@ block content
           a(class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next")
             span(class="glyphicon glyphicon-chevron-right" aria-hidden="true")
             span(class="sr-only") Next
-    .container-fluid
-      .matrix
-        .row
-          .col-md-4(class='slot1')
-            .img-holder(id='img-holder1')
-              img(src=default_img, class="img-responsive center-block", id="pic1" ,data-toggle="modal", data-target="#mySurveyModal1", trigger-place="1") 
-          .col-md-4(class='slot2')
-            //- .overlay
-            .img-holder(id='img-holder2')
-              img(src=default_img, class="img-responsive center-block", id="pic2" ,data-toggle="modal", data-target="#mySurveyModal2", trigger-place="2")
-          .col-md-4(class='slot3')
-            .img-holder(id='img-holder3')
-              img(src=default_img, class="img-responsive center-block", id="pic3" ,data-toggle="modal", data-target="#mySurveyModal3", trigger-place="3")              
-        br
-        .row
-          .col-md-4(class='slot4')
-            .img-holder(id='img-holder4')
-              img(src=default_img, class="img-responsive center-block", id="pic4" ,data-toggle="modal", data-target="#mySurveyModal4", trigger-place="4")
-          .col-md-4(class='slot5')
-            .img-holder(id='img-holder5')
-              img(src=default_img, class="img-responsive center-block", id="pic5" ,data-toggle="modal", data-target="#mySurveyModal5", trigger-place="5")
-          .col-md-4(class='slot6')
-            .img-holder(id='img-holder6')
-              img(src=default_img, class="img-responsive center-block", id="pic6" ,data-toggle="modal", data-target="#mySurveyModal6", trigger-place="6")
-      
-    .modal(class="fade", id="mySurveyModal1", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
-      include ./questionair_dialog.jade 
+      .modal(class="fade", id="mySurveyModal1", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+        include ./questionair_dialog.jade 
 
-    .modal(class="fade", id="mySurveyModal2", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
-      include ./questionair_dialog.jade 
+      .modal(class="fade", id="mySurveyModal2", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+        include ./questionair_dialog.jade 
 
-    .modal(class="fade", id="mySurveyModal3", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
-      include ./questionair_dialog.jade 
+      .modal(class="fade", id="mySurveyModal3", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+        include ./questionair_dialog.jade 
 
-    .modal(class="fade", id="mySurveyModal4", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
-      include ./questionair_dialog.jade 
+      .modal(class="fade", id="mySurveyModal4", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+        include ./questionair_dialog.jade 
 
-    .modal(class="fade", id="mySurveyModal5", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
-      include ./questionair_dialog.jade       
+      .modal(class="fade", id="mySurveyModal5", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+        include ./questionair_dialog.jade       
 
-    .modal(class="fade", id="mySurveyModal6", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
-      include ./questionair_dialog.jade 
+      .modal(class="fade", id="mySurveyModal6", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+        include ./questionair_dialog.jade 
     //- .modal(class="fade", id="linkModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
     //-   include ./link_dialog.jade  
 

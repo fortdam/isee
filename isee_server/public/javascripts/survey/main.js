@@ -462,7 +462,8 @@ function onModalLoaded(event) {
 
   //Clear
   $("label[filter='questionair-score']").removeClass('btn-primary active');
-  $("textarea").text("");
+  $("textarea").val("");
+  
 
   //Fill in content if necessary
   for(var i=0; i<window.appData.comments.length; i++){
@@ -472,7 +473,7 @@ function onModalLoaded(event) {
   		$("label[filter='questionair-score']").removeClass('btn-primary active');
   		$("label#score-"+window.appData.comments[i].score).addClass('btn-primary active');
 
-  		$("textarea").text(window.appData.comments[i].review);
+  		$("textarea").val(window.appData.comments[i].review);
   	}
   }
   
