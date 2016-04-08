@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  #dl-comments(class="hidden") #{comments}
+  h1 #{title}
+  h3 #{user}
+  
+  .container
+    table(class="table table-bordered")
+
+block append javascript
+  script(src="/javascripts/survey_report/main.js")
+
+      
