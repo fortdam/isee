@@ -72,7 +72,6 @@ function load_projects() {
 }
 
 function select_project(index){
-	window.appData.context.firstload = false;
 	window.appData.projectInfo.curr = window.appData.projectInfo.total[index].test;
 	window.appData.projectInfo.products = window.appData.projectInfo.total[index].products;
 	window.appData.projectInfo.prefix = window.appData.projectInfo.total[index].prefix;
@@ -90,6 +89,8 @@ function select_project(index){
 	$('.navbar-brand').html(window.appData.projectInfo.total[index].name);
 
 	load_page();
+
+	window.appData.context.firstload = false;
 }
 
 //
@@ -113,16 +114,15 @@ function load_page() {
 		}
 	}
 
-
 	if (window.appData.context.firstload && $('#dl-index').html().length>0){
 		var dl_index = parseInt($('#dl-index').html());
-		var page_index = window.appData.sceneInfo.total[window.appData.sceneInfo.curr].number.indexOf(dl_index);
+		var page_index = dl_index;
 
-		// console.log(page_index);
+		console.log(page_index);
 
 		if (page_index >= 0){
 			// console.log("successfully select page "+page_index);
-			select_page(page_index+1);
+			select_page(page_index);
 		}
 		else{
 			// console.log('select old page 1')
