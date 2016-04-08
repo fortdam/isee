@@ -232,10 +232,16 @@ isee_db.getProject = function(user, callback){
 	);
 }
 
-isee_db.getSurvey = function(user, callback){
+isee_db.getSurvey = function(user, project, callback){
 	var db = this.db;
 
-	db.collection(COL_SURVEY).find({"cust_id":1}).toArray(function(err, docs){
+	var criteria = {"cust_id":1};
+
+	if (project && typeof(project) == 'string' && project.length>0){
+		criteria.test = project;
+	}
+
+	db.collection(COL_SURVEY).find(criteria).toArray(function(err, docs){
 		if(callback && typeof(callback)=='function'){
 			callback(docs);
 		}
@@ -590,12 +596,12 @@ isee_db.test = function(cb){
 	//this.addMember('mml', ['zhiming tang', 'junqi xie', 'terry yin']);
 	// this.verifyMember('mml', 'junqixie', function(a){console.log(a)});
 
-	this.getSurveyComment("daoqun shan", null, null, null, function(docs){
-		console.log(docs);
-	})
-	// this.db.collection(COL_SURVEY).find().toArray(function(err, docs){
+	// this.getSurveyComment("daoqun shan", null, null, null, function(docs){
 	// 	console.log(docs);
 	// })
+	this.db.collection(COL_SURVEY).find().toArray(function(err, docs){
+		console.log(docs);
+	})
 	// var cursor = this.db.collection(COL_GROUP).find({'cust_id': 1});
 
 	// cursor.each(function(err, doc) {

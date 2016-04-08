@@ -13,7 +13,7 @@ router.get('/project', function(req, res, next) {
 });
 
 router.get('/survey', function(req, res, next) {
-	isee_db.getSurvey(req.query.user, function(data){
+	isee_db.getSurvey(req.query.user, req.query.project, function(data){
 		res.send(data);
 	});
 });
