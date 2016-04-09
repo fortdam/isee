@@ -457,7 +457,10 @@ var modalRegistered = [];
 function clearSurveyComment(){
 	$("label[filter='questionair-score']").removeClass('btn-primary active');
 	$("textarea").val("");
-	window.currModal.find("button#submit").click();
+
+	setTimeout(function(){
+        window.currModal.find("button#submit").click();
+	}, 500);
 }
 
 function onModalLoaded(event) {
