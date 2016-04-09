@@ -295,7 +295,7 @@ isee_db.sendComment = function(comment){
 		});
 }
 
-isee_db.sendSurveyComment = function(comment){
+isee_db.sendSurveyComment = function(comment, callback){
 	assert(this.db);
 
 	var db = this.db;
@@ -312,9 +312,7 @@ isee_db.sendSurveyComment = function(comment){
 		"product":comment.product}, function(){
 			if (sent==false){ //elsewhere we consider user want to delete a comment
 				sent = true;
-				console.log('delete many successful');
-				console.log(comment);
-				db.collection(COL_SURVEY_COMMENT).insertOne(comment);
+				db.collection(COL_SURVEY_COMMENT).insertOne(comment, callback);
 			}
 		});
 }
@@ -596,12 +594,12 @@ isee_db.test = function(cb){
 	//this.addMember('mml', ['zhiming tang', 'junqi xie', 'terry yin']);
 	// this.verifyMember('mml', 'junqixie', function(a){console.log(a)});
 
-	// this.getSurveyComment("daoqun shan", null, null, null, function(docs){
-	// 	console.log(docs);
-	// })
-	this.db.collection(COL_SURVEY).find().toArray(function(err, docs){
+	this.getSurveyComment("", null, null, null, function(docs){
 		console.log(docs);
 	})
+	// this.db.collection(COL_SURVEY).find().toArray(function(err, docs){
+	// 	console.log(docs);
+	// })
 	// var cursor = this.db.collection(COL_GROUP).find({'cust_id': 1});
 
 	// cursor.each(function(err, doc) {

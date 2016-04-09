@@ -15,9 +15,10 @@ router.post('/', function(req, res, next) {
   	score: req.body.score,
   	review: req.body.comment_message
   }
-  console.log(comment);
-  isee_db.sendSurveyComment(comment);
-  res.send("OK");
+  // console.log(comment);
+  isee_db.sendSurveyComment(comment, function(){
+      res.send("OK");
+  });
 });
 
 router.get('/', function(req, res, next) {
