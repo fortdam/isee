@@ -32,7 +32,7 @@ function fillin_comment(){
 	$('table#total').append(insertElement);
 
 	commentInfo.indice.forEach(function(v,i,a){
-		insertElement = "<tr><td><a href=\"/survey?propject="+commentInfo.project+"&index="+(i+1)+"\">"+(i+1)+"</td>";
+		insertElement = "<tr><td><a href=\"/survey?propject="+commentInfo.project+"&index="+(i+1)+"\"><b>"+(i+1)+"</b></td>";
 
 		for(var ii=0; ii<commentInfo.products.length; ii++){
 			var entries = commentInfo.comment.filter(function(x){
@@ -53,24 +53,18 @@ function fillin_comment(){
 				var tooltip = "";
 				var href = ""
 
-				if(entries.length > 1){
-					console.log(entries);
-					score = 0;
-					var effectiveEle = 0;
-					entries.forEach(function(v,i,a){
-						if (v.score && v.score>=1 && v.score<=10){
-							score += parseInt(v.score);
-							effectiveEle += 1;
-						}
-					})
-					score = (score/effectiveEle).toFixed(1);
-					href = "<a href=javascript:display_breakdown("+i+","+ii+")>";
-					console.log(href);
-				}
-				else {
-					score = parseInt(entries[0].score);
-					tooltip = entries[0].review;
-				}
+				console.log(entries);
+				score = 0;
+				var effectiveEle = 0;
+				entries.forEach(function(v,i,a){
+					if (v.score && v.score>=1 && v.score<=10){
+						score += parseInt(v.score);
+						effectiveEle += 1;
+					}
+				})
+				score = (score/effectiveEle).toFixed(1);
+				href = "<a href=javascript:display_breakdown("+i+","+ii+")>";
+
 
 				if(score <= 3){
 					insertElement += "<td class=\"poor\"";
@@ -85,10 +79,7 @@ function fillin_comment(){
 					insertElement += "<td class=\"good\"";					
 				}
 
-				if(tooltip.length > 0){
-					insertElement += "data-toggle=\"tooltip\" title=\""+tooltip+"\"><font color=\"blue\">"+score+"</font></td>";
-				}
-				else if(href.length > 0){
+				if(href.length > 0){
 					insertElement += ">"+href+score+"</a></td>";
 				}
 				else{
@@ -146,6 +137,7 @@ function display_breakdown(sceneIndex, productIndex){
 	$('#breakdown-title').removeClass('hidden');
 	$('#breakdown-title').html('Scene #'+(sceneIndex+1)+" | "+window.commentInfo.products[productIndex]);
 
+	$('a#img').attr('href', '/photos/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
 	$('img').removeClass('hidden');
 	$('img').attr('src', '/photos/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
 	$('table#breakdown').empty();
@@ -180,7 +172,7 @@ function display_breakdown(sceneIndex, productIndex){
 			insertElement = "<tr class=\"good\">";
 		}
 
-		insertElement += "<td>"+v.user+"</td><td>"+v.score+"</td><td>"+v.review+"</td></tr>";
+		insertElement += "<td><a href=\"/survey_report?project="+window.commentInfo.project+"&from="+v.user+"\">"+v.user+"</a></td><td>"+v.score+"</td><td>"+v.review+"</td></tr>";
 		$('table#breakdown').append(insertElement);		
 	});
 

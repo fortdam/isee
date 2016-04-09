@@ -6,12 +6,14 @@ block content
   h3 #{user}
   
   .container
+    h3 Overall
     table(class="table table-bordered", id="total")
     br
     h3(class="hidden", id="breakdown-title")
     .row
       .col-md-7
-        img(class="hidden img-responsive center-block")
+        a(id="img")
+          img(class="hidden img-responsive center-block")
     br
     table(class="table table-bordered table-condense", id="breakdown")    
 
