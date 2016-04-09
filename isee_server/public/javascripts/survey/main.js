@@ -503,6 +503,12 @@ function onModalLoaded(event) {
   var options = { 
        // target:        '#output',   // target element(s) to be updated with server response 
         beforeSubmit:  function(a,b,c){
+
+        							if(window.appData.userInfo.name == 'guest'){
+        								alert("Guest is not allowed to comment");
+        								return false;
+        							}
+
         							a[a.length] = {name:"project", value:window.appData.projectInfo.curr};
         							a[a.length] = {name:"index", value:window.appData.projectInfo.pages[window.appData.pageInfo.curr-1]};
         							a[a.length] = {name:"product", value: window.appData.projectInfo.products[window.appData.projectInfo.random.indexOf(parseInt(pos))]};
@@ -540,7 +546,9 @@ function onModalLoaded(event) {
 	        // wrap it in a jQuery object and then invoke ajaxSubmit 
 	        // console.log("trigger submit");
 	        // console.log(pos);
-	        $(this).ajaxSubmit(options); 
+
+  		    $(this).ajaxSubmit(options); 
+
 	 
 	        // !!! Important !!! 
 	        // always return false to prevent standard browser submit and page navigation 
