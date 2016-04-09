@@ -345,6 +345,9 @@ isee_db.getSurveyComment = function(user, project, index, product, callback){
 	if(user && user.length>0){
 		criteria.user = user.toLowerCase();
 	}
+	else{
+		criteria.user = {$ne: 'guest'};
+	}
 
 	if(project && project.length>0) {
 		criteria.project = project;
