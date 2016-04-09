@@ -454,6 +454,12 @@ function place_label() {
 
 var modalRegistered = [];
 
+function clearSurveyComment(){
+	$("label[filter='questionair-score']").removeClass('btn-primary active');
+	$("textarea").val("");
+	window.currModal.find("button#submit").click();
+}
+
 function onModalLoaded(event) {
   var imageElt = $(event.relatedTarget);
   var pos = imageElt.attr("trigger-place");
@@ -463,6 +469,8 @@ function onModalLoaded(event) {
   //Clear
   $("label[filter='questionair-score']").removeClass('btn-primary active');
   $("textarea").val("");
+  $("a#revoke-button").addClass("hidden");
+  $("a#revoke-button").attr('href', "javascript:clearSurveyComment()");
   
 
   //Fill in content if necessary
@@ -474,6 +482,7 @@ function onModalLoaded(event) {
   		$("label#score-"+window.appData.comments[i].score).addClass('btn-primary active');
 
   		$("textarea").val(window.appData.comments[i].review);
+  		$("a#revoke-button").removeClass("hidden");
   	}
   }
   

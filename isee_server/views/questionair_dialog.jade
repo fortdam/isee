@@ -45,5 +45,6 @@
           label.control-label(for="comment_message") Extra Comment
           textarea.form-control(rows="3", name="comment_message", id="comment_message",placeholder="Please give some comment to help us understand...(for score <6 or >8)",value="aa")
       .modal-footer
+        button(type="submit", class="btn btn-primary", id="submit") Send
+        a(class="btn btn-danger", role="button", href="javascript:void(0)", id="revoke-button") Revoke
         button(type="button", class="btn btn-default", data-dismiss="modal") Close
-        button(type="submit", class="btn btn-primary") Send

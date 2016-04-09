@@ -303,7 +303,6 @@ isee_db.sendSurveyComment = function(comment, callback){
 
 	comment.user = comment.user.toLowerCase();
 
-	console.log('hahahaha            '+comment)
 
 	this.db.collection(COL_SURVEY_COMMENT).deleteMany({
 		"user":comment.user, 
@@ -312,7 +311,12 @@ isee_db.sendSurveyComment = function(comment, callback){
 		"product":comment.product}, function(){
 			if (sent==false){ //elsewhere we consider user want to delete a comment
 				sent = true;
-				db.collection(COL_SURVEY_COMMENT).insertOne(comment, callback);
+				if(comment.score && comment.score>0 && comment.score<=10){
+					db.collection(COL_SURVEY_COMMENT).insertOne(comment, callback);
+				}
+				else{
+					callback();
+				}
 			}
 		});
 }
