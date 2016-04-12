@@ -38,6 +38,7 @@ function fillin_comment(){
 			var entries = commentInfo.comment.filter(function(x){
 				if(x.product == commentInfo.products[ii] && 
 					parseInt(x.index) == commentInfo.indice[i]) {
+
 					return true;
 				}
 				else {
@@ -139,7 +140,7 @@ function display_breakdown(sceneIndex, productIndex){
 
 	$('a#img').attr('href', '/photos/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
 	$('img').removeClass('hidden');
-	$('img').attr('src', '/photos/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
+	$('img').attr('src', '/photos/cache/__medium__/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
 	$('table#breakdown').empty();
 
 	var currComment = window.commentInfo.comment.filter(function(x){
@@ -177,6 +178,14 @@ function display_breakdown(sceneIndex, productIndex){
 	});
 
 	apply_color();
+
+	//window.location.href = "#breakdown-section";
+	$('img').bind('load',function(){
+		$('html, body').animate({
+			scrollTop:$('#breakdown-title').offset().top,
+			// top:$('#breakdown-title').offset().top
+		}, 900);
+	})
 }
 
 function apply_color(){
