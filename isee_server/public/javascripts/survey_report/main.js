@@ -21,7 +21,7 @@ function fillin_comment(){
 	var insertElement;
 
 	//Append header
-	insertElement = "<tr><th>#</th>";
+	insertElement = "<tr><th>Scene</th>";
 
 	commentInfo.products.forEach(function(v,i,a){
 		insertElement += "<th>"+v+"</th>";
@@ -32,7 +32,7 @@ function fillin_comment(){
 	$('table#total').append(insertElement);
 
 	commentInfo.indice.forEach(function(v,i,a){
-		insertElement = "<tr><td><a href=\"/survey?propject="+commentInfo.project+"&index="+(i+1)+"\"><b>"+(i+1)+"</b></td>";
+		insertElement = "<tr><td><a href=\"/survey?propject="+commentInfo.project+"&index="+(i+1)+"\"><img style=\"height:50px\" src=\"/photos/cache/__thumb__/"+commentInfo.project+"/"+window.commentInfo.prefix[0]+"_"+commentInfo.indice[i]+".jpg"+"\"/></a></td>";
 
 		for(var ii=0; ii<commentInfo.products.length; ii++){
 			var entries = commentInfo.comment.filter(function(x){
@@ -139,8 +139,8 @@ function display_breakdown(sceneIndex, productIndex){
 	$('#breakdown-title').html('Scene #'+(sceneIndex+1)+" | "+window.commentInfo.products[productIndex]);
 
 	$('a#img').attr('href', '/photos/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
-	$('img').removeClass('hidden');
-	$('img').attr('src', '/photos/cache/__medium__/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
+	$('img#detail').removeClass('hidden');
+	$('img#detail').attr('src', '/photos/cache/__medium__/'+commentInfo.project+"/"+window.commentInfo.prefix[productIndex]+"_"+commentInfo.indice[sceneIndex]+".jpg");
 	$('table#breakdown').empty();
 
 	var currComment = window.commentInfo.comment.filter(function(x){
