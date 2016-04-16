@@ -32,7 +32,7 @@ function fillin_comment(){
 	$('table#total').append(insertElement);
 
 	commentInfo.indice.forEach(function(v,i,a){
-		insertElement = "<tr><td><a href=\"/survey?propject="+commentInfo.project+"&index="+(i+1)+"\"><img style=\"height:50px\" src=\"/photos/cache/__thumb__/"+commentInfo.project+"/"+window.commentInfo.prefix[0]+"_"+commentInfo.indice[i]+".jpg"+"\"/></a></td>";
+		insertElement = "<tr><td style=\"padding:0\"><a href=\"/survey?propject="+commentInfo.project+"&index="+(i+1)+"\"><img style=\"height:50px\" src=\"/photos/cache/__thumb__/"+commentInfo.project+"/"+window.commentInfo.prefix[0]+"_"+commentInfo.indice[i]+".jpg"+"\"/></a></td>";
 
 		for(var ii=0; ii<commentInfo.products.length; ii++){
 			var entries = commentInfo.comment.filter(function(x){
