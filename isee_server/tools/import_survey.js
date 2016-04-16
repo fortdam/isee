@@ -9,6 +9,11 @@ var isee_db = require('../database/isee_db');
 var PHOTO_PATH = "../public/photos/";
 
 var RESIZE_CONFIG = {
+	thumb: {
+		path: PHOTO_PATH + "cache/__thumb__/",
+		width: 200,
+		quality: 80
+	},	
 	small: {
 		path: PHOTO_PATH + "cache/__small__/",
 		width: 500,
@@ -76,6 +81,7 @@ function process_all_files(dir, dirCB, fileCB){
 } 
 
 function prepare_subsample_dirs(originalDir){
+	prepare_subsample_dir_kernel(originalDir, "thumb");
 	prepare_subsample_dir_kernel(originalDir, "small");
 	prepare_subsample_dir_kernel(originalDir, "medium");
 	prepare_subsample_dir_kernel(originalDir, "large");
@@ -105,6 +111,7 @@ function prepare_subsample_dir_kernel(originalDir, resizeType){
 
 function subsample_images(originalFile){	
 	if (originalFile.match(/jpg$/i)){
+		subsample_image_kernel(originalFile, "thumb");		
 		subsample_image_kernel(originalFile, "small");
 		subsample_image_kernel(originalFile, "medium");
 		subsample_image_kernel(originalFile, "large");	
@@ -142,6 +149,7 @@ function perform_image_cache(err){
 		gm(entry.originalFile)
 	  		.resize(entry.width)
 	  		.quality(entry.quality)
+	  		.noProfile()
 	  		.write(entry.targetFile, perform_image_cache);
 	}
 	else
@@ -169,13 +177,6 @@ function name_normalize(orignalFile){
 	}
 }
 
-function prepare_subsample_dirs(originalDir){
-	prepare_subsample_dir_kernel(originalDir, "small");
-	prepare_subsample_dir_kernel(originalDir, "medium");
-	prepare_subsample_dir_kernel(originalDir, "large");
-
-	prepare_subsample_dir_kernel(originalDir, "exif");
-}
 
 function prepare_subsample_dir_kernel(originalDir, resizeType){
 	var targetDir = originalDir.replace(PHOTO_PATH, RESIZE_CONFIG[resizeType].path);

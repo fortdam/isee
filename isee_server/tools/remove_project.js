@@ -10,6 +10,9 @@ var isee_db = require('../database/isee_db');
 var PHOTO_PATH = "../public/photos/";
 
 var RESIZE_CONFIG = {
+	thumb: {
+		path: PHOTO_PATH + "cache/__cache__/"
+	},
 	small: {
 		path: PHOTO_PATH + "cache/__small__/"
 	},
@@ -31,6 +34,7 @@ if (process.argv.length < 2) {
 else {
 	if (fs.existsSync(PHOTO_PATH+process.argv[2])){
 		// read_project_info(process.argv[2]);
+		cp.exec('rm -rf '+ RESIZE_CONFIG.thumb.path+process.argv[2]);
 		cp.exec('rm -rf '+ RESIZE_CONFIG.small.path+process.argv[2]);
 		cp.exec('rm -rf '+ RESIZE_CONFIG.medium.path+process.argv[2]);
 		cp.exec('rm -rf '+ RESIZE_CONFIG.large.path+process.argv[2]);
