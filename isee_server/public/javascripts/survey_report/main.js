@@ -178,14 +178,6 @@ function display_breakdown(sceneIndex, productIndex){
 	});
 
 	apply_color();
-
-	//window.location.href = "#breakdown-section";
-	$('img').bind('load',function(){
-		$('html, body').animate({
-			scrollTop:$('#breakdown-title').offset().top,
-			// top:$('#breakdown-title').offset().top
-		}, 900);
-	})
 }
 
 function apply_color(){
