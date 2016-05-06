@@ -9,7 +9,8 @@ router.get('/', function(req, res, next) {
   if (req.query.from == 'all'){
   	req.query.from = "";
   }
-  
+  console.log('tang zhiming query');
+  console.log(req.query.project);
   genReport(req.query.project, req.query.from, res);
 });
 
@@ -28,7 +29,7 @@ function genReport(project, user, res){
 			if (data && data.length>0){
 				var project = data[0];
 
-				isee_db.getSurveyComment(user, project, null, null, function(idata){
+				isee_db.getSurveyComment(user, project.test, null, null, function(idata){
 					var commentInfo = {};
 
 					if(project.select === undefined){

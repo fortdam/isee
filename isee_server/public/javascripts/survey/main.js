@@ -52,7 +52,7 @@ function load_projects() {
 
 				for(i=0; i<window.appData.projectInfo.total.length; i++){
 					if(window.appData.projectInfo.total[i].test == dl_project){
-						select_project(0);
+						select_project(i);
 						break;
 					}
 				}
