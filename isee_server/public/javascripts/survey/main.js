@@ -114,11 +114,15 @@ function load_page() {
 		}
 	}
 
+	if ($('#dl-unblinded').html().length>0 && $('#dl-unblinded').html().localeCompare('true')==0){
+		window.appData.context.unblinded = true;
+	}
+
 	if (window.appData.context.firstload && $('#dl-index').html().length>0){
 		var dl_index = parseInt($('#dl-index').html());
 		var page_index = dl_index;
 
-		console.log(page_index);
+		// console.log(page_index);
 
 		if (page_index >= 0){
 			// console.log("successfully select page "+page_index);
@@ -132,7 +136,6 @@ function load_page() {
 	else {
 		select_page(1);
 	}	
-
 }
 
 function select_page(index){
@@ -336,10 +339,17 @@ function load_comments(){
 		'&project='+window.appData.projectInfo.curr+
 		'&index='+ window.appData.projectInfo.pages[window.appData.pageInfo.curr-1];
 
-
-	for(var i=1; i<=window.appData.projectInfo.prefix.length; i++){
-		$('#matrix-label-text-'+i).html('Not rated');
-		$('#carousel-label-text-'+i).html('Not rated');
+	if(window.appData.context.unblinded === true){
+		for(var i=1; i<=window.appData.projectInfo.prefix.length; i++){
+			$('#matrix-label-text-'+i).html(window.appData.projectInfo.products[i-1]);
+			$('#carousel-label-text-'+i).html(window.appData.projectInfo.products[i-1]);
+		}		
+	}
+	else{
+		for(var i=1; i<=window.appData.projectInfo.prefix.length; i++){
+			$('#matrix-label-text-'+i).html('Not rated');
+			$('#carousel-label-text-'+i).html('Not rated');
+		}
 	}
 
 	window.appData.comments = {};
@@ -358,8 +368,14 @@ function load_comments(){
 					if(v.product && v.product.length>0){
 						var pos = findProductPos(v.product);;
 
-						$('#matrix-label-text-'+pos).html(v.score);
-						$('#carousel-label-text-'+pos).html(v.score);
+						if(window.appData.context.unblinded === true){
+							$('#matrix-label-text-'+pos).html(window.appData.projectInfo.products[pos-1]+": "+v.score);
+							$('#carousel-label-text-'+pos).html(window.appData.projectInfo.products[pos-1]+": "+v.score);
+						}
+						else{
+							$('#matrix-label-text-'+pos).html(v.score);
+							$('#carousel-label-text-'+pos).html(v.score);
+						}
 					}
 				})
 			}
@@ -818,24 +834,32 @@ document.addEventListener("msfullscreenchange", function( event ) {
 function randomize(size){
 	var output = new Array(size);
 
-	for(var i=0; i<size; i++){
-		var rand = Math.floor(Math.random()*(size-i));
-		var pos = 0;
-
-		while(output[pos]){
-				//occupied, move forward
-			pos++;
+	if (window.appData.context.unblinded === true){
+		for(var i=0; i<size; i++){
+			output[i] = i+1;
 		}
+	}
+	else{		
+		for(var i=0; i<size; i++){
+			var rand = Math.floor(Math.random()*(size-i));
+			var pos = 0;
 
-		for(var j=0; j<rand; j++){
-			pos++;
 			while(output[pos]){
-				//occupied, move forward
+					//occupied, move forward
 				pos++;
 			}
+
+			for(var j=0; j<rand; j++){
+				pos++;
+				while(output[pos]){
+					//occupied, move forward
+					pos++;
+				}
+			}
+			output[pos] = i+1;
 		}
-		output[pos] = i+1;
 	}
+
 	return output;
 }
 

@@ -5,7 +5,9 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('survey', {
   	project:req.query.project, 
-  	index:req.query.index});
+  	index:req.query.index,
+  	unblinded: req.query.unblinded
+  });
 });
 
 module.exports = router;

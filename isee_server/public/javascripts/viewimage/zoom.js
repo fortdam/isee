@@ -88,6 +88,10 @@ function set_zoom(zoom_level){
 
 	$('.img-holder').css('overflow', 'hidden');
 
+	if(need_record_size_for_zoom()){
+		return; //Don't apply zoom if zoom recording not applied before...
+	}
+
 	for(var i=1; i<=totalPic; i++){
 		$('.matrix .slot'+i).width(window.appData.zoomOriginSize['width'+i]);
 		$('.matrix .slot'+i).height(window.appData.zoomOriginSize['height'+i]);
