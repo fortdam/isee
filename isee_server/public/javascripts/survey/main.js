@@ -725,10 +725,17 @@ function set_hook_functions(){
 	window.onresize = place_label;
 	window.onscroll = place_label;
 
-	for(var i=1; i<=6; i++){ //TO fix me
-		$('#mySurveyModal'+i).on('show.bs.modal', onModalLoaded);
+	if($('#dl-unblinded').html() == 'true'){
+		for(var i=1; i<=6; i++){ //TO fix me
+			$('.matrix img#pic'+i).attr('data-toggle','');
+			$('.filmstrip img#pic'+i).attr('data-toggle','');
+		}
 	}
-
+	else{
+		for(var i=1; i<=6; i++){ //TO fix me
+			$('#mySurveyModal'+i).on('show.bs.modal', onModalLoaded);
+		}
+	}
 
 	// $('#reportModal').on('show.bs.modal', onReportModalLoaded);
 
