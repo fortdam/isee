@@ -332,6 +332,15 @@ function findProductPos(product){
 }
 
 function load_comments(){
+	if(window.appData.context.unblinded){
+		load_all_comments();
+	}
+	else{
+		load_individual_comments();
+	}
+}
+
+function load_individual_comments(){
 	var request = new XMLHttpRequest();
 	var queryStr = '/questionair?'+
 		'user='+window.appData.userInfo.name+
@@ -378,6 +387,73 @@ function load_comments(){
 						}
 					}
 				})
+			}
+		}
+	}
+	request.send();
+}
+
+function load_all_comments(){
+	var request = new XMLHttpRequest();
+	var queryStr = '/questionair?'+
+		'&project='+window.appData.projectInfo.curr+
+		'&index='+ window.appData.projectInfo.pages[window.appData.pageInfo.curr-1];
+
+	if(window.appData.context.unblinded === true){
+		for(var i=1; i<=window.appData.projectInfo.prefix.length; i++){
+			$('#matrix-label-text-'+i).html(window.appData.projectInfo.products[i-1]);
+			$('#carousel-label-text-'+i).html(window.appData.projectInfo.products[i-1]);
+		}		
+	}
+	else{
+		for(var i=1; i<=window.appData.projectInfo.prefix.length; i++){
+			$('#matrix-label-text-'+i).html('Not rated');
+			$('#carousel-label-text-'+i).html('Not rated');
+		}
+	}
+
+	window.appData.comments = {};
+
+	request.open("GET", queryStr);
+	request.onreadystatechange = function() {
+
+		if (request.readyState === 4 && request.status === 200) {
+			var res = JSON.parse(request.response);	
+
+
+			if(res.state == 'yes'){
+				window.appData.comments = res.data;
+
+				//Aggregate first!
+				for(var i=0; i<window.appData.projectInfo.products.length; i++){
+					var entries = res.data.filter(function(x){
+						if(x.product == window.appData.projectInfo.products[i]){
+							return true;
+						}
+						else {
+							return false;
+						}
+					});
+
+					if(entries.length > 0){
+						var score = 0;
+						var effectiveEle = 0;
+						entries.forEach(function(v,i,a){
+							if (v.score && v.score>=1 && v.score<=10){
+								score += parseInt(v.score);
+								effectiveEle += 1;
+							}
+						})
+						score = (score/effectiveEle).toFixed(1);	
+
+						$('#matrix-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]+": "+score);
+						$('#carousel-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]+": "+score);					
+					}
+					else{
+						$('#matrix-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
+						$('#carousel-label-text-'+(i+1)).html(window.appData.projectInfo.products[i]);
+					}
+				}
 			}
 		}
 	}
