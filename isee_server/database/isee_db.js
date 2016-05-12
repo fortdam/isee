@@ -360,9 +360,9 @@ isee_db.getSurveyComment = function(user, project, index, product, callback){
 	if (product && product.length>0){
 		criteria.product = product;
 	}
-	console.log('tang zhiming getSurveyComment');
-	console.log(project);
-	console.log(JSON.stringify(criteria));
+	// console.log('tang zhiming getSurveyComment');
+	// console.log(project);
+	// console.log(JSON.stringify(criteria));
 	var cursor = this.db.collection(COL_SURVEY_COMMENT).find(criteria);
 
 	cursor.toArray(function(err, data){
